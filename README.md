@@ -1,5 +1,5 @@
-ContactForm
-===========
+ContactForm for Craft
+=====================
 
 How to install and use:
 
