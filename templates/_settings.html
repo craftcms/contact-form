@@ -1,0 +1,11 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+	label: "To Email"|t,
+	id: 'toEmail',
+	name: 'toEmail',
+	instructions: "The email address that the contact form will send to."|t,
+	value: settings.toEmail,
+	autofocus: true,
+	errors: entry.getErrors('toEmail')
+}) }}
