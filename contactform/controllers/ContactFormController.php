@@ -34,7 +34,7 @@ class ContactFormController extends BaseController
 
 			$subject = "New message from ".Craft::getSiteName();
 
-			if (($postedSubject = craft()->request->getPost('message', null)) !== null)
+			if (($postedSubject = craft()->request->getPost('subject', null)) !== null)
 			{
 				$subject .= ' - '.$postedSubject;
 			}
