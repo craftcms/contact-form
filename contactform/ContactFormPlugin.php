@@ -26,7 +26,8 @@ class ContactFormPlugin extends BasePlugin
 	protected function defineSettings()
 	{
 		return array(
-			'toEmail' => array(AttributeType::Email, 'required' => true, 'label' => 'To Email'),
+			'toEmail' => array(AttributeType::Email, 'required' => true),
+			'prependSubject' => array(AttributeType::String),
 		);
 	}
 

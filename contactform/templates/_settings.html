@@ -9,3 +9,12 @@
 	autofocus: true,
 	errors: settings.getErrors('toEmail')
 }) }}
+
+{{ forms.textField({
+	label: "Subject Text"|t,
+	id: 'prependSubject',
+	name: 'prependSubject',
+	instructions: "Text that will be prepended to the email’s subject."|t,
+	value: (settings.prependSubject ? settings.prependSubject : "New message from {siteName}"|t({ siteName: craft.app.siteName })),
+	errors: settings.getErrors('prependSubject')
+}) }}
