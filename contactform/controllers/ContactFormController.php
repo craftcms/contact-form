@@ -62,7 +62,15 @@ class ContactFormController extends BaseController
 				{
 					craft()->email->sendEmail($email);
 					craft()->userSession->setNotice('Your message has been sent, someone will be in touch shortly!');
-					$this->redirectToPostedUrl();
+
+					if (($successRedirectUrl = craft()->request->getPost('successRedirectUrl', null)) != null)
+					{
+						$this->redirect($successRedirectUrl);
+					}
+					else
+					{
+						$this->redirectToPostedUrl();
+					}
 				}
 				catch (\phpmailerException $e)
 				{
