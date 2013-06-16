@@ -22,6 +22,7 @@ Your contact form template can look something like this:
 
     <form method="post" action="" accept-charset="UTF-8">
         <input type="hidden" name="action" value="contactform/sendMessage">
+        <input type="hidden" name="successRedirectUrl" value="success">
 
         <h3><label for="fromEmail">From Email</label></h3>
         <input id="fromEmail" type="text" name="fromEmail">
@@ -55,4 +56,6 @@ Your contact form template can look something like this:
     </form>
 
 
-Note that "fromName" and "subject" are both optional fields.  The only required ones are "fromEmail" and "message".
+Note that “fromName” and “subject” are both optional fields.  The only required ones are “fromEmail” and “message”.
+
+If you have a “successRedirectUrl” hidden input, the user will get redirected to it upon successfully sending the email.
