@@ -25,28 +25,28 @@ Your contact form template can look something like this:
         <input type="hidden" name="successRedirectUrl" value="success">
 
         <h3><label for="fromEmail">From Email</label></h3>
-        <input id="fromEmail" type="text" name="fromEmail">
+        <input id="fromEmail" type="text" name="fromEmail" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
 
         {% if message is defined %}
             {{ _self.errorList(message.getErrors('fromEmail')) }}
         {% endif %}
-
+    
         <h3><label for="fromName">From Name</label></h3>
-        <input id="fromName" type="text" name="fromName">
+        <input id="fromName" type="text" name="fromName" value="{% if message is defined %}{{ message.fromName }}{% endif %}">
 
         {% if message is defined %}
             {{ _self.errorList(message.getErrors('fromName')) }}
         {% endif %}
 
         <h3><label for="subject">Subject</label></h3>
-        <input id="subject" type="text" name="subject">
+        <input id="subject" type="text" name="subject" value="{% if message is defined %}{{ message.subject }}{% endif %}">
 
         {% if message is defined %}
             {{ _self.errorList(message.getErrors('subject')) }}
         {% endif %}
 
         <h3><label for="message">Message</label></h3>
-        <textarea rows="10" cols="40" id="message" name="message"></textarea>
+        <textarea rows="10" cols="40" id="message" name="message">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
 
         {% if message is defined %}
             {{ _self.errorList(message.getErrors('message')) }}
