@@ -84,6 +84,12 @@ class ContactFormController extends BaseController
 				craft()->userSession->setError('There was a problem with your submission, please check the form and try again!');
 			}
 
+			// If there is a prepended subject, strip it out before we display any errors.
+			if ($settings->prependSubject)
+			{
+				$message->subject = substr($message->subject, strlen($settings->prependSubject) + 3);
+			}
+
 			craft()->urlManager->setRouteVariables(array(
 				'message' => $message
 			));
