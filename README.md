@@ -59,3 +59,11 @@ Your contact form template can look something like this:
 Note that “fromName” and “subject” are both optional fields.  The only required ones are “fromEmail” and “message”.
 
 If you have a “successRedirectUrl” hidden input, the user will get redirected to it upon successfully sending the email.
+
+If you want to add additional fields to capture, then change your message input name and add the others like so:
+
+    <h3><label for="message">Message</label></h3>
+    <textarea rows="10" cols="40" id="message" name="message[body]">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
+
+    <h3><label for="phone">Phone</label></h3>
+    <input id="phone" type="text" name="message[phone]" value="">

@@ -27,10 +27,27 @@ class ContactFormController extends BaseController
 		else
 		{
 			$message = new ContactFormModel();
+			$savedBody = false;
 
 			$message->fromEmail = craft()->request->getPost('fromEmail');
 			$message->fromName  = craft()->request->getPost('fromName');
-			$message->message   = craft()->request->getPost('message');
+
+			if (($postedMessage = craft()->request->getPost('message', null)) != null)
+			{
+				if (is_array($postedMessage))
+				{
+					if (isset($postedMessage['body']))
+					{
+						$savedBody = $postedMessage['body'];
+					}
+
+					$message->message = $this->_buildMessage($postedMessage);
+				}
+				else
+				{
+					$message->message = $postedMessage;
+				}
+			}
 
 			$subject = $settings->prependSubject;
 
@@ -90,9 +107,30 @@ class ContactFormController extends BaseController
 				$message->subject = substr($message->subject, strlen($settings->prependSubject) + 3);
 			}
 
+			if ($savedBody)
+			{
+				$message->message = $savedBody;
+			}
+
 			craft()->urlManager->setRouteVariables(array(
 				'message' => $message
 			));
 		}
+	}
+
+	/**
+	 * @param $messages
+	 * @return string
+	 */
+	private function _buildMessage($messages)
+	{
+		$message = '';
+
+		foreach ($messages as $key => $value)
+		{
+			$message .= $key.' : '.$value.PHP_EOL.PHP_EOL;
+		}
+
+		return $message;
 	}
 }
