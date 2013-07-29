@@ -68,8 +68,11 @@ class ContactFormController extends BaseController
 			if ($message->validate())
 			{
 				$email = new EmailModel();
+				$emailSettings = craft()->email->getSettings();
 
 				$email->fromEmail = $message->fromEmail;
+				$email->replyTo   = $message->fromEmail;
+				$email->sender    = $emailSettings['emailAddress'];
 				$email->fromName  = $message->fromName;
 				$email->toEmail   = $toEmail;
 				$email->subject   = $subject;
