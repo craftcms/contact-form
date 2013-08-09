@@ -21,7 +21,7 @@ Your contact form template can look something like this:
     {% endmacro %}
 
     <form method="post" action="" accept-charset="UTF-8">
-        <input type="hidden" name="action" value="contactform/sendMessage">
+        <input type="hidden" name="action" value="contactForm/sendMessage">
         <input type="hidden" name="successRedirectUrl" value="success">
 
         <h3><label for="fromEmail">From Email</label></h3>
