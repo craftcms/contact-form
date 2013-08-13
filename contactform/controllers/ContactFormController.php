@@ -70,7 +70,7 @@ class ContactFormController extends BaseController
 				$email = new EmailModel();
 				$emailSettings = craft()->email->getSettings();
 
-				$email->fromEmail = $message->fromEmail;
+				$email->fromEmail = $emailSettings['emailAddress'];
 				$email->replyTo   = $message->fromEmail;
 				$email->sender    = $emailSettings['emailAddress'];
 				$email->fromName  = $message->fromName;
