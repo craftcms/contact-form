@@ -32,6 +32,23 @@ class ContactFormController extends BaseController
 			$message->fromEmail = craft()->request->getPost('fromEmail');
 			$message->fromName  = craft()->request->getPost('fromName');
 
+			$fromName = $message->fromName;
+
+			if ($fromName != null)
+			{
+			    if (!empty($settings->prependSender))
+			    {
+				$fromName = $settings->prependSender.' '.$message->fromName;
+			    }
+			    else
+				{
+				$fromName = $message->fromName;
+			    }
+			}
+			else {
+			    $fromName = "";
+			}
+
 			if (($postedMessage = craft()->request->getPost('message', null)) != null)
 			{
 				if (is_array($postedMessage))
@@ -73,7 +90,7 @@ class ContactFormController extends BaseController
 				$email->fromEmail = $emailSettings['emailAddress'];
 				$email->replyTo   = $message->fromEmail;
 				$email->sender    = $emailSettings['emailAddress'];
-				$email->fromName  = $message->fromName;
+				$email->fromName  = $fromName;
 				$email->toEmail   = $toEmail;
 				$email->subject   = $subject;
 				$email->body      = $message->message;
