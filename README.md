@@ -6,7 +6,8 @@ How to install and use:
 1.  Place the contactform folder in your craft/plugins folder.
 2.  Go to Settings->Plugins from your Craft control panel and enable the Contact Form plugin.
 3.  Click on “Contact Form” to go to the plugin’s settings page.
-4.  Enter the email address you would like the contact requests to be sent to.
+4.  Enter the email address you would like the contact requests to be sent to. 
+5.  In the settings page, there are also prefix fields to allow you to improve the identification of Contact Form emails when you receive them, if you use the "fromEmail" and "subject" fields as shown below.
 
 Your contact form template can look something like this:
 
