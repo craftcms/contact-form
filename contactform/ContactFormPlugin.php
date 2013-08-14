@@ -27,6 +27,7 @@ class ContactFormPlugin extends BasePlugin
 	{
 		return array(
 			'toEmail' => array(AttributeType::Email, 'required' => true),
+			'prependSender' => array(AttributeType::String),
 			'prependSubject' => array(AttributeType::String),
 		);
 	}

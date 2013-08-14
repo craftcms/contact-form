@@ -11,10 +11,19 @@
 }) }}
 
 {{ forms.textField({
+	label: "Sender Text"|t,
+	id: 'prependSender',
+	name: 'prependSender',
+	instructions: "Text that will be prepended to the email's From Name to inform who the Contact Form actually was sent by."|t,
+	value: (settings.prependSender ? settings.prependSender : "On behalf of"|t),
+	errors: settings.getErrors('prependSender')
+}) }}
+
+{{ forms.textField({
 	label: "Subject Text"|t,
 	id: 'prependSubject',
 	name: 'prependSubject',
-	instructions: "Text that will be prepended to the email’s subject."|t,
+	instructions: "Text that will be prepended to the email’s Subject to flag that it comes from the Contact Form."|t,
 	value: (settings.prependSubject ? settings.prependSubject : "New message from {siteName}"|t({ siteName: craft.app.siteName })),
 	errors: settings.getErrors('prependSubject')
 }) }}
