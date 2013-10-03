@@ -1,5 +1,5 @@
-ContactForm for Craft
-=====================
+ContactForm plugin for Craft
+============================
 
 How to install and use:
 
@@ -68,3 +68,7 @@ If you want to add additional fields to capture, then change your message input 
 
     <h3><label for="phone">Phone</label></h3>
     <input id="phone" type="text" name="message[phone]" value="">
+
+## Installation
+
+To install Contact Form, copy the contactform/ folder into craft/plugins/, and then go to Settings > Plugins and click the “Install” button next to “Contact Form”. Then click on the “Contact Form” link to edit its settings, where you can choose the email address that should receive contact form submissions, and what the subject text shouldb be.
