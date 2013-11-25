@@ -5,6 +5,9 @@ class ContactFormController extends BaseController
 {
 	protected $allowAnonymous = true;
 
+	/**
+	 * @throws Exception
+	 */
 	public function actionSendMessage()
 	{
 		$this->requirePostRequest();
@@ -20,9 +23,16 @@ class ContactFormController extends BaseController
 
 		if (($toEmail = $settings->toEmail) == null)
 		{
-			craft()->userSession->setError('The "To Email" address is not set on the plugin’s settings page.');
-			Craft::log('Tried to send a contact form request, but missing the "To Email" address on the plugin’s settings page.', LogLevel::Error);
-			$this->redirectToPostedUrl();
+			if (!craft()->request->isAjaxRequest())
+			{
+				craft()->userSession->setError('The "To Email" address is not set on the plugin’s settings page.');
+				Craft::log('Tried to send a contact form request, but missing the "To Email" address on the plugin’s settings page.', LogLevel::Error);
+				$this->redirectToPostedUrl();
+			}
+			else
+			{
+				$this->returnErrorJson('The "To Email" address is not set on the plugin’s settings page.');
+			}
 		}
 		else
 		{
@@ -97,20 +107,34 @@ class ContactFormController extends BaseController
 					craft()->email->sendEmail($email);
 					craft()->userSession->setNotice('Your message has been sent, someone will be in touch shortly!');
 
-					if (($successRedirectUrl = craft()->request->getPost('successRedirectUrl', null)) != null)
+					if (!craft()->request->isAjaxRequest())
 					{
-						$this->redirect($successRedirectUrl);
+						if (($successRedirectUrl = craft()->request->getPost('successRedirectUrl', null)) != null)
+						{
+							$this->redirect($successRedirectUrl);
+						}
+						else
+						{
+							$this->redirectToPostedUrl();
+						}
 					}
 					else
 					{
-						$this->redirectToPostedUrl();
+						$this->returnJson(array('success' => true));
 					}
 				}
 				catch (\phpmailerException $e)
 				{
-					Craft::log('Tried to send a contact form request, but something terrible happened: '.$e->getMessage(), LogLevel::Error);
-					craft()->userSession->setError(Craft::t('Couldn’t send contact email. Check your email settings.'));
-					$this->redirectToPostedUrl();
+					if (!craft()->request->isAjaxRequest())
+					{
+						Craft::log('Tried to send a contact form request, but something terrible happened: '.$e->getMessage(), LogLevel::Error);
+						craft()->userSession->setError(Craft::t('Couldn’t send contact email. Check your email settings.'));
+						$this->redirectToPostedUrl();
+					}
+					else
+					{
+						$this->returnErrorJson('Couldn’t send contact email. Check your email settings.');
+					}
 				}
 			}
 			else
@@ -129,9 +153,16 @@ class ContactFormController extends BaseController
 				$message->message = $savedBody;
 			}
 
-			craft()->urlManager->setRouteVariables(array(
-				'message' => $message
-			));
+			if (!craft()->request->isAjaxRequest())
+			{
+				craft()->urlManager->setRouteVariables(array(
+					'message' => $message
+				));
+			}
+			else
+			{
+				return $this->returnErrorJson($message->getErrors());
+			}
 		}
 	}
 
