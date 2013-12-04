@@ -84,7 +84,34 @@ class ContactFormController extends BaseController
 
 				foreach ($postedMessage as $key => $value)
 				{
-					$compiledMessage .= $key.' : '.$value."\n\n";
+					if ($key != 'body')
+					{
+						if ($compiledMessage)
+						{
+							$compiledMessage .= "\n\n";
+						}
+
+						$compiledMessage .= $key.': ';
+
+						if (is_array($value))
+						{
+							$compiledMessage .= implode(', ', $value);
+						}
+						else
+						{
+							$compiledMessage .= $value;
+						}
+					}
+				}
+
+				if (!empty($postedMessage['body']))
+				{
+					if ($compiledMessage)
+					{
+						$compiledMessage .= "\n\n";
+					}
+
+					$compiledMessage .= $postedMessage['body'];
 				}
 
 				$message->message = $compiledMessage;
