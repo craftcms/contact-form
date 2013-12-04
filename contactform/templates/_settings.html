@@ -1,29 +1,30 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-	label: "To Email"|t,
-	id: 'toEmail',
-	name: 'toEmail',
+	first:        true,
+	label:        "To Email"|t,
+	id:           'toEmail',
+	name:         'toEmail',
 	instructions: "The email address that the contact form will send to."|t,
-	value: settings.toEmail,
-	autofocus: true,
-	errors: settings.getErrors('toEmail')
+	value:        settings.toEmail,
+	autofocus:    true,
+	errors:       settings.getErrors('toEmail')
 }) }}
 
 {{ forms.textField({
-	label: "Sender Text"|t,
-	id: 'prependSender',
-	name: 'prependSender',
+	label:         "Sender Text"|t,
+	id:            'prependSender',
+	name:          'prependSender',
 	instructions: "Text that will be prepended to the email’s From Name to inform who the Contact Form actually was sent by."|t,
-	value: (settings.prependSender ? settings.prependSender : "On behalf of"|t),
-	errors: settings.getErrors('prependSender')
+	value:         (settings.prependSender ? settings.prependSender : "On behalf of"|t),
+	errors:        settings.getErrors('prependSender')
 }) }}
 
 {{ forms.textField({
-	label: "Subject Text"|t,
-	id: 'prependSubject',
-	name: 'prependSubject',
+	label:        "Subject Text"|t,
+	id:           'prependSubject',
+	name:         'prependSubject',
 	instructions: "Text that will be prepended to the email’s Subject to flag that it comes from the Contact Form."|t,
-	value: (settings.prependSubject ? settings.prependSubject : "New message from {siteName}"|t({ siteName: craft.app.siteName })),
-	errors: settings.getErrors('prependSubject')
+	value:        (settings.prependSubject ? settings.prependSubject : "New message from {siteName}"|t({ siteName: craft.app.siteName })),
+	errors:       settings.getErrors('prependSubject')
 }) }}
