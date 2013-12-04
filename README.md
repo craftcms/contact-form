@@ -125,3 +125,16 @@ You can optionally post contact form submissions over Ajax if you’d like. Just
             }
         });
     });
+
+
+## Changelog
+
+### 1.1
+
+* Addded the ability to submit attachments
+* Added the ability to submit the form over Ajax
+* Added the ability to submit checkbox lists, which get compiled into comma-separated lists in the email
+
+### 1.0
+
+* Initial release
