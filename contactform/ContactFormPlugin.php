@@ -15,7 +15,7 @@ class ContactFormPlugin extends BasePlugin
 
 	function getDeveloper()
 	{
-		return 'Pixel & Tonic, Inc.';
+		return 'Pixel & Tonic';
 	}
 
 	function getDeveloperUrl()
@@ -26,9 +26,9 @@ class ContactFormPlugin extends BasePlugin
 	protected function defineSettings()
 	{
 		return array(
-			'toEmail' => array(AttributeType::Email, 'required' => true),
-			'prependSender' => array(AttributeType::String),
-			'prependSubject' => array(AttributeType::String),
+			'toEmail'        => array(AttributeType::Email, 'required' => true),
+			'prependSender'  => AttributeType::String,
+			'prependSubject' => AttributeType::String,
 		);
 	}
 

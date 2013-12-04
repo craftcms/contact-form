@@ -1,11 +1,20 @@
 <?php
 namespace Craft;
 
+/**
+ * Contact Form controller
+ */
 class ContactFormController extends BaseController
 {
+	/**
+	 * @var Allows anonymous access to this controller's actions.
+	 * @access protected
+	 */
 	protected $allowAnonymous = true;
 
 	/**
+	 * Sends an email based on the posted params.
+	 *
 	 * @throws Exception
 	 */
 	public function actionSendMessage()
@@ -16,169 +25,150 @@ class ContactFormController extends BaseController
 
 		if (!$plugin)
 		{
+			// This shouldn't be possible considering the request got this far, but whatever
 			throw new Exception('Couldn’t find the Contact Form plugin!');
 		}
 
 		$settings = $plugin->getSettings();
 
-		if (($toEmail = $settings->toEmail) == null)
+		if (!$settings->toEmail)
 		{
-			if (!craft()->request->isAjaxRequest())
+			$error = 'The "To Email" address is not set on the plugin’s settings page.';
+			if (craft()->request->isAjaxRequest())
 			{
-				craft()->userSession->setError('The "To Email" address is not set on the plugin’s settings page.');
-				Craft::log('Tried to send a contact form request, but missing the "To Email" address on the plugin’s settings page.', LogLevel::Error);
-				$this->redirectToPostedUrl();
+				$this->returnErrorJson($error);
 			}
 			else
 			{
-				$this->returnErrorJson('The "To Email" address is not set on the plugin’s settings page.');
+				craft()->userSession->setError($error);
+				Craft::log('Tried to send a contact form request, but missing the "To Email" address on the plugin’s settings page.', LogLevel::Error);
+				$this->redirectToPostedUrl();
+			}
+		}
+
+		$message = new ContactFormModel();
+		$savedBody = false;
+
+		$message->fromEmail = craft()->request->getPost('fromEmail');
+		$message->fromName  = craft()->request->getPost('fromName', '');
+
+		$fromName = $message->fromName;
+
+		if ($fromName)
+		{
+			if (!empty($settings->prependSender))
+			{
+				$fromName = $settings->prependSender.' '.$message->fromName;
+			}
+			else
+			{
+				$fromName = $message->fromName;
+			}
+		}
+
+		// Set the message body
+		$postedMessage = craft()->request->getPost('message');
+
+		if ($postedMessage)
+		{
+			if (is_array($postedMessage))
+			{
+				if (isset($postedMessage['body']))
+				{
+					// Save the message body in case we need to reassign it in the event there's a validation error
+					$savedBody = $postedMessage['body'];
+				}
+
+				// Compile the message from each of the individual values
+				$compiledMessage = '';
+
+				foreach ($postedMessage as $key => $value)
+				{
+					$compiledMessage .= $key.' : '.$value."\n\n";
+				}
+
+				$message->message = $compiledMessage;
+			}
+			else
+			{
+				$message->message = $postedMessage;
+			}
+		}
+
+		// Set the subject
+		$subject = $settings->prependSubject;
+		$postedSubject = craft()->request->getPost('subject');
+
+		if ($postedSubject)
+		{
+			if ($subject)
+			{
+				$subject .= ' - ';
+			}
+
+			$subject .= $postedSubject;
+		}
+
+		$message->subject = $subject;
+
+		// Validate and send
+		if ($message->validate())
+		{
+			$email = new EmailModel();
+			$emailSettings = craft()->email->getSettings();
+
+			$email->fromEmail = $emailSettings['emailAddress'];
+			$email->replyTo   = $message->fromEmail;
+			$email->sender    = $emailSettings['emailAddress'];
+			$email->fromName  = $fromName;
+			$email->toEmail   = $settings->toEmail;
+			$email->subject   = $subject;
+			$email->body      = $message->message;
+
+			craft()->email->sendEmail($email);
+			craft()->userSession->setNotice('Your message has been sent, someone will be in touch shortly!');
+
+			if (craft()->request->isAjaxRequest())
+			{
+				$this->returnJson(array('success' => true));
+			}
+			else
+			{
+				// Deprecated. Use 'redirect' instead.
+				$successRedirectUrl = craft()->request->getPost('successRedirectUrl');
+
+				if ($successRedirectUrl)
+				{
+					$_POST['redirect'] = $successRedirectUrl;
+				}
+
+				$this->redirectToPostedUrl();
 			}
 		}
 		else
 		{
-			$message = new ContactFormModel();
-			$savedBody = false;
-
-			$message->fromEmail = craft()->request->getPost('fromEmail');
-			$message->fromName  = craft()->request->getPost('fromName', '');
-
-			$fromName = $message->fromName;
-
-			if ($fromName)
+			if (craft()->request->isAjaxRequest())
 			{
-				if (!empty($settings->prependSender))
-				{
-					$fromName = $settings->prependSender.' '.$message->fromName;
-				}
-				else
-				{
-					$fromName = $message->fromName;
-				}
-			}
-
-			if (($postedMessage = craft()->request->getPost('message', null)) != null)
-			{
-				if (is_array($postedMessage))
-				{
-					if (isset($postedMessage['body']))
-					{
-						$savedBody = $postedMessage['body'];
-					}
-
-					$message->message = $this->_buildMessage($postedMessage);
-				}
-				else
-				{
-					$message->message = $postedMessage;
-				}
-			}
-
-			$subject = $settings->prependSubject;
-
-			if (($postedSubject = craft()->request->getPost('subject', null)) != null)
-			{
-				if ($subject)
-				{
-					$subject .= ' - '.$postedSubject;
-				}
-				else
-				{
-					$subject = $postedSubject;
-				}
-			}
-
-			$message->subject = $subject;
-
-			if ($message->validate())
-			{
-				$email = new EmailModel();
-				$emailSettings = craft()->email->getSettings();
-
-				$email->fromEmail = $emailSettings['emailAddress'];
-				$email->replyTo   = $message->fromEmail;
-				$email->sender    = $emailSettings['emailAddress'];
-				$email->fromName  = $fromName;
-				$email->toEmail   = $toEmail;
-				$email->subject   = $subject;
-				$email->body      = $message->message;
-
-				try
-				{
-					craft()->email->sendEmail($email);
-					craft()->userSession->setNotice('Your message has been sent, someone will be in touch shortly!');
-
-					if (!craft()->request->isAjaxRequest())
-					{
-						if (($successRedirectUrl = craft()->request->getPost('successRedirectUrl', null)) != null)
-						{
-							$this->redirect($successRedirectUrl);
-						}
-						else
-						{
-							$this->redirectToPostedUrl();
-						}
-					}
-					else
-					{
-						$this->returnJson(array('success' => true));
-					}
-				}
-				catch (\phpmailerException $e)
-				{
-					if (!craft()->request->isAjaxRequest())
-					{
-						Craft::log('Tried to send a contact form request, but something terrible happened: '.$e->getMessage(), LogLevel::Error);
-						craft()->userSession->setError(Craft::t('Couldn’t send contact email. Check your email settings.'));
-						$this->redirectToPostedUrl();
-					}
-					else
-					{
-						$this->returnErrorJson('Couldn’t send contact email. Check your email settings.');
-					}
-				}
+				return $this->returnErrorJson($message->getErrors());
 			}
 			else
 			{
 				craft()->userSession->setError('There was a problem with your submission, please check the form and try again!');
-			}
 
-			// If there is a prepended subject, strip it out before we display any errors.
-			if ($settings->prependSubject)
-			{
-				$message->subject = substr($message->subject, strlen($settings->prependSubject) + 3);
-			}
+				if ($settings->prependSubject)
+				{
+					$message->subject = $postedSubject;
+				}
 
-			if ($savedBody)
-			{
-				$message->message = $savedBody;
-			}
+				if ($savedBody)
+				{
+					$message->message = $savedBody;
+				}
 
-			if (!craft()->request->isAjaxRequest())
-			{
 				craft()->urlManager->setRouteVariables(array(
 					'message' => $message
 				));
 			}
-			else
-			{
-				return $this->returnErrorJson($message->getErrors());
-			}
 		}
-	}
-
-	/**
-	 * @param $messages
-	 * @return string
-	 */
-	private function _buildMessage($messages)
-	{
-		$message = '';
-
-		foreach ($messages as $key => $value)
-		{
-			$message .= $key.' : '.$value.PHP_EOL.PHP_EOL;
-		}
-
-		return $message;
 	}
 }
