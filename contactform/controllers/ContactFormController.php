@@ -152,6 +152,13 @@ class ContactFormController extends BaseController
 			$email->subject   = $subject;
 			$email->body      = $message->message;
 
+			$attachment = \CUploadedFile::getInstanceByName('attachment');
+
+			if ($attachment)
+			{
+				$email->addAttachment($attachment->getTempName(), $attachment->getName(), 'base64', $attachment->getType());
+			}
+
 			craft()->email->sendEmail($email);
 			craft()->userSession->setNotice('Your message has been sent, someone will be in touch shortly!');
 

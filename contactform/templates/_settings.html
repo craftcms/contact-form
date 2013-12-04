@@ -28,3 +28,11 @@
 	value:        (settings.prependSubject ? settings.prependSubject : "New message from {siteName}"|t({ siteName: craft.app.siteName })),
 	errors:       settings.getErrors('prependSubject')
 }) }}
+
+{{ forms.lightswitchField({
+	label:        "Allow attachments?"|t,
+	id:           'allowAttachments',
+	name:         'allowAttachments',
+	on:           settings.allowAttachments,
+	errors:       settings.getErrors('allowAttachments')
+}) }}
