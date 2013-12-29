@@ -12,6 +12,51 @@ class ContactFormController extends BaseController
 	 */
 	protected $allowAnonymous = true;
 
+
+    /**
+     * Checks that the 'honeypot' field has not been filled out (assuming one has been set).
+     *
+     * @param string $fieldName The honeypot field name.
+     *
+     * @return bool
+     */
+    protected function validateHoneypot($fieldName)
+    {
+        if ( ! $fieldName) {
+            return true;
+        }
+
+        $honey = craft()->request->getPost($fieldName);
+        return $honey == '';
+    }
+
+
+    /**
+     * Returns a 'success' response.
+     *
+     * @return void
+     */
+    protected function returnSuccess()
+    {
+        if (craft()->request->isAjaxRequest())
+        {
+            $this->returnJson(array('success' => true));
+        }
+        else
+        {
+            // Deprecated. Use 'redirect' instead.
+            $successRedirectUrl = craft()->request->getPost('successRedirectUrl');
+
+            if ($successRedirectUrl)
+            {
+                $_POST['redirect'] = $successRedirectUrl;
+            }
+
+            $this->redirectToPostedUrl();
+        }
+    }
+
+
 	/**
 	 * Sends an email based on the posted params.
 	 *
@@ -45,6 +90,12 @@ class ContactFormController extends BaseController
 				$this->redirectToPostedUrl();
 			}
 		}
+
+        if ( ! $this->validateHoneypot($settings->honeypotField)) {
+            // Pretend everything worked, so the evil spammer is none the wiser.
+            $this->returnSuccess();
+            return;
+        }
 
 		$message = new ContactFormModel();
 		$savedBody = false;
