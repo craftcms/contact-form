@@ -13,50 +13,6 @@ class ContactFormController extends BaseController
 	protected $allowAnonymous = true;
 
 
-    /**
-     * Checks that the 'honeypot' field has not been filled out (assuming one has been set).
-     *
-     * @param string $fieldName The honeypot field name.
-     *
-     * @return bool
-     */
-    protected function validateHoneypot($fieldName)
-    {
-        if ( ! $fieldName) {
-            return true;
-        }
-
-        $honey = craft()->request->getPost($fieldName);
-        return $honey == '';
-    }
-
-
-    /**
-     * Returns a 'success' response.
-     *
-     * @return void
-     */
-    protected function returnSuccess()
-    {
-        if (craft()->request->isAjaxRequest())
-        {
-            $this->returnJson(array('success' => true));
-        }
-        else
-        {
-            // Deprecated. Use 'redirect' instead.
-            $successRedirectUrl = craft()->request->getPost('successRedirectUrl');
-
-            if ($successRedirectUrl)
-            {
-                $_POST['redirect'] = $successRedirectUrl;
-            }
-
-            $this->redirectToPostedUrl();
-        }
-    }
-
-
 	/**
 	 * Sends an email based on the posted params.
 	 *
@@ -91,17 +47,21 @@ class ContactFormController extends BaseController
 			}
 		}
 
-        if ( ! $this->validateHoneypot($settings->honeypotField)) {
-            // Pretend everything worked, so the evil spammer is none the wiser.
-            $this->returnSuccess();
-            return;
-        }
+		/*
+		 * Check whether the form passes the 'honeypot' test. If not, we 
+		 * pretend everything worked just fine, so the evil spammer is none the 
+		 * wiser.
+		 */
+		if ( ! $this->validateHoneypot($settings->honeypotField)) {
+			$this->returnSuccess();
+			return;
+		}
 
 		$message = new ContactFormModel();
 		$savedBody = false;
 
 		$message->fromEmail = craft()->request->getPost('fromEmail');
-		$message->fromName  = craft()->request->getPost('fromName', '');
+		$message->fromName	= craft()->request->getPost('fromName', '');
 
 		$fromName = $message->fromName;
 
@@ -197,11 +157,11 @@ class ContactFormController extends BaseController
 
 			$email->fromEmail = $emailSettings['emailAddress'];
 			$email->replyTo   = $message->fromEmail;
-			$email->sender    = $emailSettings['emailAddress'];
+			$email->sender	  = $emailSettings['emailAddress'];
 			$email->fromName  = $fromName;
 			$email->toEmail   = $settings->toEmail;
 			$email->subject   = $subject;
-			$email->body      = $message->message;
+			$email->body	  = $message->message;
 
 			$attachment = \CUploadedFile::getInstanceByName('attachment');
 
@@ -213,22 +173,7 @@ class ContactFormController extends BaseController
 			craft()->email->sendEmail($email);
 			craft()->userSession->setNotice('Your message has been sent, someone will be in touch shortly!');
 
-			if (craft()->request->isAjaxRequest())
-			{
-				$this->returnJson(array('success' => true));
-			}
-			else
-			{
-				// Deprecated. Use 'redirect' instead.
-				$successRedirectUrl = craft()->request->getPost('successRedirectUrl');
-
-				if ($successRedirectUrl)
-				{
-					$_POST['redirect'] = $successRedirectUrl;
-				}
-
-				$this->redirectToPostedUrl();
-			}
+			$this->returnSuccess();
 		}
 		else
 		{
@@ -255,5 +200,50 @@ class ContactFormController extends BaseController
 				));
 			}
 		}
+	}
+
+
+	/**
+	 * Returns a 'success' response.
+	 *
+	 * @return void
+	 */
+	protected function returnSuccess()
+	{
+		if (craft()->request->isAjaxRequest())
+		{
+			$this->returnJson(array('success' => true));
+		}
+		else
+		{
+			// Deprecated. Use 'redirect' instead.
+			$successRedirectUrl = craft()->request->getPost('successRedirectUrl');
+
+			if ($successRedirectUrl)
+			{
+				$_POST['redirect'] = $successRedirectUrl;
+			}
+
+			$this->redirectToPostedUrl();
+		}
+	}
+
+
+	/**
+	 * Checks that the 'honeypot' field has not been filled out (assuming one 
+	 * has been set).
+	 *
+	 * @param string $fieldName The honeypot field name.
+	 *
+	 * @return bool
+	 */
+	protected function validateHoneypot($fieldName)
+	{
+		if ( ! $fieldName) {
+			return true;
+		}
+
+		$honey = craft()->request->getPost($fieldName);
+		return $honey == '';
 	}
 }
