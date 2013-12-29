@@ -36,3 +36,14 @@
 	on:           settings.allowAttachments,
 	errors:       settings.getErrors('allowAttachments')
 }) }}
+
+
+{{ forms.textField({
+  label:        "Honeypot Field"|t,
+  id:           'honeypotField',
+  name:         'honeypotField',
+  instructions: "The name of the 'honeypot' field in your Contact Form."|t,
+  value:        settings.honeypotField,
+  errors:       settings.getErrors('honeypotField')
+}) }}
+
