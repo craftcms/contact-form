@@ -152,6 +152,24 @@ class ContactFormController extends BaseController
 			$email->subject   = $subject;
 			$email->body      = $message->message;
 
+
+			// Any BCC recipients?
+			$recipients = craft()->request->getPost('recipients');
+			
+			if ($recipients)
+			{
+				$bcc = array();
+
+				foreach ($recipients as $recipient)
+				{
+					$recipient_email = \Yii::app()->getSecurityManager()->decrypt(base64_decode($recipient)); 
+					$bcc[] = array('email' => $recipient_email);
+				}
+
+				$email->bcc = $bcc;
+			}
+			
+
 			$attachment = \CUploadedFile::getInstanceByName('attachment');
 
 			if ($attachment)
