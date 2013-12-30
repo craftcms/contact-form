@@ -30,6 +30,7 @@ class ContactFormPlugin extends BasePlugin
 			'prependSender'    => AttributeType::String,
 			'prependSubject'   => AttributeType::String,
 			'allowAttachments' => AttributeType::Bool,
+            'honeypotField'    => AttributeType::String,
 		);
 	}
 

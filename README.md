@@ -11,6 +11,25 @@ To install Contact Form, follow these steps:
 2.  Go to Settings > Plugins from your Craft control panel and enable the Contact Form plugin.
 3.  Click on “Contact Form” to go to the plugin’s settings page, and configure the plugin how you’d like.
 
+## The "Honeypot" field
+The [Honeypot Captcha][honeypot] is a simple anti-spam technique, which greatly reduces the efficacy of spambots without expecting your visitors to decipher various tortured letterforms.
+
+[honeypot]: http://haacked.com/archive/2007/09/11/honeypot-captcha.aspx/ "The origins of the Honeypot Captcha"
+
+In brief, it works like this:
+
+1. You add a normal text field (our "honeypot") to your form, and hide it using CSS.
+2. Normal (human) visitors won't fill out this invisible text field, but those crazy spambots will.
+3. The ContactForm plugin checks to see if the "honeypot" form field contains text. If it does, it assumes the form was submitted by Evil People, and ignores it (but pretends that everything is A-OK, so the evildoer is none the wiser).
+
+### Example "Honeypot" implementation
+When naming your form field, it's probably best to avoid monikers such as "dieEvilSpammers", in favour of something a little more tempting. For example:
+
+    <input id="preferredKitten" name="preferredKitten" type="text">
+
+In this case, you could hide your form field using the following CSS:
+
+    input#preferredKitten { display: none; }
 
 ## Usage
 
