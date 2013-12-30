@@ -94,6 +94,13 @@ An email sent with the above form might result in the following message:
     Cathy Chino
 
 
+### Adding BCC recipients
+
+You can add additional recipients to a form by using the following Twig function/filter. The example code below will create a hidden input field in your form which contains the encrypted BCC recipient. You can add as many BCC recipients as you wish.
+
+    {{ 'my@email.com' | contact_recipient }}
+
+
 ### File attachments
 
 If you would like your contact form to accept file attachments, follow these steps:
