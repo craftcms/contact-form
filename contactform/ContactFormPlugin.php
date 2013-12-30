@@ -10,7 +10,7 @@ class ContactFormPlugin extends BasePlugin
 
 	function getVersion()
 	{
-		return '1.1';
+		return '1.2';
 	}
 
 	function getDeveloper()
@@ -30,7 +30,7 @@ class ContactFormPlugin extends BasePlugin
 			'prependSender'    => AttributeType::String,
 			'prependSubject'   => AttributeType::String,
 			'allowAttachments' => AttributeType::Bool,
-            'honeypotField'    => AttributeType::String,
+			'honeypotField'    => AttributeType::String,
 		);
 	}
 

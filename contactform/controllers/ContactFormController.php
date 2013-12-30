@@ -47,12 +47,10 @@ class ContactFormController extends BaseController
 			}
 		}
 
-		/*
-		 * Check whether the form passes the 'honeypot' test. If not, we 
-		 * pretend everything worked just fine, so the evil spammer is none the 
-		 * wiser.
-		 */
-		if ( ! $this->validateHoneypot($settings->honeypotField)) {
+		// Check whether the form passes the 'honeypot' test. If not, we pretend everything worked just fine,
+		// so the evil spammer is none the wiser.
+		if (!$this->validateHoneypot($settings->honeypotField))
+		{
 			$this->returnSuccess();
 			return;
 		}
@@ -230,16 +228,15 @@ class ContactFormController extends BaseController
 
 
 	/**
-	 * Checks that the 'honeypot' field has not been filled out (assuming one 
-	 * has been set).
+	 * Checks that the 'honeypot' field has not been filled out (assuming one has been set).
 	 *
 	 * @param string $fieldName The honeypot field name.
-	 *
 	 * @return bool
 	 */
 	protected function validateHoneypot($fieldName)
 	{
-		if ( ! $fieldName) {
+		if (!$fieldName)
+		{
 			return true;
 		}
 
