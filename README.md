@@ -157,7 +157,7 @@ class SomePlugin extends BasePlugin
 
     public function init()
     {
-        craft()->on('contactForm.beforeSend', funciton(ContactFormEvent $event) {
+        craft()->on('contactForm.beforeSend', function(ContactFormEvent $event) {
             $email = $event->params['email'];
 
             // ...
