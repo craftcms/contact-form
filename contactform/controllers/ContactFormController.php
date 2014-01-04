@@ -168,6 +168,21 @@ class ContactFormController extends BaseController
 				$email->addAttachment($attachment->getTempName(), $attachment->getName(), 'base64', $attachment->getType());
 			}
 
+			// onBeforeSend()
+			// Gives plugins a chance to intervene before the email is sent
+			$hookParams		= array('emailModel' => $email);
+			$hookResponses	= craft()->plugins->call('contactFormOnBeforeSend', $hookParams);
+
+			foreach ($hookResponses as $plugin => $response)
+			{
+				// @see Honeypot behavior above
+				if (false === $response)
+				{
+					$this->returnSuccess();
+					return;
+				}
+			}
+
 			craft()->email->sendEmail($email);
 			craft()->userSession->setNotice('Your message has been sent, someone will be in touch shortly!');
 
