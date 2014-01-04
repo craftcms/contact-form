@@ -10,7 +10,7 @@ class ContactFormPlugin extends BasePlugin
 
 	function getVersion()
 	{
-		return '1.2';
+		return '1.3';
 	}
 
 	function getDeveloper()

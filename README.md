@@ -145,8 +145,33 @@ You can optionally post contact form submissions over Ajax if you’d like. Just
         });
     });
 
+### The contactFormOnBeforeSend hook
+The `contactFormOnBeforeSend()` hook allows you to intervene before the email is sent.
+So if you want to further validate the email content and/or prevent it from being sent altogether,
+you can do so by adding a `public` method named `contactFormOnBeforeSend` to your main plugin class.
+
+```php
+class SomePlugin extends BasePlugin
+{
+    // ...
+
+    public function contactFormOnBeforeSend(BaseModel $email)
+    {
+        // Do what you need to do...
+
+        // Then you can...
+        return false;
+
+        // That tells craft to not send the email but return a successful response
+        // The same behavior as implemented for the honeypot feature
+    }
+}
+```
 
 ## Changelog
+
+### 1.3
+* Added the `contactFormOnBeforeSend()` hook for other plugins to use
 
 ### 1.2
 
