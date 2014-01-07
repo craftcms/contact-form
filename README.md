@@ -158,12 +158,24 @@ class SomePlugin extends BasePlugin
     public function init()
     {
         craft()->on('contactForm.beforeSend', function(ContactFormEvent $event) {
-            $email = $event->params['email'];
+            $message = $event->params['message'];
 
             // ...
 
+            if ($isVulgar)
+            {
+                // Setting $isValid to false will cause a validation error
+                // and prevent the email from being sent
+
+                $message->addError('message', 'Do you kiss your mother with those lips?');
+                $event->isValid = false;
+            }
+
             if ($isSpam)
             {
+                // Setting $fakeIt to true will make things look as if the email was sent,
+                // but really it wasn't
+
                 $event->fakeIt = true;
             }
         });
@@ -174,8 +186,10 @@ class SomePlugin extends BasePlugin
 ## Changelog
 
 ### 1.3
+
+* Added support for multiple email addresses
 * Added the ContactFormService
-* Added the `contactForm.beforeSend` event
+* Added the `contactForm.beforeSend` event, allowing third party plugins to add extra validation
 
 ### 1.2
 
