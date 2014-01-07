@@ -23,40 +23,44 @@ class ContactFormService extends BaseApplicationComponent
 
 		if ($message->validate())
 		{
-			$email = new EmailModel();
-			$emailSettings = craft()->email->getSettings();
-
-			$email->fromEmail = $emailSettings['emailAddress'];
-			$email->replyTo   = $message->fromEmail;
-			$email->sender    = $emailSettings['emailAddress'];
-			$email->fromName  = $settings->prependSender . ($settings->prependSender && $message->fromName ? ' ' : '') . $message->fromName;
-			$email->toEmail   = $settings->toEmail;
-			$email->subject   = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
-			$email->body      = $message->message;
-
-			if ($message->attachment)
-			{
-				$email->addAttachment($message->attachment->getTempName(), $message->attachment->getName(), 'base64', $message->attachment->getType());
-			}
-
 			// Fire an 'onBeforeSend' event
 			Craft::import('plugins.contactform.events.ContactFormEvent');
-			$event = new ContactFormEvent($this, array('email' => $email));
+			$event = new ContactFormEvent($this, array('message' => $message));
 			$this->onBeforeSend($event);
 
-			if ($event->fakeIt)
+			if ($event->isValid)
 			{
+				if (!$event->fakeIt)
+				{
+					$toEmails = ArrayHelper::stringToArray($settings->toEmail);
+
+					foreach ($toEmails as $toEmail)
+					{
+						$email = new EmailModel();
+						$emailSettings = craft()->email->getSettings();
+
+						$email->fromEmail = $emailSettings['emailAddress'];
+						$email->replyTo   = $message->fromEmail;
+						$email->sender    = $emailSettings['emailAddress'];
+						$email->fromName  = $settings->prependSender . ($settings->prependSender && $message->fromName ? ' ' : '') . $message->fromName;
+						$email->toEmail   = $toEmail;
+						$email->subject   = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
+						$email->body      = $message->message;
+
+						if ($message->attachment)
+						{
+							$email->addAttachment($message->attachment->getTempName(), $message->attachment->getName(), 'base64', $message->attachment->getType());
+						}
+
+						craft()->email->sendEmail($email);
+					}
+				}
+
 				return true;
 			}
-			else
-			{
-				return craft()->email->sendEmail($email);
-			}
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
