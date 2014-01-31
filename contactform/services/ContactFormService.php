@@ -9,7 +9,8 @@ class ContactFormService extends BaseApplicationComponent
 	/**
 	 * Sends an email submitted through a contact form.
 	 *
-	 * @paraam ContactFormModel $message
+	 * @param ContactFormModel $message
+	 * @throws Exception
 	 * @return bool
 	 */
 	public function sendMessage(ContactFormModel $message)
@@ -21,43 +22,40 @@ class ContactFormService extends BaseApplicationComponent
 			throw new Exception('The "To Email" address is not set on the plugin’s settings page.');
 		}
 
-		if ($message->validate())
+		// Fire an 'onBeforeSend' event
+		Craft::import('plugins.contactform.events.ContactFormEvent');
+		$event = new ContactFormEvent($this, array('message' => $message));
+		$this->onBeforeSend($event);
+
+		if ($event->isValid)
 		{
-			// Fire an 'onBeforeSend' event
-			Craft::import('plugins.contactform.events.ContactFormEvent');
-			$event = new ContactFormEvent($this, array('message' => $message));
-			$this->onBeforeSend($event);
-
-			if ($event->isValid)
+			if (!$event->fakeIt)
 			{
-				if (!$event->fakeIt)
+				$toEmails = ArrayHelper::stringToArray($settings->toEmail);
+
+				foreach ($toEmails as $toEmail)
 				{
-					$toEmails = ArrayHelper::stringToArray($settings->toEmail);
+					$email = new EmailModel();
+					$emailSettings = craft()->email->getSettings();
 
-					foreach ($toEmails as $toEmail)
+					$email->fromEmail = $emailSettings['emailAddress'];
+					$email->replyTo   = $message->fromEmail;
+					$email->sender    = $emailSettings['emailAddress'];
+					$email->fromName  = $settings->prependSender . ($settings->prependSender && $message->fromName ? ' ' : '') . $message->fromName;
+					$email->toEmail   = $toEmail;
+					$email->subject   = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
+					$email->body      = $message->message;
+
+					if ($message->attachment)
 					{
-						$email = new EmailModel();
-						$emailSettings = craft()->email->getSettings();
-
-						$email->fromEmail = $emailSettings['emailAddress'];
-						$email->replyTo   = $message->fromEmail;
-						$email->sender    = $emailSettings['emailAddress'];
-						$email->fromName  = $settings->prependSender . ($settings->prependSender && $message->fromName ? ' ' : '') . $message->fromName;
-						$email->toEmail   = $toEmail;
-						$email->subject   = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
-						$email->body      = $message->message;
-
-						if ($message->attachment)
-						{
-							$email->addAttachment($message->attachment->getTempName(), $message->attachment->getName(), 'base64', $message->attachment->getType());
-						}
-
-						craft()->email->sendEmail($email);
+						$email->addAttachment($message->attachment->getTempName(), $message->attachment->getName(), 'base64', $message->attachment->getType());
 					}
-				}
 
-				return true;
+					craft()->email->sendEmail($email);
+				}
 			}
+
+			return true;
 		}
 
 		return false;
@@ -66,7 +64,7 @@ class ContactFormService extends BaseApplicationComponent
 	/**
 	 * Fires an 'onBeforeSend' event.
 	 *
-	 * @param ContactFormModel $event
+	 * @param ContactFormEvent $event
 	 */
 	public function onBeforeSend(ContactFormEvent $event)
 	{

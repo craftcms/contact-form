@@ -95,33 +95,34 @@ class ContactFormController extends BaseController
 			}
 		}
 
-		// Send
-		if (craft()->contactForm->sendMessage($message))
+		if ($message->validate())
 		{
-			$this->returnSuccess();
+			// Send
+			if (craft()->contactForm->sendMessage($message))
+			{
+				$this->returnSuccess();
+			}
+		}
+
+		// Something has gone horribly wrong.
+		if (craft()->request->isAjaxRequest())
+		{
+			return $this->returnErrorJson($message->getErrors());
 		}
 		else
 		{
-			if (craft()->request->isAjaxRequest())
-			{
-				return $this->returnErrorJson($message->getErrors());
-			}
-			else
-			{
-				craft()->userSession->setError('There was a problem with your submission, please check the form and try again!');
+			craft()->userSession->setError('There was a problem with your submission, please check the form and try again!');
 
-				if ($savedBody)
-				{
-					$message->message = $savedBody;
-				}
-
-				craft()->urlManager->setRouteVariables(array(
-					'message' => $message
-				));
+			if ($savedBody !== false)
+			{
+				$message->message = $savedBody;
 			}
+
+			craft()->urlManager->setRouteVariables(array(
+				'message' => $message
+			));
 		}
 	}
-
 
 	/**
 	 * Returns a 'success' response.
