@@ -54,6 +54,8 @@ Your contact form template can look something like this:
 
 The only required fields are “fromEmail” and “message”. Everything else is optional.
 
+If you have a “redirect” hidden input, the user will get redirected to it upon successfully sending the email.
+
 ### Adding additional fields
 
 You can add additional fields to your form by splitting your “message” field into multiple fields, using an array syntax for the input names:
@@ -81,9 +83,6 @@ An email sent with the above form might result in the following message:
     Services: Design, Development
 
     Hey guys, I really loved this simple contact form (I'm so tired of agencies
-If you have a “redirect” hidden input, the user will get redirected to it upon successfully sending the email.
-
-
     asking for everything but my social security number up front), so I trust
     you guys know a thing or two about usability.
 
