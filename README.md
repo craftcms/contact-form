@@ -54,7 +54,26 @@ Your contact form template can look something like this:
 
 The only required fields are “fromEmail” and “message”. Everything else is optional.
 
-If you have a “redirect” hidden input, the user will get redirected to it upon successfully sending the email.
+### Redirecting after submit
+
+If you have a ‘redirect’ hidden input, the user will get redirected to it upon successfully sending the email. The following variables can be used within the URL/path you set:
+
+- `{fromName}`
+- `{fromEmail}`
+- `{subject}`
+
+For example, if you wanted to redirect to a “contact/thanks” page and pass the sender’s name to it, you could set the input like this:
+
+    <input type="hidden" name="redirect" value="contact/thanks?from={fromName}">
+
+On your contact/thanks.html template, you can access that ‘from’ parameter using [craft.request.getQuery()](http://buildwithcraft.com/docs/templating/craft.request#getQuery):
+
+```jinja
+<p>Thanks for sending that in, {{ craft.request.getQuery('from') }}!</p>
+```
+
+Note that if you don’t include a ‘redirect’ input, the current page will get reloaded.
+
 
 ### Adding additional fields
 
