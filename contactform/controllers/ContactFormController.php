@@ -24,13 +24,6 @@ class ContactFormController extends BaseController
 
 		$settings = craft()->plugins->getPlugin('contactform')->getSettings();
 
-		// Check whether the form passes the 'honeypot' test. If not, we pretend everything worked just fine,
-		// so the evil spammer is none the wiser.
-		if (!$this->validateHoneypot($settings->honeypotField))
-		{
-			$this->returnSuccess();
-		}
-
 		$message = new ContactFormModel();
 		$savedBody = false;
 
@@ -103,10 +96,26 @@ class ContactFormController extends BaseController
 
 		if ($message->validate())
 		{
-			// Send
-			if (craft()->contactForm->sendMessage($message))
+			// Only actually send it if the honeypot test was valid
+			if (!$this->validateHoneypot($settings->honeypotField) || craft()->contactForm->sendMessage($message))
 			{
-				$this->returnSuccess();
+				if (craft()->request->isAjaxRequest())
+				{
+					$this->returnJson(array('success' => true));
+				}
+				else
+				{
+					// Deprecated. Use 'redirect' instead.
+					$successRedirectUrl = craft()->request->getPost('successRedirectUrl');
+
+					if ($successRedirectUrl)
+					{
+						$_POST['redirect'] = $successRedirectUrl;
+					}
+
+					craft()->userSession->setNotice('Your message has been sent.');
+					$this->redirectToPostedUrl($message);
+				}
 			}
 		}
 
@@ -127,32 +136,6 @@ class ContactFormController extends BaseController
 			craft()->urlManager->setRouteVariables(array(
 				'message' => $message
 			));
-		}
-	}
-
-	/**
-	 * Returns a 'success' response.
-	 *
-	 * @return void
-	 */
-	protected function returnSuccess()
-	{
-		if (craft()->request->isAjaxRequest())
-		{
-			$this->returnJson(array('success' => true));
-		}
-		else
-		{
-			// Deprecated. Use 'redirect' instead.
-			$successRedirectUrl = craft()->request->getPost('successRedirectUrl');
-
-			if ($successRedirectUrl)
-			{
-				$_POST['redirect'] = $successRedirectUrl;
-			}
-
-			craft()->userSession->setNotice('Your message has been sent.');
-			$this->redirectToPostedUrl();
 		}
 	}
 
