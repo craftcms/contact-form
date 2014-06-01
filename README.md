@@ -15,61 +15,62 @@ To install Contact Form, follow these steps:
 
 Your contact form template can look something like this:
 
-    {% macro errorList(errors) %}
-        {% if errors %}
-            <ul class="errors">
-                {% for error in errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endmacro %}
+```jinja
+{% macro errorList(errors) %}
+    {% if errors %}
+        <ul class="errors">
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
 
-    {% from _self import errorList %}
+{% from _self import errorList %}
 
-    <form method="post" action="" accept-charset="UTF-8">
-        <input type="hidden" name="action" value="contactForm/sendMessage">
-        <input type="hidden" name="redirect" value="contact/thanks">
+<form method="post" action="" accept-charset="UTF-8">
+    <input type="hidden" name="action" value="contactForm/sendMessage">
+    <input type="hidden" name="redirect" value="contact/thanks">
 
-        <h3><label for="fromName">Your Name</label></h3>
-        <input id="fromName" type="text" name="fromName" value="{% if message is defined %}{{ message.fromName }}{% endif %}">
-        {% if message is defined %}{{ errorList(message.getErrors('fromName')) }}{% endif %}
+    <h3><label for="fromName">Your Name</label></h3>
+    <input id="fromName" type="text" name="fromName" value="{% if message is defined %}{{ message.fromName }}{% endif %}">
+    {% if message is defined %}{{ errorList(message.getErrors('fromName')) }}{% endif %}
 
-        <h3><label for="fromEmail">Your Email</label></h3>
-        <input id="fromEmail" type="text" name="fromEmail" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
-        {% if message is defined %}{{ errorList(message.getErrors('fromEmail')) }}{% endif %}
+    <h3><label for="fromEmail">Your Email</label></h3>
+    <input id="fromEmail" type="text" name="fromEmail" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
+    {% if message is defined %}{{ errorList(message.getErrors('fromEmail')) }}{% endif %}
 
-        <h3><label for="subject">Subject</label></h3>
-        <input id="subject" type="text" name="subject" value="{% if message is defined %}{{ message.subject }}{% endif %}">
-        {% if message is defined %}{{ errorList(message.getErrors('subject')) }}{% endif %}
+    <h3><label for="subject">Subject</label></h3>
+    <input id="subject" type="text" name="subject" value="{% if message is defined %}{{ message.subject }}{% endif %}">
+    {% if message is defined %}{{ errorList(message.getErrors('subject')) }}{% endif %}
 
-        <h3><label for="message">Message</label></h3>
-        <textarea rows="10" cols="40" id="message" name="message">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
-        {% if message is defined %}{{ errorList(message.getErrors('message')) }}{% endif %}
+    <h3><label for="message">Message</label></h3>
+    <textarea rows="10" cols="40" id="message" name="message">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
+    {% if message is defined %}{{ errorList(message.getErrors('message')) }}{% endif %}
 
-        <input type="submit" value="Send">
-    </form>
+    <input type="submit" value="Send">
+</form>
+```
 
 The only required fields are “fromEmail” and “message”. Everything else is optional.
-
-If you have a “redirect” hidden input, the user will get redirected to it upon successfully sending the email.
-
 
 ### Adding additional fields
 
 You can add additional fields to your form by splitting your “message” field into multiple fields, using an array syntax for the input names:
 
-    <h3><label for="message">Message</label></h3>
-    <textarea rows="10" cols="40" id="message" name="message[body]">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
+```jinja
+<h3><label for="message">Message</label></h3>
+<textarea rows="10" cols="40" id="message" name="message[body]">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
 
-    <h3><label for="phone">Your phone number</label></h3>
-    <input id="phone" type="text" name="message[Phone]" value="">
+<h3><label for="phone">Your phone number</label></h3>
+<input id="phone" type="text" name="message[Phone]" value="">
 
-    <h3>What services are you interested in?</h3>
-    <label><input type="checkbox" name="message[Services][]" value="Design"> Design</label>
-    <label><input type="checkbox" name="message[Services][]" value="Development"> Development</label>
-    <label><input type="checkbox" name="message[Services][]" value="Strategy"> Strategy</label>
-    <label><input type="checkbox" name="message[Services][]" value="Marketing"> Marketing</label>
+<h3>What services are you interested in?</h3>
+<label><input type="checkbox" name="message[Services][]" value="Design"> Design</label>
+<label><input type="checkbox" name="message[Services][]" value="Development"> Development</label>
+<label><input type="checkbox" name="message[Services][]" value="Strategy"> Strategy</label>
+<label><input type="checkbox" name="message[Services][]" value="Marketing"> Marketing</label>
+```
 
 If you have a primary “Message” field, you should name it ``message[body]``, like in that example.
 
@@ -80,6 +81,9 @@ An email sent with the above form might result in the following message:
     Services: Design, Development
 
     Hey guys, I really loved this simple contact form (I'm so tired of agencies
+If you have a “redirect” hidden input, the user will get redirected to it upon successfully sending the email.
+
+
     asking for everything but my social security number up front), so I trust
     you guys know a thing or two about usability.
 
@@ -107,11 +111,15 @@ In brief, it works like this:
 ### Example “Honeypot” implementation
 When naming your form field, it's probably best to avoid monikers such as “dieEvilSpammers”, in favour of something a little more tempting. For example:
 
-    <input id="preferredKitten" name="preferredKitten" type="text">
+```html
+<input id="preferredKitten" name="preferredKitten" type="text">
+```
 
 In this case, you could hide your form field using the following CSS:
 
-    input#preferredKitten { display: none; }
+```css
+input#preferredKitten { display: none; }
+```
 
 ### File attachments
 
@@ -126,24 +134,26 @@ If you would like your contact form to accept file attachments, follow these ste
 
 You can optionally post contact form submissions over Ajax if you’d like. Just send a POST request to your site with all of the same data that would normally be sent:
 
-    $('#my-form').submit(function(ev) {
-        // Prevent the form from actually submitting
-        ev.preventDefault();
+```js
+$('#my-form').submit(function(ev) {
+    // Prevent the form from actually submitting
+    ev.preventDefault();
 
-        // Get the post data
-        var data = $(this).serialize();
+    // Get the post data
+    var data = $(this).serialize();
 
-        // Send it to the server
-        $.post('/', data, function(response) {
-            if (response.success) {
-                $('#thanks').fadeIn();
-            } else {
-                // response.error will be an object containing any validation errors that occurred, indexed by field name
-                // e.g. response.error.fromName => ['From Name is required']
-                alert('An error occurred. Please try again.');
-            }
-        });
+    // Send it to the server
+    $.post('/', data, function(response) {
+        if (response.success) {
+            $('#thanks').fadeIn();
+        } else {
+            // response.error will be an object containing any validation errors that occurred, indexed by field name
+            // e.g. response.error.fromName => ['From Name is required']
+            alert('An error occurred. Please try again.');
+        }
     });
+});
+```
 
 ### The `contactForm.beforeSend` event
 
