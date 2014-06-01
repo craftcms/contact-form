@@ -213,6 +213,10 @@ class SomePlugin extends BasePlugin
 
 ## Changelog
 
+### 1.4
+
+* Added support for passing `{fromName}`, `{fromEmail}`, and `{subject}` in the ‘redirect’ URL.
+
 ### 1.3
 
 * Added support for multiple email addresses
