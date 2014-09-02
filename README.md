@@ -29,6 +29,7 @@ Your contact form template can look something like this:
 {% from _self import errorList %}
 
 <form method="post" action="" accept-charset="UTF-8">
+    {{ getCsrfInput() }}
     <input type="hidden" name="action" value="contactForm/sendMessage">
     <input type="hidden" name="redirect" value="contact/thanks">
 
