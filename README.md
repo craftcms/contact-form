@@ -35,19 +35,19 @@ Your contact form template can look something like this:
 
     <h3><label for="fromName">Your Name</label></h3>
     <input id="fromName" type="text" name="fromName" value="{% if message is defined %}{{ message.fromName }}{% endif %}">
-    {% if message is defined %}{{ errorList(message.getErrors('fromName')) }}{% endif %}
+    {{ message is defined and message ? errorList(message.getErrors('fromName')) }}
 
     <h3><label for="fromEmail">Your Email</label></h3>
     <input id="fromEmail" type="text" name="fromEmail" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
-    {% if message is defined %}{{ errorList(message.getErrors('fromEmail')) }}{% endif %}
+    {{ message is defined and message ? errorList(message.getErrors('fromEmail')) }}
 
     <h3><label for="subject">Subject</label></h3>
     <input id="subject" type="text" name="subject" value="{% if message is defined %}{{ message.subject }}{% endif %}">
-    {% if message is defined %}{{ errorList(message.getErrors('subject')) }}{% endif %}
+    {{ message is defined and message ? errorList(message.getErrors('subject')) }}
 
     <h3><label for="message">Message</label></h3>
     <textarea rows="10" cols="40" id="message" name="message">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
-    {% if message is defined %}{{ errorList(message.getErrors('message')) }}{% endif %}
+    {{ message is defined and message ? errorList(message.getErrors('message')) }}
 
     <input type="submit" value="Send">
 </form>
