@@ -48,7 +48,10 @@ class ContactFormService extends BaseApplicationComponent
 
 					if ($message->attachment)
 					{
-						$email->addAttachment($message->attachment->getTempName(), $message->attachment->getName(), 'base64', $message->attachment->getType());
+						foreach ($message->attachment as $attachment)
+						{
+							$email->addAttachment($attachment->getTempName(), $attachment->getName(), 'base64', $attachment->getType());
+						}
 					}
 
 					craft()->email->sendEmail($email);
