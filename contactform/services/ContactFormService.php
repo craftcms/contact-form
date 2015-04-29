@@ -34,8 +34,17 @@ class ContactFormService extends BaseApplicationComponent
 				$toEmails = ArrayHelper::stringToArray($settings->toEmail);
 
                 // translation subject / body
-                $translationSubject = Craft::t('contactform_subject', null, null, 'en_us');
-                $translationBody = Craft::t('contactform_body', null, null, 'en_us');
+                if (craft()->getEdition() >= Craft::Client)
+                {
+                    $rebrandMessage = craft()->emailMessages->getMessage('contactform');
+                    $translationSubject = $rebrandMessage->subject;
+                    $translationBody  = $rebrandMessage->body;
+                }
+                else
+                {
+                    $translationSubject = Craft::t('contactform_subject', null, null, 'en_us');
+                    $translationBody = Craft::t('contactform_body', null, null, 'en_us');
+                }
 
                 // prepend message subject?
                 $message->subject = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
