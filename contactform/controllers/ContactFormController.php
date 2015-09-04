@@ -27,6 +27,7 @@ class ContactFormController extends BaseController
 		$message = new ContactFormModel();
 		$savedBody = false;
 
+		$message->toEmail    = craft()->request->getPost('toEmail');
 		$message->fromEmail  = craft()->request->getPost('fromEmail');
 		$message->fromName	 = craft()->request->getPost('fromName');
 		$message->subject    = craft()->request->getPost('subject');
