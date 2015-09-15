@@ -17,7 +17,7 @@ class ContactFormService extends BaseApplicationComponent
 	{
 		$settings = craft()->plugins->getPlugin('contactform')->getSettings();
 
-		if (!$settings->toEmail)
+		if (!$message->toEmail && !$settings->toEmail)
 		{
 			throw new Exception('The "To Email" address is not set on the plugin’s settings page.');
 		}
@@ -31,7 +31,8 @@ class ContactFormService extends BaseApplicationComponent
 		{
 			if (!$event->fakeIt)
 			{
-				$toEmails = ArrayHelper::stringToArray($settings->toEmail);
+				$to = ($message->toEmail ? $message->toEmail : $settings->toEmail);
+				$toEmails = ArrayHelper::stringToArray($to);
 
 				foreach ($toEmails as $toEmail)
 				{
