@@ -40,4 +40,10 @@ class ContactFormPlugin extends BasePlugin
 			'settings' => $this->getSettings()
 		));
 	}
+
+	public function addTwigExtension()
+	{
+		Craft::import('plugins.contactform.twigextensions.ContactFormTwigExtension');
+		return new ContactFormTwigExtension();
+	}
 }
