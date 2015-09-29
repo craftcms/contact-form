@@ -23,6 +23,13 @@ class ContactFormPlugin extends BasePlugin
 		return 'http://pixelandtonic.com';
 	}
 
+    public function registerEmailMessages()
+    {
+        return array(
+            'contactform'
+        );
+    }
+
 	protected function defineSettings()
 	{
 		return array(
