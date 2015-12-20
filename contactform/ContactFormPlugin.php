@@ -61,7 +61,7 @@ class ContactFormPlugin extends BasePlugin
 	 */
 	public function getReleaseFeedUrl()
 	{
-		return $this->getPluginUrl().'/blob/master/releases.json';
+		return 'https://raw.githubusercontent.com/pixelandtonic/ContactForm/master/releases.json';
 	}
 
 	/**
