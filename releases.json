@@ -2,22 +2,9 @@
   {
     "version": "1.4.3",
     "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.5.zip",
-    "date": "2015-12-20 14:48:00",
+    "date": "2015-12-20T15:00:00-08:00",
     "notes": [
-        "[Added] Added support for some Craft 2.5 features."
+        "[Added] Added support for some Craft 2.5 features including update notifications."
     ]
   }
-]
-
-
-[
-    {
-        "version": "1.1.0",
-        "downloadUrl": "https://github.com/pixelandtonic/BigDates/archive/1.1.0.zip",
-        "date": "2015-12-16T17:00:00-08:00",
-        "notes": [
-            "[Added] Added support for update notifications in Craft 2.5.",
-            "[Fixed] Fixed a PHP error that occurred when running Big Dates on Craft 2.5."
-        ]
-    }
 ]
