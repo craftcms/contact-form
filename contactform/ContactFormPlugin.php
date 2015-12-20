@@ -3,26 +3,80 @@ namespace Craft;
 
 class ContactFormPlugin extends BasePlugin
 {
-	function getName()
+	/**
+	 * @return mixed
+	 */
+	public function getName()
 	{
 		return Craft::t('Contact Form');
 	}
 
-	function getVersion()
+	/**
+	 * @return string
+	 */
+	public function getVersion()
 	{
-		return '1.4';
+		return '1.5';
 	}
 
-	function getDeveloper()
+	public function getSchemaVersion()
+	{
+		return '1.0.0';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDeveloper()
 	{
 		return 'Pixel & Tonic';
 	}
 
-	function getDeveloperUrl()
+	/**
+	 * @return string
+	 */
+	public function getDeveloperUrl()
 	{
 		return 'http://pixelandtonic.com';
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getPluginUrl()
+	{
+		return 'https://github.com/pixelandtonic/ContactForm';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDocumentationUrl()
+	{
+		return $this->getPluginUrl().'/blob/master/README.md';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getReleaseFeedUrl()
+	{
+		return $this->getPluginUrl().'/blob/master/changelog.json';
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getSettingsHtml()
+	{
+		return craft()->templates->render('contactform/_settings', array(
+			'settings' => $this->getSettings()
+		));
+	}
+
+	/**
+	 * @return array
+	 */
 	protected function defineSettings()
 	{
 		return array(
@@ -32,12 +86,5 @@ class ContactFormPlugin extends BasePlugin
 			'allowAttachments' => AttributeType::Bool,
 			'honeypotField'    => AttributeType::String,
 		);
-	}
-
-	public function getSettingsHtml()
-	{
-		return craft()->templates->render('contactform/_settings', array(
-			'settings' => $this->getSettings()
-		));
 	}
 }

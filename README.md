@@ -214,6 +214,10 @@ class SomePlugin extends BasePlugin
 
 ## Changelog
 
+### 1.5
+
+* Added support for some Craft 2.5 features.
+
 ### 1.4
 
 * Added support for passing `{fromName}`, `{fromEmail}`, and `{subject}` in the ‘redirect’ URL.
