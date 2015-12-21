@@ -147,6 +147,7 @@ If you would like your contact form to accept file attachments, follow these ste
 1. Go to Settings > Plugins > Contact Form in your CP and make sure the plugin is set to allow attachments.
 2. Make sure your opening HTML `<form>` tag contains `enctype="multipart/form-data"`.
 3. Add a `<input type="file" name="attachment">` to your form.
+4. If you want to allow multiple file attachments, use multiple `<input type="file" name="attachment[]">` inputs.
 
 
 ### Ajax form submissions

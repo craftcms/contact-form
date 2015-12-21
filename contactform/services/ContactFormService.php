@@ -46,9 +46,15 @@ class ContactFormService extends BaseApplicationComponent
 					$email->subject   = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
 					$email->body      = $message->message;
 
-					if ($message->attachment)
+					if (!empty($message->attachment))
 					{
-						$email->addAttachment($message->attachment->getTempName(), $message->attachment->getName(), 'base64', $message->attachment->getType());
+						foreach ($message->attachment as $attachment)
+						{
+							if ($attachment)
+							{
+								$email->addAttachment($attachment->getTempName(), $attachment->getName(), 'base64', $attachment->getType());
+							}
+						}
 					}
 
 					craft()->email->sendEmail($email);

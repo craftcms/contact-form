@@ -33,7 +33,18 @@ class ContactFormController extends BaseController
 
 		if ($settings->allowAttachments)
 		{
-			$message->attachment = \CUploadedFile::getInstanceByName('attachment');
+			if (isset($_FILES['attachment']) && isset($_FILES['attachment']['name']))
+			{
+				if (is_array($_FILES['attachment']['name']))
+				{
+					$message->attachment = \CUploadedFile::getInstancesByName('attachment');
+				}
+				else
+				{
+					$message->attachment = array(\CUploadedFile::getInstanceByName('attachment'));
+				}
+			}
+
 		}
 
 		// Set the message body
