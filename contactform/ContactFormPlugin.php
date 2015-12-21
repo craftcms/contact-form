@@ -85,6 +85,9 @@ class ContactFormPlugin extends BasePlugin
 			'prependSubject'   => AttributeType::String,
 			'allowAttachments' => AttributeType::Bool,
 			'honeypotField'    => AttributeType::String,
+			'successMessage'   => array(AttributeType::String,
+			                            'default' => 'Your message has been sent.',
+			                            'required' => true),
 		);
 	}
 }

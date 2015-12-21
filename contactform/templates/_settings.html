@@ -48,3 +48,11 @@
 	errors:       settings.getErrors('honeypotField')
 }) }}
 
+{{ forms.textField({
+	label:        "Success Message"|t,
+	id:           "successMessage",
+	name:         "successMessage",
+	instructions: "The message displayed after successfully sending a message."|t,
+	value:        settings.successMessage,
+	errors:       settings.getErrors('successMessage')
+}) }}
