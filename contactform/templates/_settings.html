@@ -1,5 +1,13 @@
 {% import "_includes/forms" as forms %}
 
+{% macro configWarning(setting) -%}
+	{{ "This is being overridden by the {setting} config setting in your contactform.php config file."|t({
+		setting: setting
+	})|raw }}
+{%- endmacro %}
+
+{% from _self import configWarning %}
+
 {{ forms.textField({
 	first:        true,
 	label:        "To Email"|t,
@@ -9,16 +17,20 @@
 	instructions: "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."|t,
 	value:        settings.toEmail,
 	autofocus:    true,
+	disabled:     (craft.config.get('toEmail', 'contactform') is not sameas(null)),
+	warning:      (craft.config.get('toEmail', 'contactform') is not sameas(null)) ? configWarning('toEmail'),
 	errors:       settings.getErrors('toEmail')
 }) }}
 
 {{ forms.textField({
-	label:         "Sender Text"|t,
-	id:            'prependSender',
-	name:          'prependSender',
+	label:        "Sender Text"|t,
+	id:           'prependSender',
+	name:         'prependSender',
 	instructions: "Text that will be prepended to the email’s From Name to inform who the Contact Form actually was sent by."|t,
-	value:         (settings.prependSender ? settings.prependSender : ""),
-	errors:        settings.getErrors('prependSender')
+	value:        (settings.prependSender ? settings.prependSender : ""),
+	disabled:     (craft.config.get('prependSender', 'contactform') is not sameas(null)),
+	warning:      (craft.config.get('prependSender', 'contactform') is not sameas(null)) ? configWarning('prependSender'),
+	errors:       settings.getErrors('prependSender')
 }) }}
 
 {{ forms.textField({
@@ -27,6 +39,8 @@
 	name:         'prependSubject',
 	instructions: "Text that will be prepended to the email’s Subject to flag that it comes from the Contact Form."|t,
 	value:        (settings.prependSubject ? settings.prependSubject : ""),
+	disabled:     (craft.config.get('prependSubject', 'contactform') is not sameas(null)),
+	warning:      (craft.config.get('prependSubject', 'contactform') is not sameas(null)) ? configWarning('prependSubject'),
 	errors:       settings.getErrors('prependSubject')
 }) }}
 
@@ -35,6 +49,8 @@
 	id:           'allowAttachments',
 	name:         'allowAttachments',
 	on:           settings.allowAttachments,
+	disabled:     (craft.config.get('allowAttachments', 'contactform') is not sameas(null)),
+	warning:      (craft.config.get('allowAttachments', 'contactform') is not sameas(null)) ? configWarning('allowAttachments'),
 	errors:       settings.getErrors('allowAttachments')
 }) }}
 
@@ -44,6 +60,8 @@
 	name:         'honeypotField',
 	instructions: "The name of the 'honeypot' field in your Contact Form."|t,
 	value:        settings.honeypotField,
+	disabled:     (craft.config.get('honeypotField', 'contactform') is not sameas(null)),
+	warning:      (craft.config.get('honeypotField', 'contactform') is not sameas(null)) ? configWarning('honeypotField'),
 	errors:       settings.getErrors('honeypotField')
 }) }}
 
@@ -53,5 +71,7 @@
 	name:         "successFlashMessage",
 	instructions: "The flash message displayed after successfully sending a message."|t,
 	value:        settings.successFlashMessage,
+	disabled:     (craft.config.get('successFlashMessage', 'contactform') is not sameas(null)),
+	warning:      (craft.config.get('successFlashMessage', 'contactform') is not sameas(null)) ? configWarning('successFlashMessage'),
 	errors:       settings.getErrors('successFlashMessage')
 }) }}
