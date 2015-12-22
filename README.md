@@ -221,7 +221,37 @@ class SomePlugin extends BasePlugin
 }
 ```
 
+### Overriding plugin settings
+
+If you create a [config file](https://craftcms.com/docs/config-settings) in your `craft/config` folder called `contactform.php`, you can override
+the plugin’s settings in the control panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/multi-environment-configs) aware, this is
+a handy way to have different settings across multiple environments.
+
+Here’s what that config file might look like along with a list of all of the possible values you can override.
+
+```php
+    <?php
+
+    return array(
+        'toEmail'             => 'bond@007.com',
+        'prependSubject'      => '',
+        'prependSender'       => '',
+        'allowAttachments'    => false,
+        'honeypotField'       => 'dieSpammers',
+        'successFlashMessage' => 'Congrats, yo!'
+    );
+```
+
 ## Changelog
+
+### 1.6
+
+* Added the ability to attach multiple files to the contact email.
+* Added the ability to define additional email recipients from the template via "additionalToEmail" hidden inputs.
+* Added the ability to change the flash success message via the "successFlashMessage" setting.
+* Added the ability to override plugin settings via a `craft/config/contactform.php` config setting.
+* The "prependSender" and "prependSubject" settings can now be empty strings.
+* Fixed a bug where the "allowAttachments" config setting wasn't being respected.
 
 ### 1.5
 

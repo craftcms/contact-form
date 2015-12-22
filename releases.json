@@ -1,10 +1,23 @@
 [
   {
-    "version": "1.4.3",
+    "version": "1.6",
+    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.6.zip",
+    "date": "2015-12-20T15:00:00-08:00",
+    "notes": [
+      "[Added] Added the ability to attach multiple files to the contact email.",
+      "[Added] Added the ability to define additional email recipients from the template via “additionalToEmail” hidden inputs.",
+      "[Added] Added the ability to change the flash success message via the “successFlashMessage” setting.",
+      "[Added] Added the ability to override plugin settings via a `craft/config/contactform.php` config file.",
+      "[Improved] The “prependSender” and “prependSubject” settings can now be empty strings.",
+      "[Fixed] Fixed a bug where the “allowAttachments” config setting wasn’t being respected."
+    ]
+  },
+  {
+    "version": "1.5",
     "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.5.zip",
     "date": "2015-12-20T15:00:00-08:00",
     "notes": [
-        "[Added] Added support for some Craft 2.5 features including update notifications."
+      "[Added] Added support for some Craft 2.5 features including update notifications."
     ]
   }
 ]
