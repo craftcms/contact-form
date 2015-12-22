@@ -115,6 +115,14 @@ An email sent with the above form might result in the following message:
 
     Cathy Chino
 
+### Dynamically adding additional email recipients (requires Craft 2.5+)
+You can programatically add additional email recipients from your template by adding hidden input fields named "additionalToEmail" like so:
+
+    <input type="hidden" name="additionalToEmail[]" value="{{ 'me@example.com'|hash }}">
+    <input type="hidden" name="additionalToEmail[]" value="{{ 'meToo@example.com'|hash }}">
+
+Note that the `|hash` filter is required because the plugin will verify the data wasn't tampered with on submit preventing turning your site in potential SPAM relay!
+
 
 ### The “Honeypot” field
 The [Honeypot Captcha][honeypot] is a simple anti-spam technique, which greatly reduces the efficacy of spambots without expecting your visitors to decipher various tortured letterforms.
