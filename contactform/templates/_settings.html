@@ -17,7 +17,7 @@
 	id:            'prependSender',
 	name:          'prependSender',
 	instructions: "Text that will be prepended to the email’s From Name to inform who the Contact Form actually was sent by."|t,
-	value:         (settings.prependSender ? settings.prependSender : "On behalf of"|t),
+	value:         (settings.prependSender ? settings.prependSender : ""),
 	errors:        settings.getErrors('prependSender')
 }) }}
 
@@ -26,7 +26,7 @@
 	id:           'prependSubject',
 	name:         'prependSubject',
 	instructions: "Text that will be prepended to the email’s Subject to flag that it comes from the Contact Form."|t,
-	value:        (settings.prependSubject ? settings.prependSubject : "New message from {siteName}"|t({ siteName: craft.app.siteName })),
+	value:        (settings.prependSubject ? settings.prependSubject : ""),
 	errors:       settings.getErrors('prependSubject')
 }) }}
 

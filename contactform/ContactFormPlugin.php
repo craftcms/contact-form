@@ -81,8 +81,8 @@ class ContactFormPlugin extends BasePlugin
 	{
 		return array(
 			'toEmail'          => array(AttributeType::String, 'required' => true),
-			'prependSender'    => AttributeType::String,
-			'prependSubject'   => AttributeType::String,
+			'prependSender'    => array(AttributeType::String, 'default' => Craft::t('On behalf of')),
+			'prependSubject'   => array(AttributeType::String, 'default' => Craft::t('New message from {siteName}', array('siteName' => craft()->getSiteName()))),
 			'allowAttachments' => AttributeType::Bool,
 			'honeypotField'    => AttributeType::String,
 		);
