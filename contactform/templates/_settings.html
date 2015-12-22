@@ -38,7 +38,6 @@
 	errors:       settings.getErrors('allowAttachments')
 }) }}
 
-
 {{ forms.textField({
 	label:        "Honeypot Field"|t,
 	id:           'honeypotField',
@@ -48,3 +47,11 @@
 	errors:       settings.getErrors('honeypotField')
 }) }}
 
+{{ forms.textField({
+	label:        "Success Flash Message"|t,
+	id:           "successFlashMessage",
+	name:         "successFlashMessage",
+	instructions: "The flash message displayed after successfully sending a message."|t,
+	value:        settings.successFlashMessage,
+	errors:       settings.getErrors('successFlashMessage')
+}) }}

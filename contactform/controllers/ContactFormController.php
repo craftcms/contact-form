@@ -170,7 +170,7 @@ class ContactFormController extends BaseController
 						$_POST['redirect'] = $successRedirectUrl;
 					}
 
-					craft()->userSession->setNotice('Your message has been sent.');
+					craft()->userSession->setNotice($settings->successFlashMessage);
 					$this->redirectToPostedUrl($message);
 				}
 			}
