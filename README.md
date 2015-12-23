@@ -160,7 +160,7 @@ Then from your `craft/config/contactform.php` config file, you’ll need to add 
     );
 );
 
-In this example if `$toEmail` doesn not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings.
+In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings.
 
 ### The “Honeypot” field
 The [Honeypot Captcha][honeypot] is a simple anti-spam technique, which greatly reduces the efficacy of spambots without expecting your visitors to decipher various tortured letterforms.
