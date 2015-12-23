@@ -170,25 +170,4 @@ class ContactFormController extends BaseController
 		$honey = craft()->request->getPost($fieldName);
 		return $honey == '';
 	}
-
-	/**
-	 * If the given $data param is serialized it will return the unserialized value. If not, it will return false.
-	 *
-	 * @param $data
-	 *
-	 * @return bool|mixed
-	 */
-	private function _getDataIfSerialized($data)
-	{
-		$data = @unserialize($data);
-
-		if ($data === 'b:0;' || $data !== false)
-		{
-			return $data;
-		}
-		else
-		{
-		    return false;
-		}
-	}
 }
