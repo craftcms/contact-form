@@ -115,14 +115,52 @@ An email sent with the above form might result in the following message:
 
     Cathy Chino
 
-### Dynamically adding additional email recipients (requires Craft 2.5+)
-You can programatically add additional email recipients from your template by adding hidden input fields named "additionalToEmail" like so:
+### Overriding plugin settings
 
-    <input type="hidden" name="additionalToEmail[]" value="{{ 'me@example.com'|hash }}">
-    <input type="hidden" name="additionalToEmail[]" value="{{ 'meToo@example.com'|hash }}">
+If you create a [config file](https://craftcms.com/docs/config-settings) in your `craft/config` folder called `contactform.php`, you can override
+the plugin’s settings in the control panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/multi-environment-configs) aware, this is
+a handy way to have different settings across multiple environments.
 
-Note that the `|hash` filter is required because the plugin will verify the data wasn't tampered with on submit preventing turning your site in potential SPAM relay!
+Here’s what that config file might look like along with a list of all of the possible values you can override.
 
+```php
+    <?php
+
+    return array(
+        'toEmail'             => 'bond@007.com',
+        'prependSubject'      => '',
+        'prependSender'       => '',
+        'allowAttachments'    => false,
+        'honeypotField'       => 'dieSpammers',
+        'successFlashMessage' => 'Congrats, yo!'
+    );
+```
+
+### Dynamically adding email recipients (requires Craft 2.5+)
+You can programatically add email recipients from your template by adding a hidden input field named “toEmail” like so:
+
+    <input type="hidden" name="toEmail" value="{{ 'me@example.com'|hash }}">
+
+If you want to add multiple recipients, you can provide a comma separated list of emails like so:
+    <input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
+
+Note that this will override any value for the plugin’s “To Email” setting in the control panel.
+
+Then from your `craft/config/contactform.php` config file, you’ll need to add a bit of logic:
+
+```php
+    <?php
+
+    $toEmail = craft()->request->getPost('toEmail');
+    $toEmail = craft()->security->validateData($toEmail);
+
+    return array(
+        'toEmail' => ($toEmail ?: null),
+        ...
+    );
+);
+
+In this example if `$toEmail` doesn not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings.
 
 ### The “Honeypot” field
 The [Honeypot Captcha][honeypot] is a simple anti-spam technique, which greatly reduces the efficacy of spambots without expecting your visitors to decipher various tortured letterforms.
@@ -219,27 +257,6 @@ class SomePlugin extends BasePlugin
         });
     }
 }
-```
-
-### Overriding plugin settings
-
-If you create a [config file](https://craftcms.com/docs/config-settings) in your `craft/config` folder called `contactform.php`, you can override
-the plugin’s settings in the control panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/multi-environment-configs) aware, this is
-a handy way to have different settings across multiple environments.
-
-Here’s what that config file might look like along with a list of all of the possible values you can override.
-
-```php
-    <?php
-
-    return array(
-        'toEmail'             => 'bond@007.com',
-        'prependSubject'      => '',
-        'prependSender'       => '',
-        'allowAttachments'    => false,
-        'honeypotField'       => 'dieSpammers',
-        'successFlashMessage' => 'Congrats, yo!'
-    );
 ```
 
 ## Changelog

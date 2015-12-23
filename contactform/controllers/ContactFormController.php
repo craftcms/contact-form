@@ -31,48 +31,6 @@ class ContactFormController extends BaseController
 		$message->fromName	 = craft()->request->getPost('fromName');
 		$message->subject    = craft()->request->getPost('subject');
 
-		$additionalToEmail = craft()->request->getPost('additionalToEmail');
-		$additionalValidToEmails = array();
-
-		if (!empty($additionalToEmail))
-		{
-			if (is_array($additionalToEmail))
-			{
-				foreach ($additionalToEmail as $email)
-				{
-					if ($email = craft()->security->validateData($email))
-					{
-						// Craft 2.6 adds a |serialize filter so the email might be serialized.
-						if ($unserializedEmail = $this->_getDataIfSerialized($email))
-						{
-							$email = $unserializedEmail;
-						}
-
-						$additionalValidToEmails[] = $email;
-					}
-				}
-
-			}
-			else
-			{
-				if ($additionalToEmail = craft()->security->validateData($additionalToEmail))
-				{
-					// Craft 2.6 adds a |serialize filter so the email might be serialized.
-					if ($unserializedEmail = $this->_getDataIfSerialized($additionalToEmail))
-					{
-						$additionalToEmail = $unserializedEmail;
-					}
-
-					$additionalValidToEmails[] = $additionalToEmail;
-				}
-			}
-		}
-
-		if (!empty($additionalValidToEmails))
-		{
-			$message->additionalToEmail = $additionalValidToEmails;
-		}
-
 		if ($settings->allowAttachments)
 		{
 			if (isset($_FILES['attachment']) && isset($_FILES['attachment']['name']))

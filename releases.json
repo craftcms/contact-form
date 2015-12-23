@@ -5,7 +5,6 @@
     "date": "2015-12-20T15:00:00-08:00",
     "notes": [
       "[Added] Added the ability to attach multiple files to the contact email.",
-      "[Added] Added the ability to define additional email recipients from the template via “additionalToEmail” hidden inputs.",
       "[Added] Added the ability to change the flash success message via the “successFlashMessage” setting.",
       "[Added] Added the ability to override plugin settings via a `craft/config/contactform.php` config file.",
       "[Improved] The “prependSender” and “prependSubject” settings can now be empty strings.",

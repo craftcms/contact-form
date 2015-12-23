@@ -34,12 +34,6 @@ class ContactFormService extends BaseApplicationComponent
 				// Grab any "to" emails set in the plugin settings.
 				$toEmails = ArrayHelper::stringToArray($settings->toEmail);
 
-				if (!empty($message->additionalToEmail))
-				{
-					// merge in any "to" emails defined in the template.
-					$toEmails = array_merge($toEmails, $message->additionalToEmail);
-				}
-
 				foreach ($toEmails as $toEmail)
 				{
 					$email = new EmailModel();
