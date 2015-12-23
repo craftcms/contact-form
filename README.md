@@ -150,6 +150,7 @@ Then from your `craft/config/contactform.php` config file, you’ll need to add 
 
 ```php
     <?php
+    namespace Craft;
 
     $toEmail = craft()->request->getPost('toEmail');
     $toEmail = craft()->security->validateData($toEmail);
