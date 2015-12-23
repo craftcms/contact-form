@@ -144,8 +144,6 @@ You can programatically add email recipients from your template by adding a hidd
 If you want to add multiple recipients, you can provide a comma separated list of emails like so:
     <input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
 
-Note that this will override any value for the plugin’s “To Email” setting in the control panel.
-
 Then from your `craft/config/contactform.php` config file, you’ll need to add a bit of logic:
 
 ```php
@@ -161,7 +159,7 @@ Then from your `craft/config/contactform.php` config file, you’ll need to add 
     );
 );
 
-In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings.
+In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings, so you must have that defined as well.
 
 ### The “Honeypot” field
 The [Honeypot Captcha][honeypot] is a simple anti-spam technique, which greatly reduces the efficacy of spambots without expecting your visitors to decipher various tortured letterforms.
