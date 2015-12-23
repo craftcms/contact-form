@@ -142,6 +142,7 @@ You can programatically add email recipients from your template by adding a hidd
     <input type="hidden" name="toEmail" value="{{ 'me@example.com'|hash }}">
 
 If you want to add multiple recipients, you can provide a comma separated list of emails like so:
+
     <input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
 
 Then from your `craft/config/contactform.php` config file, you’ll need to add a bit of logic:
@@ -158,6 +159,7 @@ Then from your `craft/config/contactform.php` config file, you’ll need to add 
         ...
     );
 );
+```
 
 In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings, so you must have that defined as well.
 
