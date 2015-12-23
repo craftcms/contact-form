@@ -265,7 +265,6 @@ class SomePlugin extends BasePlugin
 ### 1.6.0
 
 * Added the ability to attach multiple files to the contact email.
-* Added the ability to define additional email recipients from the template via "additionalToEmail" hidden inputs.
 * Added the ability to change the flash success message via the "successFlashMessage" setting.
 * Added the ability to override plugin settings via a `craft/config/contactform.php` config setting.
 * The "prependSender" and "prependSubject" settings can now be empty strings.
