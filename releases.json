@@ -1,7 +1,7 @@
 [
   {
     "version": "1.6.0",
-    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.6.zip",
+    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.6.0.zip",
     "date": "2015-12-20T15:00:00-08:00",
     "notes": [
       "[Added] Added the ability to attach multiple files to the contact email.",
@@ -13,7 +13,7 @@
   },
   {
     "version": "1.5",
-    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.5.zip",
+    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.5.0.zip",
     "date": "2015-12-20T15:00:00-08:00",
     "notes": [
       "[Added] Added support for some Craft 2.5 features including update notifications."
