@@ -76,7 +76,7 @@ class ContactFormController extends BaseController
 						{
 							if ($compiledMessage)
 							{
-								$compiledMessage .= "\n\n";
+								$compiledMessage .= "  \n";
 							}
 
 							$compiledMessage .= $key.': ';
