@@ -54,8 +54,7 @@ class ContactFormController extends BaseController
 		{
 			if (is_array($postedMessage))
 			{
-				$savedBody = false;
-
+				// Capture the original message body
 				if (isset($postedMessage['body']))
 				{
 					// Save the message body in case we need to reassign it in the event there's a validation error
