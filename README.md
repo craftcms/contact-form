@@ -262,6 +262,11 @@ class SomePlugin extends BasePlugin
 
 ## Changelog
 
+### 1.7.0
+
+* Added the ability to access individual message fields values via `message.messageFields` when a validation error occurred. For example, the value of the input `message[Phone]` can now be accessed via `message.messageFields['Phone']`.
+* Custom message field values only have a single line break between them in the generated email body now, rather than two.
+
 ### 1.6.0
 
 * Added the ability to attach multiple files to the contact email.

@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.7.0",
+    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.7.0.zip",
+    "date": "2016-01-18T13:00:00-08:00",
+    "notes": [
+      "[Added] Added the ability to access individual message fields values via `message.messageFields` when a validation error occurred. For example, the value of the input `message[Phone]` can now be accessed via `message.messageFields['Phone']`.",
+      "[Improved] Custom message field values only have a single line break between them in the generated email body now, rather than two."
+    ]
+  },
+  {
     "version": "1.6.0",
     "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.6.0.zip",
     "date": "2015-12-20T15:00:00-08:00",
