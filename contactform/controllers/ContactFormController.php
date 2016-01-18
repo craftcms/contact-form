@@ -54,6 +54,9 @@ class ContactFormController extends BaseController
 		{
 			if (is_array($postedMessage))
 			{
+				// Capture all of the message fields on the model in case there's a validation error
+				$message->messageFields = $postedMessage;
+
 				// Capture the original message body
 				if (isset($postedMessage['body']))
 				{
@@ -105,6 +108,7 @@ class ContactFormController extends BaseController
 			else
 			{
 				$message->message = $postedMessage;
+				$message->messageFields = array('body' => $postedMessage);
 			}
 		}
 
