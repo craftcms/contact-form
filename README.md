@@ -262,6 +262,11 @@ class SomePlugin extends BasePlugin
 
 ## Changelog
 
+### 1.7.0
+
+* Added the ability to access individual message fields values via `message.messageFields` when a validation error occurred. For example, the value of the input `message[Phone]` can now be accessed via `message.messageFields['Phone']`.
+* Custom message field values only have a single line break between them in the generated email body now, rather than two.
+
 ### 1.6.0
 
 * Added the ability to attach multiple files to the contact email.
@@ -270,30 +275,30 @@ class SomePlugin extends BasePlugin
 * The "prependSender" and "prependSubject" settings can now be empty strings.
 * Fixed a bug where the "allowAttachments" config setting wasn't being respected.
 
-### 1.5
+### 1.5.0
 
 * Added support for some Craft 2.5 features.
 
-### 1.4
+### 1.4.0
 
 * Added support for passing `{fromName}`, `{fromEmail}`, and `{subject}` in the ‘redirect’ URL.
 
-### 1.3
+### 1.3.0
 
 * Added support for multiple email addresses
 * Added the ContactFormService
 * Added the `contactForm.beforeSend` event, allowing third party plugins to add extra validation
 
-### 1.2
+### 1.2.0
 
 * Added honeypot captcha support
 
-### 1.1
+### 1.1.0
 
 * Added the ability to submit attachments
 * Added the ability to submit the form over Ajax
 * Added the ability to submit checkbox lists, which get compiled into comma-separated lists in the email
 
-### 1.0
+### 1.0.0
 
 * Initial release
