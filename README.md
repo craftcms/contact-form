@@ -158,7 +158,6 @@ Then from your `craft/config/contactform.php` config file, you’ll need to add 
         'toEmail' => ($toEmail ?: null),
         ...
     );
-);
 ```
 
 In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings, so you must have that defined as well.
