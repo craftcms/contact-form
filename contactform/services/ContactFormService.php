@@ -77,4 +77,14 @@ class ContactFormService extends BaseApplicationComponent
 	{
 		$this->raiseEvent('onBeforeSend', $event);
 	}
+			/**
+	 * Fires an 'onBeforeCompile' event.
+	 *
+	 * @param ContactFormMessageEvent $event
+	 */
+	public function onBeforeCompile(ContactFormMessageEvent $event)
+	{
+		$this->raiseEvent('onBeforeCompile', $event);
+	}
+	
 }
