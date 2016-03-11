@@ -59,6 +59,10 @@ class ContactFormController extends BaseController
 		{
 			$message->message = $event->message;
 			$message->messageFields = $event->messageFields;
+			if (!empty($event->htmlMessage))
+			{
+				$message->htmlMessage = $event->htmlMessage;
+			}
 		}
 		elseif ($postedMessage)
 		{

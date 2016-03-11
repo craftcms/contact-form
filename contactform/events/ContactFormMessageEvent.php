@@ -6,6 +6,7 @@ namespace Craft;
  */
 class ContactFormMessageEvent extends Event
 {
-  public $message = true;
-  public $messageFields = false;
+  public $message = null;
+  public $htmlMessage = null;
+  public $messageFields = null;
 }
