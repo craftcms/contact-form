@@ -53,7 +53,7 @@ class ContactFormController extends BaseController
 		// Before compile event
 		Craft::import('plugins.contactform.events.ContactFormMessageEvent');
 		$event = new ContactFormMessageEvent($this, array('postedMessage' => $postedMessage));
-		craft()->contactForm->onBeforeCompile($event);
+		craft()->contactForm->onBeforeMessageCompile($event);
 
 		if ($event->message && $event->messageFields)
 		{
