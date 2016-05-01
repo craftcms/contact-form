@@ -46,6 +46,10 @@ class ContactFormService extends BaseApplicationComponent
 					$email->toEmail   = $toEmail;
 					$email->subject   = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
 					$email->body      = $message->message;
+					if (!empty($message->htmlMessage))
+					{
+						$email->htmlBody = $message->htmlMessage;
+					}
 
 					if (!empty($message->attachment))
 					{
@@ -77,4 +81,14 @@ class ContactFormService extends BaseApplicationComponent
 	{
 		$this->raiseEvent('onBeforeSend', $event);
 	}
+			/**
+	 * Fires an 'onBeforeMessageCompile' event.
+	 *
+	 * @param ContactFormMessageEvent $event
+	 */
+	public function onBeforeMessageCompile(ContactFormMessageEvent $event)
+	{
+		$this->raiseEvent('onBeforeMessageCompile', $event);
+	}
+	
 }
