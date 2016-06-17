@@ -81,6 +81,8 @@ class ContactFormPlugin extends BasePlugin
 	{
     $settings = $this->prepSettings($values);
 
+    // Craft::dd(craft()->request->getPost('settings'));
+
 		parent::setSettings($settings);
 	}
 
@@ -133,7 +135,7 @@ class ContactFormPlugin extends BasePlugin
     {
       $setting = $definitions[$key];
 
-      if(array_key_exists('default', $setting))
+      if(is_array($setting) && array_key_exists('default', $setting))
       {
         return $setting['default'];
       }
