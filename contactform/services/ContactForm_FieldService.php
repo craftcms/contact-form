@@ -7,13 +7,9 @@ namespace Craft;
 class ContactForm_FieldService extends BaseApplicationComponent
 {
   /**
-   * Get mailing lists field as HTML.
+   * Get mailing lists field as HTML select.
    *
    * @param array  $params
-   *
-   * Params possibilities:
-   * - class
-   *
    * @return string
    */
   public function mailingListsSelect($attributes = array())
@@ -35,19 +31,30 @@ class ContactForm_FieldService extends BaseApplicationComponent
     return TemplateHelper::getRaw($html);
   }
 
+  /**
+   * Get attribute array as string.
+   *
+   * @param array  $params
+   * @return string
+   */
   protected function _getAttributesString($attributes)
   {
-    $default_attributes = array(
-      'id'    => 'mailingLists',
-      'name'  => 'mailingLists'
-    );
-
-    $attrs = array_merge($default_attributes, $attributes);
     $attrs_str = '';
 
-    foreach ($attrs as $key => $value) {
-      $attrs_str = "{$attrs_str} {$key}=\"$value\"";
+    if (isset($attributes) && is_array($attributes))
+    {
+      $default_attributes = array(
+        'id'    => 'mailingLists',
+        'name'  => 'mailingLists'
+      );
+
+      $attrs = array_merge($default_attributes, $attributes);
+
+      foreach ($attrs as $key => $value) {
+        $attrs_str = "{$attrs_str} {$key}=\"$value\"";
+      }
     }
+
     return trim($attrs_str);
   }
 }
