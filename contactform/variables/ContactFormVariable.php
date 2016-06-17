@@ -17,13 +17,20 @@ class ContactFormVariable
   }
 
   /**
+   * Get mailing lists as array.
+   *
+   * @param array  $params
+   * @return string
+   */
+  public function mailingLists($lists = null)
+  {
+    return craft()->contactForm->mailingLists($lists);
+  }
+
+  /**
    * Get mailing lists field as HTML.
    *
    * @param array  $params
-   *
-   * Params possibilities:
-   * - class
-   *
    * @return string
    */
   public function mailingListsSelect($attributes = null)

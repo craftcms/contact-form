@@ -177,6 +177,25 @@ You can also add attributes to the select element by passing in a hash of desire
 ```jinja
 {{ craft.contactForm.mailingListsSelect({'class':'custom-select'}) }}
 ```
+If you want full control over the markup you can also loop over the mailing lists.
+```jinja
+<h3 for="mailingLists">Select Department</h3>
+{% for list in craft.contactForm.mailingLists() %}
+  <label for="mailingList{{ loop.index }}">
+    <input type="checkbox" id="mailingList{{ loop.index }}" name="mailingLists[]" value="{{ list.listName }}">
+    {{ list.listName | ucfirst }}
+  </label>
+{% endfor %}
+
+// or...
+
+<label for="mailingLists">Select Department</label>
+<select id="mailingLists" name="mailingLists[]">
+  {% for list in craft.contactForm.mailingLists() %}
+    <option value="{{ list.listName }}">{{ list.listName | ucfirst }}</option>
+  {% endfor %}
+</select>
+```
 
 ### The “Honeypot” field
 The [Honeypot Captcha][honeypot] is a simple anti-spam technique, which greatly reduces the efficacy of spambots without expecting your visitors to decipher various tortured letterforms.
