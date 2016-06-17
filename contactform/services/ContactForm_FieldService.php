@@ -12,7 +12,7 @@ class ContactForm_FieldService extends BaseApplicationComponent
    * @param array  $params
    * @return string
    */
-  public function mailingListsSelect($attributes = array())
+  public function mailingListsSelect($attributes = null)
   {
     $settings = craft()->plugins->getPlugin('contactform')->getSettings();
     $tag = 'select';
@@ -40,21 +40,35 @@ class ContactForm_FieldService extends BaseApplicationComponent
   protected function _getAttributesString($attributes)
   {
     $attrs_str = '';
+    $attributes = isset($attributes) ? (array) $attributes : array();
+    $default_attributes = array(
+      'id'    => 'mailingLists',
+      'name'  => 'mailingLists[]'
+    );
 
-    if (isset($attributes) && is_array($attributes))
+    $attrs = array_merge($default_attributes, $attributes);
+
+    $attrs_str = implode(' ', array_map(function($v, $k)
     {
-      $default_attributes = array(
-        'id'    => 'mailingLists',
-        'name'  => 'mailingLists'
-      );
+      $value = is_string($v) ? strtolower($v) : $v;
+      $key = is_string($k) ? strtolower($k) : $k;
+      $attr = '';
 
-      $attrs = array_merge($default_attributes, $attributes);
-
-      foreach ($attrs as $key => $value) {
-        $attrs_str = "{$attrs_str} {$key}=\"$value\"";
+      if (is_bool($value) && $value === true)
+      {
+        $attr = $key;
       }
-    }
+      elseif (is_int($key))
+      {
+        $attr = $value;
+      }
+      else {
+        $attr = "{$key}=\"$value\"";
+      }
 
-    return trim($attrs_str);
+      return $attr;
+    }, $attrs, array_keys($attrs)));
+
+    return $attrs_str;
   }
 }
