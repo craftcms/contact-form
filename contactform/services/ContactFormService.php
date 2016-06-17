@@ -32,7 +32,7 @@ class ContactFormService extends BaseApplicationComponent
 			if (!$event->fakeIt)
 			{
 				// Grab any "to" emails set in the plugin settings.
-				$toEmails = array_unique($this->getEmails($settings));
+				$toEmails = $this->getEmails($settings);
 
 				foreach ($toEmails as $toEmail)
 				{
@@ -111,22 +111,19 @@ class ContactFormService extends BaseApplicationComponent
 
     if (isset($postedMailingLists))
     {
-      if (is_array($postedMailingLists))
+      if (!is_array($postedMailingLists))
       {
-        foreach ($postedMailingLists as $listName)
-        {
-          $listEmails = $this->getMailingListEmails($listName, $settings->mailingLists);
-          $toEmails = array_merge($toEmails, $listEmails);
-        }
+        $postedMailingLists = ArrayHelper::stringToArray($postedMailingLists);
       }
-      else
+
+      foreach ($postedMailingLists as $listName)
       {
-        $listEmails = $this->getMailingListEmails($postedMailingLists, $settings->mailingLists);
+        $listEmails = $this->getMailingListEmails($listName, $settings->mailingLists);
         $toEmails = array_merge($toEmails, $listEmails);
       }
     }
 
-    return $toEmails;
+    return array_unique($toEmails);
 	}
 
   /**

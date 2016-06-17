@@ -105,11 +105,6 @@ class ContactFormPlugin extends BasePlugin
         $defaultValue = $this->getDefaultValue($key, $configValue);
         $postedValue = $postedSettings[$key];
 
-        if ($configValue !== null)
-				{
-					$values[$key] = $configValue;
-				}
-
         if ($postedValue !== null && $postedValue !== $defaultValue)
         {
           $values[$key] = $postedValue;
@@ -119,6 +114,11 @@ class ContactFormPlugin extends BasePlugin
         {
           $values[$key] = $defaultValue;
         }
+
+        if ($configValue !== null)
+				{
+					$values[$key] = $configValue;
+				}
 			}
 		}
 
