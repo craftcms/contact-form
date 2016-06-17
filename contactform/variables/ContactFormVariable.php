@@ -26,7 +26,7 @@ class ContactFormVariable
    *
    * @return string
    */
-  public function mailingListsSelect($attributes)
+  public function mailingListsSelect($attributes = array())
   {
     return craft()->contactForm_field->mailingListsSelect($attributes);
   }
