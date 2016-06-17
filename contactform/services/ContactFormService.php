@@ -92,6 +92,32 @@ class ContactFormService extends BaseApplicationComponent
 		$this->raiseEvent('onBeforeMessageCompile', $event);
 	}
 
+
+  /**
+   * Get mailing lists as array for use in contact form variables
+   *
+   * @param array  $params
+   * @return string
+   */
+  public function mailingLists($lists = null)
+  {
+    $settings = craft()->plugins->getPlugin('contactform')->getSettings();
+
+    if (isset($lists)) {
+      $mailingLists = array();
+      foreach ($settings->mailingLists as $key => $value)
+      {
+        if (in_array($value['listName'], $lists))
+        {
+          $mailingLists[$key] = $list;
+        }
+      }
+      return $mailingLists;
+    }
+
+    return $settings->mailingLists;
+  }
+
   /**
 	 * Get emails as array
 	 *
