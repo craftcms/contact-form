@@ -38,7 +38,7 @@ Your contact form template can look something like this:
     {{ message is defined and message ? errorList(message.getErrors('fromName')) }}
 
     <h3><label for="fromEmail">Your Email</label></h3>
-    <input id="fromEmail" type="text" name="fromEmail" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
+    <input id="fromEmail" type="email" name="fromEmail" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
     {{ message is defined and message ? errorList(message.getErrors('fromEmail')) }}
 
     <h3><label for="subject">Subject</label></h3>
