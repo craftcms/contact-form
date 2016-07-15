@@ -79,27 +79,70 @@ class ContactFormPlugin extends BasePlugin
 	 */
 	public function setSettings($values)
 	{
-		if (!$values)
+    $settings = $this->prepSettings($values);
+
+    // Craft::dd(craft()->request->getPost('settings'));
+
+		parent::setSettings($settings);
+	}
+
+  /**
+	 * @return array
+	 */
+  public function prepSettings($values) {
+
+    if (!$values)
 		{
 			$values = array();
 		}
 
 		if (is_array($values))
 		{
+      $postedSettings = craft()->request->getPost('settings');
+
 			// Merge in any values that are stored in craft/config/contactform.php
 			foreach ($this->getSettings() as $key => $value)
 			{
 				$configValue = craft()->config->get($key, 'contactform');
+        $defaultValue = $this->getDefaultValue($key, $configValue);
+        $postedValue = $postedSettings[$key];
 
-				if ($configValue !== null)
+        if ($postedValue !== null && $postedValue !== $defaultValue)
+        {
+          $values[$key] = $postedValue;
+        }
+
+        if (!isset($values[$key]))
+        {
+          $values[$key] = $defaultValue;
+        }
+
+        if ($configValue !== null)
 				{
 					$values[$key] = $configValue;
 				}
 			}
 		}
 
-		parent::setSettings($values);
-	}
+    return $values;
+  }
+
+  protected function getDefaultValue($key, $value)
+  {
+    $definitions = $this->defineSettings();
+
+    if(array_key_exists($key, $definitions))
+    {
+      $setting = $definitions[$key];
+
+      if(is_array($setting) && array_key_exists('default', $setting))
+      {
+        return $setting['default'];
+      }
+    }
+
+    return $value;
+  }
 
 	/**
 	 * @return array
@@ -108,6 +151,7 @@ class ContactFormPlugin extends BasePlugin
 	{
 		return array(
 			'toEmail'               => array(AttributeType::String, 'required' => true),
+      'mailingLists'          => array(AttributeType::Mixed, 'default' => array(['listName'=>'', 'toEmails'=>''])),
 			'prependSender'         => array(AttributeType::String, 'default' => Craft::t('On behalf of')),
 			'prependSubject'        => array(AttributeType::String, 'default' => Craft::t('New message from {siteName}', array('siteName' => craft()->getSiteName()))),
 			'allowAttachments'      => AttributeType::Bool,

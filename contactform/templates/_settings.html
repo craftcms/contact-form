@@ -22,6 +22,18 @@
 	errors:       settings.getErrors('toEmail')
 }) }}
 
+{{ forms.editableTableField({
+  label:        "Mailing Lists"|t,
+  id:           'mailingLists',
+  name:         'mailingLists',
+  instructions: "Creat mailing lists. Separate multiple email addresses with commas."|t,
+  cols: {
+    'listName': { heading: "List name"|t,   type: 'singleline', name: 'listName'},
+    'toEmails': { heading: "To Email(s)"|t, type: 'singleline', name: 'toEmails'}
+  },
+  rows: settings.mailingLists
+}) }}
+
 {{ forms.textField({
 	label:        "Sender Text"|t,
 	id:           'prependSender',

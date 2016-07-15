@@ -32,7 +32,7 @@ class ContactFormService extends BaseApplicationComponent
 			if (!$event->fakeIt)
 			{
 				// Grab any "to" emails set in the plugin settings.
-				$toEmails = ArrayHelper::stringToArray($settings->toEmail);
+				$toEmails = $this->getEmails($settings);
 
 				foreach ($toEmails as $toEmail)
 				{
@@ -81,7 +81,8 @@ class ContactFormService extends BaseApplicationComponent
 	{
 		$this->raiseEvent('onBeforeSend', $event);
 	}
-			/**
+
+  /**
 	 * Fires an 'onBeforeMessageCompile' event.
 	 *
 	 * @param ContactFormMessageEvent $event
@@ -90,5 +91,81 @@ class ContactFormService extends BaseApplicationComponent
 	{
 		$this->raiseEvent('onBeforeMessageCompile', $event);
 	}
-	
+
+
+  /**
+   * Get mailing lists as array for use in contact form variables
+   *
+   * @param array  $params
+   * @return string
+   */
+  public function mailingLists($lists = null)
+  {
+    $settings = craft()->plugins->getPlugin('contactform')->getSettings();
+
+    if (isset($lists)) {
+      $mailingLists = array();
+      foreach ($settings->mailingLists as $key => $value)
+      {
+        if (in_array($value['listName'], $lists))
+        {
+          $mailingLists[$key] = $list;
+        }
+      }
+      return $mailingLists;
+    }
+
+    return $settings->mailingLists;
+  }
+
+  /**
+	 * Get emails as array
+	 *
+   * @param array|settings
+	 * @return array
+	 */
+	protected function getEmails($settings)
+	{
+		$toEmails = ArrayHelper::stringToArray($settings->toEmail);
+    $postedMailingLists = craft()->request->getPost('mailingLists');
+
+    if (isset($postedMailingLists))
+    {
+      if (!is_array($postedMailingLists))
+      {
+        $postedMailingLists = ArrayHelper::stringToArray($postedMailingLists);
+      }
+
+      foreach ($postedMailingLists as $listName)
+      {
+        $listEmails = $this->getMailingListEmails($listName, $settings->mailingLists);
+        $toEmails = array_merge($toEmails, $listEmails);
+      }
+    }
+
+    return array_unique($toEmails);
+	}
+
+  /**
+	 * Get emails as array
+	 *
+   * @param mixed $listName
+   * @param array $mailingLists
+	 * @return array
+	 */
+  protected function getMailingListEmails($listName, $mailingLists)
+  {
+    $toEmails = array();
+
+    foreach ($mailingLists as $key => $list)
+    {
+      if ($list['listName'] == $listName)
+      {
+        $toEmails = ArrayHelper::stringToArray($list['toEmails']);
+      }
+    }
+
+    return $toEmails;
+  }
+
 }

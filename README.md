@@ -162,6 +162,41 @@ Then from your `craft/config/contactform.php` config file, you’ll need to add 
 
 In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings, so you must have that defined as well.
 
+### Mailing lists
+Craft dashboard administrators can add mailing/distribution lists in the plugin settings. This allows changes to a given contact form without updating the template. Mailing lists can be leveraged in the forms a few like so.
+
+A hidden field with the given list name.
+```jinja
+<input type="hidden" name="mailingLists" value="LIST_NAME_FROM_SETTINGS">
+```
+Or, if you have more than one list you call this to add a select dropdown.
+```jinja
+{{ craft.contactForm.mailingListsSelect() }}
+```
+You can also add attributes to the select element by passing in a hash of desired attributes. You can also override the `id` attribute if need be though refrain from overriding the `name` as it will cause the mailing list to not send.
+```jinja
+{{ craft.contactForm.mailingListsSelect({'class':'custom-select'}) }}
+```
+If you want full control over the markup you can also loop over the mailing lists.
+```jinja
+<h3 for="mailingLists">Select Department</h3>
+{% for list in craft.contactForm.mailingLists() %}
+  <label for="mailingList{{ loop.index }}">
+    <input type="checkbox" id="mailingList{{ loop.index }}" name="mailingLists[]" value="{{ list.listName }}">
+    {{ list.listName | ucfirst }}
+  </label>
+{% endfor %}
+
+// or...
+
+<label for="mailingLists">Select Department</label>
+<select id="mailingLists" name="mailingLists[]">
+  {% for list in craft.contactForm.mailingLists() %}
+    <option value="{{ list.listName }}">{{ list.listName | ucfirst }}</option>
+  {% endfor %}
+</select>
+```
+
 ### The “Honeypot” field
 The [Honeypot Captcha][honeypot] is a simple anti-spam technique, which greatly reduces the efficacy of spambots without expecting your visitors to decipher various tortured letterforms.
 
