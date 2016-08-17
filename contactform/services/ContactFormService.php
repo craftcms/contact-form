@@ -36,6 +36,7 @@ class ContactFormService extends BaseApplicationComponent
 
 				foreach ($toEmails as $toEmail)
 				{
+					$variables = array();
 					$email = new EmailModel();
 					$emailSettings = craft()->email->getSettings();
 
@@ -44,11 +45,16 @@ class ContactFormService extends BaseApplicationComponent
 					$email->sender    = $emailSettings['emailAddress'];
 					$email->fromName  = $settings->prependSender . ($settings->prependSender && $message->fromName ? ' ' : '') . $message->fromName;
 					$email->toEmail   = $toEmail;
-					$email->subject   = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
-					$email->body      = $message->message;
+					$email->subject   = '{{ emailSubject }}';
+					$email->body      = '{{ emailBody }}';
+
+					$variables['emailSubject'] = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
+					$variables['emailBody'] = $message->message;
+
 					if (!empty($message->htmlMessage))
 					{
-						$email->htmlBody = $message->htmlMessage;
+						$email->htmlBody = '{{ emailHtmlBody }}';
+						$variables['emailHtmlBody'] = $message->htmlMessage;
 					}
 
 					if (!empty($message->attachment))
@@ -62,7 +68,7 @@ class ContactFormService extends BaseApplicationComponent
 						}
 					}
 
-					craft()->email->sendEmail($email);
+					craft()->email->sendEmail($email, $variables);
 				}
 			}
 
@@ -90,5 +96,5 @@ class ContactFormService extends BaseApplicationComponent
 	{
 		$this->raiseEvent('onBeforeMessageCompile', $event);
 	}
-	
+
 }
