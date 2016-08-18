@@ -259,6 +259,32 @@ class SomePlugin extends BasePlugin
 }
 ```
 
+### The `contactForm.beforeMessageCompile` event
+
+Other plugins can list to this event to change the contents of the plain text body of the 
+email as well as the HTML body.
+
+```php
+class SomePlugin extends BasePlugin
+{
+    // ...
+
+    public function init()
+    {
+        craft()->on('contactForm.beforeMessageCompile', function(ContactFormMessageEvent $event) {
+            $message = $event->params['message'];
+            $htmlMessage = $event->params['htmlMessage'];
+            $messageFields = $event->params['messageFields'];
+
+            // ...
+
+            $event->params['message'] = 'Make email great again! - '.$message
+            $event->params['htmlMessage'] = '<p>Make email great again! - '.$message.'</p>';
+        });
+    }
+}
+```
+
 ## Changelog
 
 ### 1.7.0
