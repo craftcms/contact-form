@@ -16,7 +16,7 @@ class ContactFormPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '1.7.0';
+		return '1.8.0';
 	}
 
 	public function getSchemaVersion()

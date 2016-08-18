@@ -287,6 +287,11 @@ class SomePlugin extends BasePlugin
 
 ## Changelog
 
+### 1.8.0
+
+* Added the ability for plugins to modify the email's plain text and HTML body via the `contactForm.beforeMessageCompile` event.
+* Fixed a bug where Twig code that was entered in the email body or subject was getting parsed.
+
 ### 1.7.0
 
 * Added the ability to access individual message fields values via `message.messageFields` when a validation error occurred. For example, the value of the input `message[Phone]` can now be accessed via `message.messageFields['Phone']`.
