@@ -53,7 +53,7 @@ class ContactFormService extends BaseApplicationComponent
 
 					if (!empty($message->htmlMessage))
 					{
-						$email->htmlBody = '{{ emailHtmlBody }}';
+						$email->htmlBody = '{{ emailHtmlBody | raw }}';
 						$variables['emailHtmlBody'] = $message->htmlMessage;
 					}
 
