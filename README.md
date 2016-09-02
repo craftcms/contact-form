@@ -287,6 +287,10 @@ class SomePlugin extends BasePlugin
 
 ## Changelog
 
+### 1.8.1
+
+* Fixed a bug where the HTML body of an email was being escaped displaying HTML entities in the email.
+
 ### 1.8.0
 
 * Added the ability for plugins to modify the email's plain text and HTML body via the `contactForm.beforeMessageCompile` event.
