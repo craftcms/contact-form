@@ -58,6 +58,7 @@ class ContactFormController extends BaseController
 		{
 			$message->message = $event->message;
 			$message->messageFields = $event->messageFields;
+
 			if (!empty($event->htmlMessage))
 			{
 				$message->htmlMessage = $event->htmlMessage;
@@ -124,6 +125,11 @@ class ContactFormController extends BaseController
 				$message->messageFields = array('body' => $postedMessage);
 			}
 		}
+
+        if (empty($message->htmlMessage))
+        {
+            $message->htmlMessage = StringHelper::parseMarkdown($message->message);
+        }
 
 		if ($message->validate())
 		{
