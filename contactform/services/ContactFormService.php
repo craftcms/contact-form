@@ -53,8 +53,8 @@ class ContactFormService extends BaseApplicationComponent
 
 					if (!empty($message->htmlMessage))
 					{
-						$email->htmlBody = '{{ emailHtmlBody }}';
-						$variables['emailHtmlBody'] = $message->htmlMessage;
+						// Prevent Twig tags from getting parsed
+						$email->htmlBody = str_replace(array('{', '}'), array('&lbrace;', '&rbrace;'), $message->htmlMessage);
 					}
 
 					if (!empty($message->attachment))
