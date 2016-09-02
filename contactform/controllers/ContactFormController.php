@@ -44,7 +44,6 @@ class ContactFormController extends BaseController
 					$message->attachment = array(\CUploadedFile::getInstanceByName('attachment'));
 				}
 			}
-
 		}
 
 		// Set the message body
