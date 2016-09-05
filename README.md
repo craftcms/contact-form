@@ -278,7 +278,7 @@ class SomePlugin extends BasePlugin
 
             // ...
 
-            $event->params['message'] = 'Make email great again! - '.$message
+            $event->params['message'] = 'Make email great again! - '.$message;
             $event->params['htmlMessage'] = '<p>Make email great again! - '.$message.'</p>';
         });
     }
