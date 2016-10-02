@@ -24,7 +24,7 @@ class ContactFormService extends BaseApplicationComponent
 
 		// Fire an 'onBeforeSend' event
 		Craft::import('plugins.contactform.events.ContactFormEvent');
-		$event = new ContactFormEvent($this, array('message' => $message));
+		$event = new ContactFormEvent($this, array('message' => $message, 'settings' => $settings));
 		$this->onBeforeSend($event);
 
 		if ($event->isValid)
