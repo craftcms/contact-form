@@ -173,7 +173,7 @@ Or, if you have more than one list you call this to add a select dropdown.
 ```jinja
 {{ craft.contactForm.mailingListsSelect() }}
 ```
-You can also add attributes to the select element by passing in a hash of desired attributes. You can also override the `id` attribute if need be though refrain from overriding the `name` as it will cause the mailing list to not send.
+You can also add attributes to the select element by passing in `{key:value}` pairs of desired attributes. You can also override the `id` attribute if need be though refrain from overriding the `name` as it will cause the mailing list to not send.
 ```jinja
 {{ craft.contactForm.mailingListsSelect({'class':'custom-select'}) }}
 ```
@@ -296,7 +296,7 @@ class SomePlugin extends BasePlugin
 
 ### The `contactForm.beforeMessageCompile` event
 
-Other plugins can list to this event to change the contents of the plain text body of the 
+Other plugins can list to this event to change the contents of the plain text body of the
 email as well as the HTML body.
 
 ```php

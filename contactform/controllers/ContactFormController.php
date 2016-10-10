@@ -126,10 +126,10 @@ class ContactFormController extends BaseController
 			}
 		}
 
-        if (empty($message->htmlMessage))
-        {
-            $message->htmlMessage = StringHelper::parseMarkdown($message->message);
-        }
+		if (empty($message->htmlMessage))
+		{
+			$message->htmlMessage = StringHelper::parseMarkdown($message->message);
+		}
 
 		if ($message->validate())
 		{

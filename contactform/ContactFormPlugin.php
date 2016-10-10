@@ -79,70 +79,75 @@ class ContactFormPlugin extends BasePlugin
 	 */
 	public function setSettings($values)
 	{
-    $settings = $this->prepSettings($values);
-
-    // Craft::dd(craft()->request->getPost('settings'));
+		$settings = $this->prepSettings($values);
 
 		parent::setSettings($settings);
 	}
 
-  /**
+	/**
+	 * @param array|BaseModel $values
 	 * @return array
 	 */
-  public function prepSettings($values) {
-
-    if (!$values)
+	public function prepSettings($values)
+	{
+		// Ensure our return array is set
+		if (!$values)
 		{
 			$values = array();
 		}
 
 		if (is_array($values))
 		{
-      $postedSettings = craft()->request->getPost('settings');
+			$postedSettings = craft()->request->getPost('settings');
 
 			// Merge in any values that are stored in craft/config/contactform.php
 			foreach ($this->getSettings() as $key => $value)
 			{
 				$configValue = craft()->config->get($key, 'contactform');
-        $defaultValue = $this->getDefaultValue($key, $configValue);
-        $postedValue = $postedSettings[$key];
+				$defaultValue = $this->getDefaultValue($key, $configValue);
+				$postedValue = $postedSettings[$key];
 
-        if ($postedValue !== null && $postedValue !== $defaultValue)
-        {
-          $values[$key] = $postedValue;
-        }
+				if ($postedValue !== null && $postedValue !== $defaultValue)
+				{
+					$values[$key] = $postedValue;
+				}
 
-        if (!isset($values[$key]))
-        {
-          $values[$key] = $defaultValue;
-        }
+				if (!isset($values[$key]))
+				{
+					$values[$key] = $defaultValue;
+				}
 
-        if ($configValue !== null)
+				if ($configValue !== null)
 				{
 					$values[$key] = $configValue;
 				}
 			}
 		}
 
-    return $values;
-  }
+		return $values;
+	}
 
-  protected function getDefaultValue($key, $value)
-  {
-    $definitions = $this->defineSettings();
+	/**
+	 * @param string $key
+	 * @param mixed $value|default returned
+	 * @return mixed
+	 */
+	protected function getDefaultValue($key, $value)
+	{
+		$definitions = $this->defineSettings();
 
-    if(array_key_exists($key, $definitions))
-    {
-      $setting = $definitions[$key];
+		if(array_key_exists($key, $definitions))
+		{
+			$setting = $definitions[$key];
 
-      if(is_array($setting) && array_key_exists('default', $setting))
-      {
-        return $setting['default'];
-      }
-    }
+			if(is_array($setting) && array_key_exists('default', $setting))
+			{
+				return $setting['default'];
+			}
+		}
 
-    return $value;
-  }
+		return $value;
+	}
 
 	/**
 	 * @return array
@@ -150,13 +155,13 @@ class ContactFormPlugin extends BasePlugin
 	protected function defineSettings()
 	{
 		return array(
-			'toEmail'               => array(AttributeType::String, 'required' => true),
-      'mailingLists'          => array(AttributeType::Mixed, 'default' => array(['listName'=>'', 'toEmails'=>''])),
-			'prependSender'         => array(AttributeType::String, 'default' => Craft::t('On behalf of')),
-			'prependSubject'        => array(AttributeType::String, 'default' => Craft::t('New message from {siteName}', array('siteName' => craft()->getSiteName()))),
-			'allowAttachments'      => AttributeType::Bool,
-			'honeypotField'         => AttributeType::String,
-			'successFlashMessage'   => array(AttributeType::String, 'default' => Craft::t('Your message has been sent.'), 'required' => true),
+			'toEmail'             => array(AttributeType::String, 'required' => true),
+			'mailingLists'        => array(AttributeType::Mixed, 'default' => array(['listName'=>'', 'toEmails'=>''])),
+			'prependSender'       => array(AttributeType::String, 'default' => Craft::t('On behalf of')),
+			'prependSubject'      => array(AttributeType::String, 'default' => Craft::t('New message from {siteName}', array('siteName' => craft()->getSiteName()))),
+			'allowAttachments'    => AttributeType::Bool,
+			'honeypotField'       => AttributeType::String,
+			'successFlashMessage' => array(AttributeType::String, 'default' => Craft::t('Your message has been sent.'), 'required' => true),
 		);
 	}
 }
