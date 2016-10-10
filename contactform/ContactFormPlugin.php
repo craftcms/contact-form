@@ -105,7 +105,7 @@ class ContactFormPlugin extends BasePlugin
 			{
 				$configValue = craft()->config->get($key, 'contactform');
 				$defaultValue = $this->getDefaultValue($key, $configValue);
-				$postedValue = $postedSettings[$key];
+				$postedValue = isset($postedSettings[$key]) ? $postedSettings[$key] : null;
 
 				if ($postedValue !== null && $postedValue !== $defaultValue)
 				{
@@ -156,7 +156,7 @@ class ContactFormPlugin extends BasePlugin
 	{
 		return array(
 			'toEmail'             => array(AttributeType::String, 'required' => true),
-			'mailingLists'        => array(AttributeType::Mixed, 'default' => array(['listName'=>'', 'toEmails'=>''])),
+			'mailingLists'        => array(AttributeType::Mixed,  'default' => array(['listName'=>'', 'toEmails'=>''])),
 			'prependSender'       => array(AttributeType::String, 'default' => Craft::t('On behalf of')),
 			'prependSubject'      => array(AttributeType::String, 'default' => Craft::t('New message from {siteName}', array('siteName' => craft()->getSiteName()))),
 			'allowAttachments'    => AttributeType::Bool,
