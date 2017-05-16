@@ -15,7 +15,7 @@ To install Contact Form, follow these steps:
 
 Your contact form template can look something like this:
 
-```jinja
+```twig
 {% macro errorList(errors) %}
     {% if errors %}
         <ul class="errors">
@@ -69,7 +69,7 @@ For example, if you wanted to redirect to a “contact/thanks” page and pass t
 
 On your contact/thanks.html template, you can access that ‘from’ parameter using [craft.request.getQuery()](http://buildwithcraft.com/docs/templating/craft.request#getQuery):
 
-```jinja
+```twig
 <p>Thanks for sending that in, {{ craft.request.getQuery('from') }}!</p>
 ```
 
@@ -80,7 +80,7 @@ Note that if you don’t include a ‘redirect’ input, the current page will g
 
 You can add additional fields to your form by splitting your “message” field into multiple fields, using an array syntax for the input names:
 
-```jinja
+```twig
 <h3><label for="message">Message</label></h3>
 <textarea rows="10" cols="40" id="message" name="message[body]">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
 
