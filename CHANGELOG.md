@@ -1,6 +1,21 @@
 Changelog
 =========
 
+## 2.0.0 - 2017-05-16
+
+### Added
+- Added Craft 3 compatibility.
+- Added the `afterSend` event.
+
+### Changed
+- The `beforeSend` event now has `$submission` and `$message` properties, set to the user submission model and the compiled email message, respectively.
+- The `contactForm/sendMessage` action is now `contact-form/send`.
+
+### Removed
+- Removed honeypot field support. (Moved to the [contact-form-honeypot](https://github.com/craftcms/contact-form-honeypot) plugin.)
+- Removed the `beforeMessageCompile` event.
+- Removed the `$isValid` property from the `beforeSend` event. Use the `beforeValidate` event on the `Submission` model to prevent submissions from going through.
+
 ## 1.8.1 - 2016-09-02 
 
 ### Fixed

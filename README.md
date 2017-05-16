@@ -3,13 +3,24 @@
 This plugin allows you to add an email contact form to your website.
 
 
+## Requirements
+
+This plugin requires Craft CMS 3.0.0-beta.14 or later.
+
+
 ## Installation
 
-To install Contact Form, follow these steps:
+To install the plugin, follow these instructions.
 
-1.  Upload the contactform/ folder to your craft/plugins/ folder.
-2.  Go to Settings > Plugins from your Craft control panel and enable the Contact Form plugin.
-3.  Click on “Contact Form” to go to the plugin’s settings page, and configure the plugin how you’d like.
+1. Open your terminal and go to your Craft project:
+
+        cd /path/to/project
+
+2. Then tell Composer to load the plugin:
+
+        composer require craftcms/contact-form
+
+3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Contact Form.
 
 ## Usage
 
@@ -29,60 +40,60 @@ Your contact form template can look something like this:
 {% from _self import errorList %}
 
 <form method="post" action="" accept-charset="UTF-8">
-    {{ getCsrfInput() }}
-    <input type="hidden" name="action" value="contactForm/sendMessage">
-    <input type="hidden" name="redirect" value="contact/thanks">
+    {{ csrfInput() }}
+    <input type="hidden" name="action" value="contact-form/send">
+    <input type="hidden" name="redirect" value="{{ 'contact/thanks'|hash }}">
 
-    <h3><label for="fromName">Your Name</label></h3>
-    <input id="fromName" type="text" name="fromName" value="{% if message is defined %}{{ message.fromName }}{% endif %}">
+    <h3><label for="from-name">Your Name</label></h3>
+    <input id="from-name" type="text" name="fromName" value="{{ message.fromName ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('fromName')) }}
 
-    <h3><label for="fromEmail">Your Email</label></h3>
-    <input id="fromEmail" type="email" name="fromEmail" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
+    <h3><label for="from-email">Your Email</label></h3>
+    <input id="from-email" type="email" name="fromEmail" value="{{ message.fromEmail ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('fromEmail')) }}
 
     <h3><label for="subject">Subject</label></h3>
-    <input id="subject" type="text" name="subject" value="{% if message is defined %}{{ message.subject }}{% endif %}">
+    <input id="subject" type="text" name="subject" value="{{ message.subject ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('subject')) }}
 
     <h3><label for="message">Message</label></h3>
-    <textarea rows="10" cols="40" id="message" name="message">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
+    <textarea rows="10" cols="40" id="message" name="message">{{ message.message ?? '' }}</textarea>
     {{ message is defined and message ? errorList(message.getErrors('message')) }}
 
     <input type="submit" value="Send">
 </form>
 ```
 
-The only required fields are “fromEmail” and “message”. Everything else is optional.
+The only required fields are `fromEmail` and `message`. Everything else is optional.
 
 ### Redirecting after submit
 
-If you have a ‘redirect’ hidden input, the user will get redirected to it upon successfully sending the email. The following variables can be used within the URL/path you set:
+If you have a `redirect` hidden input, the user will get redirected to it upon successfully sending the email. The following variables can be used within the URL/path you set:
 
 - `{fromName}`
 - `{fromEmail}`
 - `{subject}`
 
-For example, if you wanted to redirect to a “contact/thanks” page and pass the sender’s name to it, you could set the input like this:
+For example, if you wanted to redirect to a `contact/thanks` page and pass the sender’s name to it, you could set the input like this:
 
-    <input type="hidden" name="redirect" value="contact/thanks?from={fromName}">
+    <input type="hidden" name="redirect" value="{{ 'contact/thanks?from={fromName}'|hash }}">
 
-On your contact/thanks.html template, you can access that ‘from’ parameter using [craft.request.getQuery()](http://buildwithcraft.com/docs/templating/craft.request#getQuery):
+On your `contact/thanks.html` template, you can access that `from` parameter using `craft.app.request.getQueryParam()`:
 
 ```twig
-<p>Thanks for sending that in, {{ craft.request.getQuery('from') }}!</p>
+<p>Thanks for sending that in, {{ craft.app.request.getQueryParam('from') }}!</p>
 ```
 
-Note that if you don’t include a ‘redirect’ input, the current page will get reloaded.
+Note that if you don’t include a `redirect` input, the current page will get reloaded.
 
 
 ### Adding additional fields
 
-You can add additional fields to your form by splitting your “message” field into multiple fields, using an array syntax for the input names:
+You can add additional fields to your form by splitting your `message` field into multiple fields, using an array syntax for the input names:
 
 ```twig
 <h3><label for="message">Message</label></h3>
-<textarea rows="10" cols="40" id="message" name="message[body]">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
+<textarea rows="10" cols="40" id="message" name="message[body]">{{ message.message ?? '' }}</textarea>
 
 <h3><label for="phone">Your phone number</label></h3>
 <input id="phone" type="text" name="message[Phone]" value="">
@@ -94,7 +105,7 @@ You can add additional fields to your form by splitting your “message” field
 <label><input type="checkbox" name="message[Services][]" value="Marketing"> Marketing</label>
 ```
 
-If you have a primary “Message” field, you should name it ``message[body]``, like in that example.
+If you have a primary “Message” field, you should name it `message[body]`, like in that example.
 
 An email sent with the above form might result in the following message:
 
@@ -117,8 +128,8 @@ An email sent with the above form might result in the following message:
 
 ### Overriding plugin settings
 
-If you create a [config file](https://craftcms.com/docs/config-settings) in your `craft/config` folder called `contactform.php`, you can override
-the plugin’s settings in the control panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/multi-environment-configs) aware, this is
+If you create a [config file](https://craftcms.com/docs/config-settings) in your `config/` folder called `contactform.php`, you can override
+the plugin’s settings in the Control Panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/multi-environment-configs) aware, this is
 a handy way to have different settings across multiple environments.
 
 Here’s what that config file might look like along with a list of all of the possible values you can override.
@@ -126,18 +137,18 @@ Here’s what that config file might look like along with a list of all of the p
 ```php
     <?php
 
-    return array(
+    return [
         'toEmail'             => 'bond@007.com',
         'prependSubject'      => '',
         'prependSender'       => '',
         'allowAttachments'    => false,
-        'honeypotField'       => 'dieSpammers',
-        'successFlashMessage' => 'Congrats, yo!'
-    );
+        'successFlashMessage' => 'Message sent!'
+    ];
 ```
 
-### Dynamically adding email recipients (requires Craft 2.5+)
-You can programmatically add email recipients from your template by adding a hidden input field named “toEmail” like so:
+### Dynamically adding email recipients
+
+You can programmatically add email recipients from your template by adding a hidden input field named `toEmail` like so:
 
     <input type="hidden" name="toEmail" value="{{ 'me@example.com'|hash }}">
 
@@ -148,52 +159,24 @@ If you want to add multiple recipients, you can provide a comma separated list o
 Then from your `craft/config/contactform.php` config file, you’ll need to add a bit of logic:
 
 ```php
-    <?php
-    namespace Craft;
+<?php
 
-    $toEmail = craft()->request->getPost('toEmail');
-    $toEmail = craft()->security->validateData($toEmail);
-
-    return array(
-        'toEmail' => ($toEmail ?: null),
-        ...
-    );
+return [
+    'toEmail' => Craft::$app->request->getValidatedBodyParam('toEmail'),
+    // ...
+];
 ```
 
-In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings, so you must have that defined as well.
-
-### The “Honeypot” field
-The [Honeypot Captcha][honeypot] is a simple anti-spam technique, which greatly reduces the efficacy of spambots without expecting your visitors to decipher various tortured letterforms.
-
-[honeypot]: http://haacked.com/archive/2007/09/11/honeypot-captcha.aspx/ "The origins of the Honeypot Captcha"
-
-In brief, it works like this:
-
-1. You add a normal text field (our “honeypot”) to your form, and hide it using CSS.
-2. Normal (human) visitors won't fill out this invisible text field, but those crazy spambots will.
-3. The ContactForm plugin checks to see if the “honeypot” form field contains text. If it does, it assumes the form was submitted by “Evil People”, and ignores it (but pretends that everything is A-OK, so the evildoer is none the wiser).
-
-### Example “Honeypot” implementation
-When naming your form field, it's probably best to avoid monikers such as “dieEvilSpammers”, in favour of something a little more tempting. For example:
-
-```html
-<input id="preferredKitten" name="preferredKitten" type="text">
-```
-
-In this case, you could hide your form field using the following CSS:
-
-```css
-input#preferredKitten { display: none; }
-```
+In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “To Email” defined in the plugin settings, so you must have that defined as well.
 
 ### File attachments
 
 If you would like your contact form to accept file attachments, follow these steps:
 
-1. Go to Settings > Plugins > Contact Form in your CP and make sure the plugin is set to allow attachments.
+1. Go to Settings → Contact Form in the Control Panel, and make sure the plugin is set to allow attachments.
 2. Make sure your opening HTML `<form>` tag contains `enctype="multipart/form-data"`.
 3. Add a `<input type="file" name="attachment">` to your form.
-4. If you want to allow multiple file attachments, use multiple `<input type="file" name="attachment[]">` inputs.
+4. If you want to allow multiple file attachments, use multiple `<input type="file" name="attachment[]" multiple>` inputs.
 
 
 ### Ajax form submissions
@@ -205,82 +188,80 @@ $('#my-form').submit(function(ev) {
     // Prevent the form from actually submitting
     ev.preventDefault();
 
-    // Get the post data
-    var data = $(this).serialize();
-
     // Send it to the server
-    $.post('/', data, function(response) {
-        if (response.success) {
-            $('#thanks').fadeIn();
-        } else {
-            // response.error will be an object containing any validation errors that occurred, indexed by field name
-            // e.g. response.error.fromName => ['From Name is required']
-            alert('An error occurred. Please try again.');
+    $.ajax('/', {
+        dataType: 'json',
+        data: $(this).serialize(),
+        success: function(response) {
+            if (response.success) {
+                $('#thanks').fadeIn();
+            } else {
+                // response.error will be an object containing any validation errors that occurred, indexed by field name
+                // e.g. response.error.fromName => ['From Name is required']
+                alert('An error occurred. Please try again.');
+            }
         }
     });
 });
 ```
 
-### The `contactForm.beforeSend` event
+### The `beforeValidate` event
 
-Other plugins can be notified right before an email is sent with the Contact Form plugin,
-and they are even given a chance to prevent the email from getting sent at all.
+Plugins can be notified when a submission is being validated, providing their own custom validation logic, using the `beforeValidate` event on the `Submission` model:
 
 ```php
-class SomePlugin extends BasePlugin
-{
-    // ...
+use craft\contactform\models\Submission;
+use yii\base\Event;
+use yii\base\ModelEvent;
 
-    public function init()
-    {
-        craft()->on('contactForm.beforeSend', function(ContactFormEvent $event) {
-            $message = $event->params['message'];
+// ...
 
-            // ...
-
-            if ($isVulgar)
-            {
-                // Setting $isValid to false will cause a validation error
-                // and prevent the email from being sent
-
-                $message->addError('message', 'Do you kiss your mother with those lips?');
-                $event->isValid = false;
-            }
-
-            if ($isSpam)
-            {
-                // Setting $fakeIt to true will make things look as if the email was sent,
-                // but really it wasn't
-
-                $event->fakeIt = true;
-            }
-        });
+Event::on(Submission::class, Submission::EVENT_BEFORE_VALIDATE, function(ModelEvent $e) {
+    /** @var Submission $submission */
+    $submission = $e->sender;
+    $validates = // custom validation logic...
+    
+    if (!$validates) {
+        $submission->addError('someAttribute', 'Error message');
+        $e->isValid = false;
     }
-}
+});
 ```
 
-### The `contactForm.beforeMessageCompile` event
 
-Other plugins can list to this event to change the contents of the plain text body of the 
-email as well as the HTML body.
+### The `beforeSend` event
+
+Plugins can be notified right before a message is sent out to the recipients using the `beforeSend` event. This is also an opportunity to flag the message as spam, preventing it from getting sent:
 
 ```php
-class SomePlugin extends BasePlugin
-{
-    // ...
+use craft\contactform\events\SendEvent;
+use craft\contactform\Mailer;
+use yii\base\Event;
 
-    public function init()
-    {
-        craft()->on('contactForm.beforeMessageCompile', function(ContactFormMessageEvent $event) {
-            $message = $event->params['message'];
-            $htmlMessage = $event->params['htmlMessage'];
-            $messageFields = $event->params['messageFields'];
+// ...
 
-            // ...
-
-            $event->params['message'] = 'Make email great again! - '.$message;
-            $event->params['htmlMessage'] = '<p>Make email great again! - '.$message.'</p>';
-        });
+Event::on(Mailer::class, Mailer::EVENT_BEFORE_SEND, function(SendEvent $e) {
+    $isSpam = // custom spam detection logic...
+    
+    if (!$isSpam) {
+        $e->isSpam = true;
     }
-}
+});
+```
+
+
+### The `afterSend` event
+
+Plugins can be notified right after a message is sent out to the recipients using the `afterSend` event.
+
+```php
+use craft\contactform\events\SendEvent;
+use craft\contactform\Mailer;
+use yii\base\Event;
+
+// ...
+
+Event::on(Mailer::class, Mailer::EVENT_AFTER_SEND, function(SendEvent $e) {
+    // custom logic...
+});
 ```
