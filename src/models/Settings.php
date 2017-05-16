@@ -34,11 +34,6 @@ class Settings extends Model
     /**
      * @var string|null
      */
-    public $honeypotField;
-
-    /**
-     * @var string|null
-     */
     public $successFlashMessage;
 
     /**
@@ -70,7 +65,7 @@ class Settings extends Model
     {
         return [
             [['toEmail', 'successFlashMessage'], 'required'],
-            [['toEmail', 'prependSender', 'prependSubject', 'honeypotField', 'successFlashMessage'], 'string'],
+            [['toEmail', 'prependSender', 'prependSubject', 'successFlashMessage'], 'string'],
         ];
     }
 }
