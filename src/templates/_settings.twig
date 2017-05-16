@@ -2,7 +2,7 @@
 
 {% macro configWarning(setting) -%}
     {% set setting = '<code>'~setting~'</code>' %}
-    {{ "This is being overridden by the {setting} config setting in your contactform.php config file."|t({
+    {{ "This is being overridden by the {setting} config setting in your contactform.php config file."|t('contactform', {
         setting: setting
     })|raw }}
 {%- endmacro %}
@@ -11,11 +11,11 @@
 
 {{ forms.textField({
     first:        true,
-    label:        "To Email"|t,
+    label:        "To Email"|t('contactform'),
     required:     true,
     id:           'toEmail',
     name:         'toEmail',
-    instructions: "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."|t,
+    instructions: "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."|t('contactform'),
     value:        settings.toEmail,
     autofocus:    true,
     disabled:     'toEmail' in overrides,
@@ -24,10 +24,10 @@
 }) }}
 
 {{ forms.textField({
-    label:        "Sender Text"|t,
+    label:        "Sender Text"|t('contactform'),
     id:           'prependSender',
     name:         'prependSender',
-    instructions: "Text that will be prepended to the email’s From Name to inform who the Contact Form actually was sent by."|t,
+    instructions: "Text that will be prepended to the email’s From Name to inform who the Contact Form actually was sent by."|t('contactform'),
     value:        (settings.prependSender ? settings.prependSender : ""),
     disabled:     'prependSender' in overrides,
     warning:      'prependSender' in overrides ? configWarning('prependSender'),
@@ -35,10 +35,10 @@
 }) }}
 
 {{ forms.textField({
-    label:        "Subject Text"|t,
+    label:        "Subject Text"|t('contactform'),
     id:           'prependSubject',
     name:         'prependSubject',
-    instructions: "Text that will be prepended to the email’s Subject to flag that it comes from the Contact Form."|t,
+    instructions: "Text that will be prepended to the email’s Subject to flag that it comes from the Contact Form."|t('contactform'),
     value:        (settings.prependSubject ? settings.prependSubject : ""),
     disabled:     'prependSubject' in overrides,
     warning:      'prependSubject' in overrides ? configWarning('prependSubject'),
@@ -46,7 +46,7 @@
 }) }}
 
 {{ forms.lightswitchField({
-    label:        "Allow attachments?"|t,
+    label:        "Allow attachments?"|t('contactform'),
     id:           'allowAttachments',
     name:         'allowAttachments',
     on:           settings.allowAttachments,
@@ -56,10 +56,10 @@
 }) }}
 
 {{ forms.textField({
-    label:        "Success Flash Message"|t,
+    label:        "Success Flash Message"|t('contactform'),
     id:           "successFlashMessage",
     name:         "successFlashMessage",
-    instructions: "The flash message displayed after successfully sending a message."|t,
+    instructions: "The flash message displayed after successfully sending a message."|t('contactform'),
     value:        settings.successFlashMessage,
     disabled:     'successFlashMessage' in overrides,
     warning:      'successFlashMessage' in overrides ? configWarning('successFlashMessage'),
