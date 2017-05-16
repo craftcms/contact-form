@@ -52,7 +52,7 @@ class Plugin extends \craft\base\Plugin
         // Get the settings that are being defined by the config file
         $overrides = Craft::$app->getConfig()->getConfigFromFile(strtolower($this->handle));
 
-        return Craft::$app->view->renderTemplate('contactform/_settings', [
+        return Craft::$app->view->renderTemplate('contact-form/_settings', [
             'settings' => $settings,
             'overrides' => array_keys($overrides),
         ]);
