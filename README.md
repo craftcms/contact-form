@@ -137,7 +137,7 @@ Here’s what that config file might look like along with a list of all of the p
 ```
 
 ### Dynamically adding email recipients (requires Craft 2.5+)
-You can programatically add email recipients from your template by adding a hidden input field named “toEmail” like so:
+You can programmatically add email recipients from your template by adding a hidden input field named “toEmail” like so:
 
     <input type="hidden" name="toEmail" value="{{ 'me@example.com'|hash }}">
 
