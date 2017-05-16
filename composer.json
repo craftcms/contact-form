@@ -40,6 +40,9 @@
     "name": "Contact Form",
     "handle": "contactForm",
     "changelogUrl": "https://raw.githubusercontent.com/craftcms/contact-form/v2/CHANGELOG.md",
-    "downloadUrl": "https://github.com/craftcms/contact-form/archive/v2.zip"
+    "downloadUrl": "https://github.com/craftcms/contact-form/archive/v2.zip",
+    "components": {
+      "mailer": "craft\\contactform\\Mailer"
+    }
   }
 }
