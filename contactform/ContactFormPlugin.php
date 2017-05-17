@@ -45,7 +45,7 @@ class ContactFormPlugin extends BasePlugin
 	 */
 	public function getPluginUrl()
 	{
-		return 'https://github.com/pixelandtonic/ContactForm';
+		return 'https://github.com/craftcms/contact-form';
 	}
 
 	/**
@@ -53,7 +53,7 @@ class ContactFormPlugin extends BasePlugin
 	 */
 	public function getDocumentationUrl()
 	{
-		return $this->getPluginUrl().'/blob/master/README.md';
+		return $this->getPluginUrl().'/blob/v1/README.md';
 	}
 
 	/**
@@ -61,7 +61,7 @@ class ContactFormPlugin extends BasePlugin
 	 */
 	public function getReleaseFeedUrl()
 	{
-		return 'https://raw.githubusercontent.com/pixelandtonic/ContactForm/master/releases.json';
+		return 'https://raw.githubusercontent.com/craftcms/contact-form/v1/releases.json';
 	}
 
 	/**
