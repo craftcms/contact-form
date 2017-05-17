@@ -1,7 +1,7 @@
 [
   {
     "version": "1.8.1",
-    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.8.1.zip",
+    "downloadUrl": "https://github.com/craftcms/contact-form/archive/1.8.1.zip",
     "date": "2016-09-02T15:00:00-08:00",
     "notes": [
       "[Fixed] Fixed a bug where the HTML body of an email was being escaped displaying HTML entities in the email."
@@ -9,7 +9,7 @@
   },
   {
     "version": "1.8.0",
-    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.8.0.zip",
+    "downloadUrl": "https://github.com/craftcms/contact-form/archive/1.8.0.zip",
     "date": "2016-08-18T15:00:00-08:00",
     "notes": [
       "[Added] Added the ability for plugins to modify the email's plain text and HTML body via the `contactForm.beforeMessageCompile` event.",
@@ -18,7 +18,7 @@
   },
   {
     "version": "1.7.0",
-    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.7.0.zip",
+    "downloadUrl": "https://github.com/craftcms/contact-form/archive/1.7.0.zip",
     "date": "2016-01-18T13:00:00-08:00",
     "notes": [
       "[Added] Added the ability to access individual message fields values via `message.messageFields` when a validation error occurred. For example, the value of the input `message[Phone]` can now be accessed via `message.messageFields['Phone']`.",
@@ -27,7 +27,7 @@
   },
   {
     "version": "1.6.0",
-    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.6.0.zip",
+    "downloadUrl": "https://github.com/craftcms/contact-form/archive/1.6.0.zip",
     "date": "2015-12-20T15:00:00-08:00",
     "notes": [
       "[Added] Added the ability to attach multiple files to the contact email.",
@@ -39,7 +39,7 @@
   },
   {
     "version": "1.5",
-    "downloadUrl": "https://github.com/pixelandtonic/ContactForm/archive/1.5.0.zip",
+    "downloadUrl": "https://github.com/craftcms/contact-form/archive/1.5.0.zip",
     "date": "2015-12-20T15:00:00-08:00",
     "notes": [
       "[Added] Added support for some Craft 2.5 features including update notifications."
