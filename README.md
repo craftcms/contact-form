@@ -261,7 +261,7 @@ class SomePlugin extends BasePlugin
 
 ### The `contactForm.beforeMessageCompile` event
 
-Other plugins can list to this event to change the contents of the plain text body of the 
+Other plugins can list to this event to change the contents of the plain text body of the
 email as well as the HTML body.
 
 ```php
