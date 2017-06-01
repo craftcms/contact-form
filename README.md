@@ -276,7 +276,7 @@ class SomePlugin extends BasePlugin
             $postedMessage = $event->params['postedMessage'];
 
             // Take over the actual message compilation if you want...
-            $event->message = '...'';
+            $event->message = '...';
             $event->htmlMessage = '...'; // optional
 
             // Preserve the individual message fields in case there's a validation error
