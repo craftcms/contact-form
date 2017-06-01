@@ -64,7 +64,7 @@ class ContactFormController extends BaseController
 				$message->htmlMessage = $event->htmlMessage;
 			}
 		}
-		elseif ($postedMessage)
+		else if ($postedMessage)
 		{
 			if (is_array($postedMessage))
 			{
@@ -126,10 +126,10 @@ class ContactFormController extends BaseController
 			}
 		}
 
-        if (empty($message->htmlMessage))
-        {
-            $message->htmlMessage = StringHelper::parseMarkdown($message->message);
-        }
+		if (empty($message->htmlMessage))
+		{
+			$message->htmlMessage = StringHelper::parseMarkdown($message->message);
+		}
 
 		if ($message->validate())
 		{
