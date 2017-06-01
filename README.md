@@ -272,14 +272,18 @@ class SomePlugin extends BasePlugin
     public function init()
     {
         craft()->on('contactForm.beforeMessageCompile', function(ContactFormMessageEvent $event) {
-            $message = $event->params['message'];
-            $htmlMessage = $event->params['htmlMessage'];
-            $messageFields = $event->params['messageFields'];
+            // The 'postedMessage' param is whatever $_POST['message'] was set to
+            $postedMessage = $event->params['postedMessage'];
 
-            // ...
+            // Take over the actual message compilation if you want...
+            $event->message = '...'';
+            $event->htmlMessage = '...'; // optional
 
-            $event->params['message'] = 'Make email great again! - '.$message;
-            $event->params['htmlMessage'] = '<p>Make email great again! - '.$message.'</p>';
+            // Preserve the individual message fields in case there's a validation error
+            if (is_array($postedMessage))
+            {
+                $event->messageFields = $postedMessage;
+            }
         });
     }
 }
