@@ -7,7 +7,7 @@ namespace Craft;
 class ContactFormController extends BaseController
 {
 	/**
-	 * @var Allows anonymous access to this controller's actions.
+	 * @var bool Allows anonymous access to this controller's actions.
 	 * @access protected
 	 */
 	protected $allowAnonymous = true;
