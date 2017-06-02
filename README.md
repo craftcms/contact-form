@@ -275,14 +275,12 @@ class SomePlugin extends BasePlugin
             // The 'postedMessage' param is whatever $_POST['message'] was set to
             $postedMessage = $event->params['postedMessage'];
 
-            // Take over the actual message compilation if you want...
-            $event->message = '...';
-            $event->htmlMessage = '...'; // optional
-
-            // Preserve the individual message fields in case there's a validation error
-            if (is_array($postedMessage))
+            // Take over the actual message compilation if you want. But make sure there's a posted message
+            // in either string or array for so validation can run its course.
+            if (is_array($postedMessage) && !empty($postedMessage['body']) || is_string($postedMessage) && !empty($postedMessage))
             {
-                $event->messageFields = $postedMessage;
+                $event->message = '...';
+                $event->htmlMessage = '...'; // optional
             }
         });
     }
