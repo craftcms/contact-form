@@ -276,7 +276,7 @@ class SomePlugin extends BasePlugin
             $postedMessage = $event->params['postedMessage'];
 
             // Take over the actual message compilation if you want. But make sure there's a posted message
-            // in either string or array for so validation can run its course.
+            // in either string or array format so validation can run its course.
             if (is_array($postedMessage) && !empty($postedMessage['body']) || is_string($postedMessage) && !empty($postedMessage))
             {
                 $event->message = '...';
