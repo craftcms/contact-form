@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 2.0.1 - 2017-06-12
+
+### Fixed
+- Fixed a bug where the `message` variable was not available to contact form templates when the submission contained validation errors.  
+
 ## 2.0.0 - 2017-05-16
 
 ### Added
