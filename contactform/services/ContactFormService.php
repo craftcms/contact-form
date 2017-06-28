@@ -11,7 +11,7 @@ class ContactFormService extends BaseApplicationComponent
 	 *
 	 * @param ContactFormModel $message
 	 * @throws Exception
-	 * @return bool
+	 * @return void
 	 */
 	public function sendMessage(ContactFormModel $message)
 	{
@@ -22,60 +22,45 @@ class ContactFormService extends BaseApplicationComponent
 			throw new Exception('The "To Email" address is not set on the plugin’s settings page.');
 		}
 
-		// Fire an 'onBeforeSend' event
-		Craft::import('plugins.contactform.events.ContactFormEvent');
-		$event = new ContactFormEvent($this, array('message' => $message, 'settings' => $settings));
-		$this->onBeforeSend($event);
+		// Grab any "to" emails set in the plugin settings.
+		$toEmails = ArrayHelper::stringToArray($settings->toEmail);
 
-		if ($event->isValid)
+		foreach ($toEmails as $toEmail)
 		{
-			if (!$event->fakeIt)
+			$variables = array();
+			$email = new EmailModel();
+			$emailSettings = craft()->email->getSettings();
+
+			$email->fromEmail = $emailSettings['emailAddress'];
+			$email->replyTo   = $message->fromEmail;
+			$email->sender    = $emailSettings['emailAddress'];
+			$email->fromName  = $settings->prependSender . ($settings->prependSender && $message->fromName ? ' ' : '') . $message->fromName;
+			$email->toEmail   = $toEmail;
+			$email->subject   = '{{ emailSubject }}';
+			$email->body      = '{{ emailBody }}';
+
+			$variables['emailSubject'] = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
+			$variables['emailBody'] = $message->message;
+
+			if (!empty($message->htmlMessage))
 			{
-				// Grab any "to" emails set in the plugin settings.
-				$toEmails = ArrayHelper::stringToArray($settings->toEmail);
+				// Prevent Twig tags from getting parsed
+				$email->htmlBody = str_replace(array('{', '}'), array('&lbrace;', '&rbrace;'), $message->htmlMessage);
+			}
 
-				foreach ($toEmails as $toEmail)
+			if (!empty($message->attachment))
+			{
+				foreach ($message->attachment as $attachment)
 				{
-					$variables = array();
-					$email = new EmailModel();
-					$emailSettings = craft()->email->getSettings();
-
-					$email->fromEmail = $emailSettings['emailAddress'];
-					$email->replyTo   = $message->fromEmail;
-					$email->sender    = $emailSettings['emailAddress'];
-					$email->fromName  = $settings->prependSender . ($settings->prependSender && $message->fromName ? ' ' : '') . $message->fromName;
-					$email->toEmail   = $toEmail;
-					$email->subject   = '{{ emailSubject }}';
-					$email->body      = '{{ emailBody }}';
-
-					$variables['emailSubject'] = $settings->prependSubject . ($settings->prependSubject && $message->subject ? ' - ' : '') . $message->subject;
-					$variables['emailBody'] = $message->message;
-
-					if (!empty($message->htmlMessage))
+					if ($attachment)
 					{
-						// Prevent Twig tags from getting parsed
-						$email->htmlBody = str_replace(array('{', '}'), array('&lbrace;', '&rbrace;'), $message->htmlMessage);
+						$email->addAttachment($attachment->getTempName(), $attachment->getName(), 'base64', $attachment->getType());
 					}
-
-					if (!empty($message->attachment))
-					{
-						foreach ($message->attachment as $attachment)
-						{
-							if ($attachment)
-							{
-								$email->addAttachment($attachment->getTempName(), $attachment->getName(), 'base64', $attachment->getType());
-							}
-						}
-					}
-
-					craft()->email->sendEmail($email, $variables);
 				}
 			}
 
-			return true;
+			craft()->email->sendEmail($email, $variables);
 		}
-
-		return false;
 	}
 
 	/**
