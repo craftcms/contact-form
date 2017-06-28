@@ -138,10 +138,7 @@ class ContactFormController extends BaseController
 		$event = new ContactFormEvent($this, array('message' => $message));
 		craft()->contactForm->onBeforeSend($event);
 
-		// Deprecated. Add errors instead.
-		$isValid = $event->isValid;
-
-		if (!$message->hasErrors() && $isValid)
+		if (!$message->hasErrors() && $event->isValid)
 		{
 			// Only actually send it if the honeypot test was valid
 			if ($this->validateHoneypot($settings->honeypotField) && !$event->fakeIt)
