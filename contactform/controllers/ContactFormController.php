@@ -129,28 +129,38 @@ class ContactFormController extends BaseController
 			$message->htmlMessage = StringHelper::parseMarkdown($message->message);
 		}
 
-		if ($message->validate())
+		// Validate!
+		$message->validate();
+
+		// Fire an 'onBeforeSend' event
+		Craft::import('plugins.contactform.events.ContactFormEvent');
+		$event = new ContactFormEvent($this, array('message' => $message));
+		craft()->contactForm->onBeforeSend($event);
+
+		if (!$message->hasErrors() && $event->isValid)
 		{
 			// Only actually send it if the honeypot test was valid
-			if (!$this->validateHoneypot($settings->honeypotField) || craft()->contactForm->sendMessage($message))
+			if ($this->validateHoneypot($settings->honeypotField) && !$event->fakeIt)
 			{
-				if (craft()->request->isAjaxRequest())
-				{
-					$this->returnJson(array('success' => true));
-				}
-				else
-				{
-					// Deprecated. Use 'redirect' instead.
-					$successRedirectUrl = craft()->request->getPost('successRedirectUrl');
+				craft()->contactForm->sendMessage($message);
+			}
 
-					if ($successRedirectUrl)
-					{
-						$_POST['redirect'] = $successRedirectUrl;
-					}
+			if (craft()->request->isAjaxRequest())
+			{
+				$this->returnJson(array('success' => true));
+			}
+			else
+			{
+				// Deprecated. Use 'redirect' instead.
+				$successRedirectUrl = craft()->request->getPost('successRedirectUrl');
 
-					craft()->userSession->setNotice($settings->successFlashMessage);
-					$this->redirectToPostedUrl($message);
+				if ($successRedirectUrl)
+				{
+					$_POST['redirect'] = $successRedirectUrl;
 				}
+
+				craft()->userSession->setNotice($settings->successFlashMessage);
+				$this->redirectToPostedUrl($message);
 			}
 		}
 
