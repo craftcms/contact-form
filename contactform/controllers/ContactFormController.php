@@ -131,7 +131,6 @@ class ContactFormController extends BaseController
 
 		// Validate!
 		$message->validate();
-		$message->addErrors($message->getErrors());
 
 		// Fire an 'onBeforeSend' event
 		Craft::import('plugins.contactform.events.ContactFormEvent');
