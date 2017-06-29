@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.9.0",
+    "downloadUrl": "https://github.com/craftcms/contact-form/archive/1.9.0.zip",
+    "date": "2017-06-29T15:00:00-08:00",
+    "notes": [
+      "[Fixed] Fixed a bug where if a plugin added errors to the `message` model in the `onBeforeSend()` event, they would not make it back to the template to display."
+    ]
+  },
+  {
     "version": "1.8.1",
     "downloadUrl": "https://github.com/craftcms/contact-form/archive/1.8.1.zip",
     "date": "2016-09-02T15:00:00-08:00",

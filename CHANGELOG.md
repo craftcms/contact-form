@@ -1,7 +1,12 @@
 Changelog
 =========
 
-## 1.8.1 - 2016-09-02 
+## 1.9.0 - 2017-06-29
+
+### Fixed
+- Fixed a bug where if a plugin added errors to the `message` model in the `onBeforeSend()` event, they would not make it back to the template to display. ([#84](https://github.com/craftcms/cms/issues/84))
+
+## 1.8.1 - 2016-09-02
 
 ### Fixed
 - Fixed a bug where the HTML body of an email was being escaped displaying HTML entities in the email.
