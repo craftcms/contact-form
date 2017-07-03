@@ -23,7 +23,7 @@
     "rss": "https://github.com/craftcms/contact-form/commits/v2.atom"
   },
   "require": {
-    "craftcms/cms": "~3.0.0-beta.14"
+    "craftcms/cms": "~3.0.0-beta.20"
   },
   "autoload": {
     "psr-4": {
@@ -38,7 +38,7 @@
   ],
   "extra": {
     "name": "Contact Form",
-    "handle": "contactForm",
+    "handle": "contact-form",
     "changelogUrl": "https://raw.githubusercontent.com/craftcms/contact-form/v2/CHANGELOG.md",
     "downloadUrl": "https://github.com/craftcms/contact-form/archive/v2.zip",
     "components": {
