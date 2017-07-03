@@ -48,10 +48,10 @@ class Submission extends Model
     public function attributeLabels()
     {
         return [
-            'fromName' => \Craft::t('contactform', 'Your Name'),
-            'fromEmail' => \Craft::t('contactform', 'Your Email'),
-            'message' => \Craft::t('contactform', 'Message'),
-            'subject' => \Craft::t('contactform', 'Subject'),
+            'fromName' => \Craft::t('contact-form', 'Your Name'),
+            'fromEmail' => \Craft::t('contact-form', 'Your Email'),
+            'message' => \Craft::t('contact-form', 'Message'),
+            'subject' => \Craft::t('contact-form', 'Subject'),
         ];
     }
 

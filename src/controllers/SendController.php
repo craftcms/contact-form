@@ -53,7 +53,7 @@ class SendController extends Controller
                 return $this->asJson(['errors' => $submission->getErrors()]);
             }
 
-            Craft::$app->getSession()->setError(Craft::t('contactform', 'There was a problem with your submission, please check the form and try again!'));
+            Craft::$app->getSession()->setError(Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'));
             Craft::$app->getUrlManager()->setRouteParams([
                 'variables' => ['message' => $submission]
             ]);
