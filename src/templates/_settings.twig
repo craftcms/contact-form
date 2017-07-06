@@ -2,8 +2,9 @@
 
 {% macro configWarning(setting) -%}
     {% set setting = '<code>'~setting~'</code>' %}
-    {{ "This is being overridden by the {setting} config setting in your contactform.php config file."|t('contact-form', {
-        setting: setting
+    {{ "This is being overridden by the {setting} config setting in your {file} config file."|t('contact-form', {
+        setting: setting,
+        file: 'contact-form.php'
     })|raw }}
 {%- endmacro %}
 
