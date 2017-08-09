@@ -100,11 +100,13 @@ class Mailer extends Component
         }
 
         // Fire an 'afterSend' event
-        $this->trigger(self::EVENT_AFTER_SEND, new SendEvent([
-            'submission' => $submission,
-            'message' => $message,
-            'toEmails' => $toEmails,
-        ]));
+        if ($this->hasEventHandlers(self::EVENT_AFTER_SEND)) {
+            $this->trigger(self::EVENT_AFTER_SEND, new SendEvent([
+                'submission' => $submission,
+                'message' => $message,
+                'toEmails' => $toEmails,
+            ]));
+        }
 
         return true;
     }
