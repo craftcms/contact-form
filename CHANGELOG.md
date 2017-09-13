@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Fixed
+- Fixed a bug where `{` and `}` braces in CSS and JS code within HTML email templates were getting encoded. ([#90](https://github.com/craftcms/contact-form/issues/90))
+
 ## 1.9.0 - 2017-06-29
 
 ### Fixed
