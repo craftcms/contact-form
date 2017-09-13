@@ -148,7 +148,7 @@ class Mailer extends Component
     public function compileFromName(string $fromName = null): string
     {
         $settings = Plugin::getInstance()->getSettings();
-        return $settings->prependSender . ($settings->prependSender && $fromName ? ' ' : '') . $fromName;
+        return $settings->prependSender.($settings->prependSender && $fromName ? ' ' : '').$fromName;
     }
 
     /**
