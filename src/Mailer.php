@@ -6,8 +6,8 @@ use Craft;
 use craft\contactform\events\SendEvent;
 use craft\contactform\models\Submission;
 use craft\elements\User;
-use craft\helpers\ArrayHelper;
 use craft\helpers\FileHelper;
+use craft\helpers\StringHelper;
 use craft\mail\Message;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -79,7 +79,7 @@ class Mailer extends Component
         }
 
         // Grab any "to" emails set in the plugin settings.
-        $toEmails = ArrayHelper::toArray($settings->toEmail);
+        $toEmails = is_string($settings->toEmail) ? StringHelper::split($settings->toEmail) : $settings->toEmail;
 
         // Fire a 'beforeSend' event
         $event = new SendEvent([
