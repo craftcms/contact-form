@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Added
+- Added German translations.
+
 ## 2.0.3 - 2017-09-15
 
 ### Added
@@ -14,7 +19,7 @@ Changelog
 ## 2.0.1 - 2017-06-12
 
 ### Fixed
-- Fixed a bug where the `message` variable was not available to contact form templates when the submission contained validation errors.  
+- Fixed a bug where the `message` variable was not available to contact form templates when the submission contained validation errors.
 
 ## 2.0.0 - 2017-05-16
 
@@ -31,7 +36,7 @@ Changelog
 - Removed the `beforeMessageCompile` event.
 - Removed the `$isValid` property from the `beforeSend` event. Use the `beforeValidate` event on the `Submission` model to prevent submissions from going through.
 
-## 1.8.1 - 2016-09-02 
+## 1.8.1 - 2016-09-02
 
 ### Fixed
 - Fixed a bug where the HTML body of an email was being escaped displaying HTML entities in the email.
