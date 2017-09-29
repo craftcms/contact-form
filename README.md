@@ -124,40 +124,44 @@ a handy way to have different settings across multiple environments.
 Here’s what that config file might look like along with a list of all of the possible values you can override.
 
 ```php
-    <?php
+<?php
 
-    return array(
-        'toEmail'             => 'bond@007.com',
-        'prependSubject'      => '',
-        'prependSender'       => '',
-        'allowAttachments'    => false,
-        'honeypotField'       => 'dieSpammers',
-        'successFlashMessage' => 'Congrats, yo!'
-    );
+return array(
+    'toEmail'             => 'bond@007.com',
+    'prependSubject'      => '',
+    'prependSender'       => '',
+    'allowAttachments'    => false,
+    'honeypotField'       => 'dieSpammers',
+    'successFlashMessage' => 'Congrats, yo!'
+);
 ```
 
 ### Dynamically adding email recipients (requires Craft 2.5+)
 You can programmatically add email recipients from your template by adding a hidden input field named “toEmail” like so:
 
-    <input type="hidden" name="toEmail" value="{{ 'me@example.com'|hash }}">
+```twig
+<input type="hidden" name="toEmail" value="{{ 'me@example.com'|hash }}">
+```
 
 If you want to add multiple recipients, you can provide a comma separated list of emails like so:
 
-    <input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
+```twig
+<input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
+```
 
 Then from your `craft/config/contactform.php` config file, you’ll need to add a bit of logic:
 
 ```php
-    <?php
-    namespace Craft;
+<?php
+namespace Craft;
 
-    $toEmail = craft()->request->getPost('toEmail');
-    $toEmail = craft()->security->validateData($toEmail);
+$toEmail = craft()->request->getPost('toEmail');
+$toEmail = craft()->security->validateData($toEmail);
 
-    return array(
-        'toEmail' => ($toEmail ?: null),
-        ...
-    );
+return array(
+    'toEmail' => ($toEmail ?: null),
+    // ...
+);
 ```
 
 In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “toEmail” defined in the plugin settings, so you must have that defined as well.
