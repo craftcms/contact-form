@@ -128,7 +128,7 @@ An email sent with the above form might result in the following message:
 
 ### Overriding plugin settings
 
-If you create a [config file](https://craftcms.com/docs/config-settings) in your `config/` folder called `contactform.php`, you can override
+If you create a [config file](https://craftcms.com/docs/config-settings) in your `config/` folder called `contact-form.php`, you can override
 the plugin’s settings in the Control Panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/multi-environment-configs) aware, this is
 a handy way to have different settings across multiple environments.
 
@@ -156,7 +156,7 @@ If you want to add multiple recipients, you can provide a comma separated list o
 
     <input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
 
-Then from your `craft/config/contactform.php` config file, you’ll need to add a bit of logic:
+Then from your `craft/config/contact-form.php` config file, you’ll need to add a bit of logic:
 
 ```php
 <?php
