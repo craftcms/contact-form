@@ -87,6 +87,15 @@ On your `contact/thanks.html` template, you can access that `from` parameter usi
 Note that if you don’t include a `redirect` input, the current page will get reloaded.
 
 
+### Using the Success Flash Message
+
+You can access the value of the success flash message setting by calling `craft.app.session.getFlash('notice')` in your template:
+
+```twig
+<p>{{ craft.app.session.getFlash('notice') }}</p>
+```
+
+
 ### Adding additional fields
 
 You can add additional fields to your form by splitting your `message` field into multiple fields, using an array syntax for the input names:
