@@ -23,6 +23,8 @@ return [
         => "Text, welcher der Betreffzeile vorangestellt wird, um aufzuzeigen dass die Mail vom Kontaktformular stammt",
     "Allow attachments?"
         => "Anlagen erlauben?",
+    "Include all data in email body?"
+        => "Alle Daten in Mail einbeziehen?",
     "Success Flash Message"
         => "Erfolgsnachricht",
     "The flash message diplayed after successfully sending a message."

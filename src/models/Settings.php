@@ -32,6 +32,11 @@ class Settings extends Model
     public $allowAttachments = false;
 
     /**
+     * @var bool
+     */
+     public $includeAllData = false;
+
+    /**
      * @var string|null
      */
     public $successFlashMessage;

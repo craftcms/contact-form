@@ -56,6 +56,16 @@
     errors:       settings.getErrors('allowAttachments')
 }) }}
 
+{{ forms.lightswitchField({
+    label:        "Include all data in email body?"|t('contact-form'),
+    id:           'includeAllData',
+    name:         'includeAllData',
+    on:           settings.includeAllData,
+    disabled:     'includeAllData' in overrides,
+    warning:      'includeAllData' in overrides ? configWarning('includeAllData'),
+    errors:       settings.getErrors('includeAllData')
+}) }}
+
 {{ forms.textField({
     label:        "Success Flash Message"|t('contact-form'),
     id:           "successFlashMessage",
