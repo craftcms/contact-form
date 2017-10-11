@@ -86,6 +86,17 @@ On your `contact/thanks.html` template, you can access that `from` parameter usi
 
 Note that if you don’t include a `redirect` input, the current page will get reloaded.
 
+### Displaying flash messages
+
+When a contact form is submitted, the plugin will set a `notice` or `success` flash message on the user session. You can display it in your template like this:
+
+```twig
+{% if craft.app.session.hasFlash('notice') %}
+    <p class="message notice">{{ craft.app.session.getFlash('notice') }}</p>
+{% elseif craft.app.session.hasFlash('error') %}
+    <p class="message error">{{ craft.app.session.getFlash('error') }}</p>
+{% endif %}
+```
 
 ### Adding additional fields
 
