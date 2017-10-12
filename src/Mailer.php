@@ -6,6 +6,7 @@ use Craft;
 use craft\contactform\events\SendEvent;
 use craft\contactform\models\Submission;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use craft\helpers\FileHelper;
 use craft\helpers\StringHelper;
 use craft\mail\Message;
@@ -59,7 +60,7 @@ class Mailer extends Component
         $fromEmail = $this->getFromEmail($mailer->from);
         $fromName = $this->compileFromName($submission->fromName);
         $subject = $this->compileSubject($submission->subject);
-        $textBody = $this->compileTextBody($submission->message);
+        $textBody = $this->compileTextBody($submission);
         $htmlBody = $this->compileHtmlBody($textBody);
 
         $message = (new Message())
@@ -167,47 +168,41 @@ class Mailer extends Component
     /**
      * Compiles the real email textual body from the submitted message.
      *
-     * @param string|string[] $message
+     * @param Submission $submission
      *
      * @return string
      */
-    public function compileTextBody($message): string
+    public function compileTextBody(Submission $submission): string
     {
-        if (!is_array($message)) {
-            return (string)$message;
+        $fields = [
+            Craft::t('contact-form', 'Name') => $submission->fromName,
+            Craft::t('contact-form', 'Email') => $submission->fromEmail,
+        ];
+
+        if (is_array($submission->message)) {
+            $body = $submission->message['body'] ?? '';
+            $fields = array_merge($fields, $submission->message);
+            unset($fields['body']);
+        } else {
+            $body = (string) $submission->message;
         }
 
-        // Start with the body, if submitted
-        $compiledMessage = '';
+        $text = '';
 
-        // Now loop through the rest
-        foreach ($message as $key => $value) {
-            if ($key === 'body') {
-                continue;
-            }
-
-            if ($compiledMessage) {
-                $compiledMessage .= "\n\n";
-            }
-
-            $compiledMessage .= $key.': ';
-
+        foreach ($fields as $key => $value) {
+            $text .= ($text ? "\n" : '')."- **{$key}:** ";
             if (is_array($value)) {
-                $compiledMessage .= implode(', ', $value);
+                $text .= implode(', ', $value);
             } else {
-                $compiledMessage .= $value;
+                $text .= $value;
             }
         }
 
-        if (!empty($message['body'])) {
-            if ($compiledMessage) {
-                $compiledMessage .= "\n\n";
-            }
-
-            $compiledMessage .= $message['body'];
+        if ($body !== '') {
+            $text .= "\n\n".$body;
         }
 
-        return $compiledMessage;
+        return $text;
     }
 
     /**

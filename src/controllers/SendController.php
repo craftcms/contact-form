@@ -38,11 +38,7 @@ class SendController extends Controller
         $submission->fromEmail = $request->getBodyParam('fromEmail');
         $submission->fromName = $request->getBodyParam('fromName');
         $submission->subject = $request->getBodyParam('subject');
-
-        $submission->message = '- '.Craft::t('contact-form', 'Name:').' '.$request->getBodyParam('fromName')."\n".
-            '- '.Craft::t('contact-form', 'Email:').' '.$request->getBodyParam('fromEmail')."\n".
-            '- '.Craft::t('contact-form', 'Subject:').' '.$request->getBodyParam('subject')."\n\n".
-            '- '.$request->getBodyParam('message');
+        $submission->message = $request->getBodyParam('message');
 
         if ($settings->allowAttachments && isset($_FILES['attachment']) && isset($_FILES['attachment']['name'])) {
             if (is_array($_FILES['attachment']['name'])) {

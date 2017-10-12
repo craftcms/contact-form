@@ -6,6 +6,9 @@ Changelog
 ### Added
 - Added German translations.
 
+### Changed
+- Email message bodies now include the sender’s name and email. ([#97](https://github.com/craftcms/contact-form/pull/97))
+
 ## 2.0.3 - 2017-09-15
 
 ### Added
