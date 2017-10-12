@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 2.1.0 - 2017-10-12
 
 ### Added
 - Added German translations.
