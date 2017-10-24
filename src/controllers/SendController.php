@@ -62,7 +62,10 @@ class SendController extends Controller
         }
 
         if ($request->getAcceptsJson()) {
-            return $this->asJson(['success' => true]);
+            return $this->asJson([
+                'success' => true,
+                'message' => $settings->successFlashMessage
+            ]);
         }
 
         Craft::$app->getSession()->setNotice($settings->successFlashMessage);
