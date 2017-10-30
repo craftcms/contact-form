@@ -202,6 +202,7 @@ $('#my-form').submit(function(ev) {
     // Send it to the server
     $.post('/', {
         dataType: 'json',
+        method: 'POST',
         data: $(this).serialize(),
         success: function(response) {
             if (response.success) {
