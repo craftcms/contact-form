@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.9.2 - 2017-10-31
+- Fixed a bug where any HTML submitted in the message body was not being encoded. ([#104](https://github.com/craftcms/contact-form/issues/104))
+
 ## 1.9.1 - 2017-09-13
 
 ### Fixed

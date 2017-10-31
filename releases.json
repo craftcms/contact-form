@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.9.2",
+    "downloadUrl": "https://github.com/craftcms/contact-form/archive/1.9.2.zip",
+    "date": "2017-10-31T15:00:00-08:00",
+    "notes": [
+      "[Fixed] Fixed a bug where any HTML submitted in the message body was not being encoded."
+    ]
+  },
+  {
     "version": "1.9.1",
     "downloadUrl": "https://github.com/craftcms/contact-form/archive/1.9.1.zip",
     "date": "2017-09-13T15:00:00-08:00",
