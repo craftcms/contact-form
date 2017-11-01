@@ -126,8 +126,8 @@ class ContactFormController extends BaseController
 
 		if (empty($message->htmlMessage))
 		{
-            $htmlMessage = HtmlHelper::encode($message->message);
-			$message->htmlMessage = StringHelper::parseMarkdown($message->message);
+			$htmlMessage = HtmlHelper::encode($message->message);
+			$message->htmlMessage = StringHelper::parseMarkdown($htmlMessage);
 		}
 
 		// Validate!
