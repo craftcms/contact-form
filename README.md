@@ -200,7 +200,8 @@ $('#my-form').submit(function(ev) {
     ev.preventDefault();
 
     // Send it to the server
-    $.post('/', {
+    $.post({
+        url: '/',
         dataType: 'json',
         data: $(this).serialize(),
         success: function(response) {
