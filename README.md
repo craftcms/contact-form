@@ -42,7 +42,7 @@ Your contact form template can look something like this:
 <form method="post" action="" accept-charset="UTF-8">
     {{ csrfInput() }}
     <input type="hidden" name="action" value="contact-form/send">
-    <input type="hidden" name="redirect" value="{{ 'contact/thanks'|hash }}">
+    {{ redirectInput('contact/thanks') }}
 
     <h3><label for="from-name">Your Name</label></h3>
     <input id="from-name" type="text" name="fromName" value="{{ message.fromName ?? '' }}">
@@ -76,7 +76,7 @@ If you have a `redirect` hidden input, the user will get redirected to it upon s
 
 For example, if you wanted to redirect to a `contact/thanks` page and pass the sender’s name to it, you could set the input like this:
 
-    <input type="hidden" name="redirect" value="{{ 'contact/thanks?from={fromName}'|hash }}">
+    {{ redirectInput('contact/thanks?from={fromName}') }}
 
 On your `contact/thanks.html` template, you can access that `from` parameter using `craft.app.request.getQueryParam()`:
 
