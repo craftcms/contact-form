@@ -10,23 +10,23 @@ return [
 
     //plugin settings
     "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."
-        => "Die Email-Adresse(n) an welche das Kontaktformular senden wird. Trennen Sie mehrere Email-Adressen mit Kommas.",
+    => "Die Email-Adresse(n) an welche das Kontaktformular senden wird. Trennen Sie mehrere Email-Adressen mit Kommas.",
     "Sender Text"
-        => "Absendertext",
+    => "Absendertext",
     "Text that will be prepended to the email's From Name to inform who the Contact Form actually was sent by."
-        => "Text, welcher dem Absendernamen der Email vorangestellt wird, um aufzuzeigen von wem das Kontaktformular abgesendet wurde.",
+    => "Text, welcher dem Absendernamen der Email vorangestellt wird, um aufzuzeigen von wem das Kontaktformular abgesendet wurde.",
     "On behalf of"
-        => "Mitteilung von",
+    => "Mitteilung von",
     "Subject Text"
-        => "Betreffzeile",
+    => "Betreffzeile",
     "Text that will be prepended to the email's Subject to flag that it comes from the Contact Form."
-        => "Text, welcher der Betreffzeile vorangestellt wird, um aufzuzeigen dass die Mail vom Kontaktformular stammt",
+    => "Text, welcher der Betreffzeile vorangestellt wird, um aufzuzeigen dass die Mail vom Kontaktformular stammt",
     "Allow attachments?"
-        => "Anlagen erlauben?",
+    => "Anlagen erlauben?",
     "Success Flash Message"
-        => "Erfolgsnachricht",
+    => "Erfolgsnachricht",
     "The flash message diplayed after successfully sending a message."
-        => "Die Statusnachricht welche angezeigt wird, wenn eine Nachricht erfolgreich versendet wurde.",
+    => "Die Statusnachricht welche angezeigt wird, wenn eine Nachricht erfolgreich versendet wurde.",
     "Your message has been sent."
-        => "Ihre Nachricht wurde versendet."
+    => "Ihre Nachricht wurde versendet."
 ];

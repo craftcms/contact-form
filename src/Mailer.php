@@ -6,7 +6,6 @@ use Craft;
 use craft\contactform\events\SendEvent;
 use craft\contactform\models\Submission;
 use craft\elements\User;
-use craft\helpers\ArrayHelper;
 use craft\helpers\FileHelper;
 use craft\helpers\StringHelper;
 use craft\mail\Message;
@@ -36,8 +35,7 @@ class Mailer extends Component
      * Sends an email submitted through a contact form.
      *
      * @param Submission $submission
-     * @param bool       $runValidation Whether the section should be validated
-     *
+     * @param bool $runValidation Whether the section should be validated
      * @throws InvalidConfigException if the plugin settings don't validate
      * @return bool
      */
@@ -116,7 +114,6 @@ class Mailer extends Component
      * Returns the "From" email value on the given mailer $from property object.
      *
      * @param string|array|User|User[]|null $from
-     *
      * @return string
      * @throws InvalidConfigException if it can’t be determined
      */
@@ -143,7 +140,6 @@ class Mailer extends Component
      * Compiles the "From" name value from the submitted name.
      *
      * @param string|null $fromName
-     *
      * @return string
      */
     public function compileFromName(string $fromName = null): string
@@ -156,7 +152,6 @@ class Mailer extends Component
      * Compiles the real email subject from the submitted subject.
      *
      * @param string|null $subject
-     *
      * @return string
      */
     public function compileSubject(string $subject = null): string
@@ -169,7 +164,6 @@ class Mailer extends Component
      * Compiles the real email textual body from the submitted message.
      *
      * @param Submission $submission
-     *
      * @return string
      */
     public function compileTextBody(Submission $submission): string
@@ -184,7 +178,7 @@ class Mailer extends Component
             $fields = array_merge($fields, $submission->message);
             unset($fields['body']);
         } else {
-            $body = (string) $submission->message;
+            $body = (string)$submission->message;
         }
 
         $text = '';
@@ -209,7 +203,6 @@ class Mailer extends Component
      * Compiles the real email HTML body from the compiled textual body.
      *
      * @param string $textBody
-     *
      * @return string
      */
     public function compileHtmlBody(string $textBody): string
