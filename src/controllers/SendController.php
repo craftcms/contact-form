@@ -7,8 +7,6 @@ use craft\contactform\models\Submission;
 use craft\contactform\Plugin;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use yii\helpers\Html;
-use yii\helpers\Markdown;
 use yii\web\Response;
 
 class SendController extends Controller
@@ -41,9 +39,6 @@ class SendController extends Controller
         $submission->fromName = $request->getBodyParam('fromName');
         $submission->subject = $request->getBodyParam('subject');
         $submission->message = $request->getBodyParam('message');
-
-        $htmlMessage = Html::encode($submission->message);
-        $submission->message = Markdown::process($htmlMessage);
 
         if ($settings->allowAttachments && isset($_FILES['attachment']) && isset($_FILES['attachment']['name'])) {
             if (is_array($_FILES['attachment']['name'])) {

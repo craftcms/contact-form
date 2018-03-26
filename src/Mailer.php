@@ -11,6 +11,7 @@ use craft\helpers\StringHelper;
 use craft\mail\Message;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
+use yii\helpers\Html;
 use yii\helpers\Markdown;
 
 class Mailer extends Component
@@ -207,7 +208,8 @@ class Mailer extends Component
      */
     public function compileHtmlBody(string $textBody): string
     {
-        $html = Markdown::process($textBody);
+        $html = Html::encode($textBody);
+        $html = Markdown::process($html);
 
         // Prevent Twig tags from getting parsed
         // TODO: probably safe to remove?
