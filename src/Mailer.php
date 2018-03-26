@@ -209,10 +209,6 @@ class Mailer extends Component
     {
         $html = Markdown::process($textBody);
 
-        // Prevent Twig tags from getting parsed
-        // TODO: probably safe to remove?
-        $html = str_replace(['{%', '{{', '}}', '%}'], ['&lbrace;%', '&lbrace;&lbrace;', '&rbrace;&rbrace;', '%&rbrace;'], $html);
-
         return $html;
     }
 }
