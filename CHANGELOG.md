@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Fixed
+- Fixed a bug where single carriage returns in a `<textarea>` would be lost in the email. ([#118](https://github.com/craftcms/contact-form/issues/118))
+
 ## 2.1.1 - 2017-12-04
 
 ### Changed
