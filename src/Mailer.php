@@ -70,7 +70,9 @@ class Mailer extends Component
 
         if ($submission->attachment !== null) {
             foreach ($submission->attachment as $attachment) {
-                if (!$attachment) continue;
+                if (!$attachment) {
+                    continue;
+                }
                 $message->attach($attachment->tempName, [
                     'fileName' => $attachment->name,
                     'contentType' => FileHelper::getMimeType($attachment->tempName),
