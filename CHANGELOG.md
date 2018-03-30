@@ -6,6 +6,7 @@ Changelog
 ### Fixed
 - Fixed a bug where single carriage returns in a `<textarea>` would be lost in the email. ([#118](https://github.com/craftcms/contact-form/issues/118))
 - Fixed a bug where HTML was not being properly escaped in an email body. ([#104](https://github.com/craftcms/contact-form/issues/104))
+- Fixed a bug where an empty file attachment field caused an error instead of sending an email without attachments. ([#116](https://github.com/craftcms/contact-form/pull/116))
 
 ## 2.1.1 - 2017-12-04
 
