@@ -45,7 +45,9 @@ class ContactFormService extends BaseApplicationComponent
 			if (!empty($message->htmlMessage))
 			{
 				// Prevent Twig tags from getting parsed
-				$email->htmlBody = str_replace(array('{%', '{{', '}}', '%}'), array('&lbrace;%', '&lbrace;&lbrace;', '&rbrace;&rbrace;', '%&rbrace;'), $message->htmlMessage);
+        $email->htmlBody = str_replace(array('{%', '{{', '}}', '%}'), array('&lbrace;%', '&lbrace;&lbrace;', '&rbrace;&rbrace;', '%&rbrace;'), $message->htmlMessage);
+        // Append email output at the end of email
+        $email->htmlBody .= '<p>Email Address: '.$message->fromEmail.'</p>';
 			}
 
 			if (!empty($message->attachment))
