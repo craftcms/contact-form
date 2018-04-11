@@ -104,7 +104,7 @@ You can add additional fields to your form by splitting your `message` field int
 
 ```twig
 <h3><label for="message">Message</label></h3>
-<textarea rows="10" cols="40" id="message" name="message[body]">{{ message.message ?? '' }}</textarea>
+<textarea rows="10" cols="40" id="message" name="message[body]">{{ message.message.body ?? '' }}</textarea>
 
 <h3><label for="phone">Your phone number</label></h3>
 <input id="phone" type="text" name="message[Phone]" value="">
