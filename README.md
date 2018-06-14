@@ -277,3 +277,7 @@ Event::on(Mailer::class, Mailer::EVENT_AFTER_SEND, function(SendEvent $e) {
     // custom logic...
 });
 ```
+
+### Using a “Honeypot” field
+
+Support for the [honeypot captcha technique](https://haacked.com/archive/2007/09/11/honeypot-captcha.aspx/) to fight spam has been moved to a [separate plugin](https://github.com/craftcms/contact-form-honeypot) that complements this one.
