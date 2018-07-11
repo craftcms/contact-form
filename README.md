@@ -177,18 +177,21 @@ If you want to add multiple recipients, you can provide a comma separated list o
 <input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
 ```
 
-Then from your `craft/config/contact-form.php` config file, you’ll need to add a bit of logic:
+Then from your `config/contact-form.php` config file, you’ll need to add a bit of logic:
 
 ```php
 <?php
 
-return [
-    'toEmail' => Craft::$app->request->getValidatedBodyParam('toEmail'),
-    // ...
-];
+$config = [];
+
+if (($toEmail = Craft::$app->request->getValidatedBodyParam('toEmail')) !== null) {
+    $config['toEmail'] =  $toEmail;
+}
+
+return $config;
 ```
 
-In this example if `$toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “To Email” defined in the plugin settings, so you must have that defined as well.
+In this example if `toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “To Email” defined in the plugin settings, so you must have that defined as well.
 
 ### File attachments
 
