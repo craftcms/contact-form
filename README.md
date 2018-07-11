@@ -14,11 +14,15 @@ To install the plugin, follow these instructions.
 
 1. Open your terminal and go to your Craft project:
 
-        cd /path/to/project
+    ```bash
+    cd /path/to/project
+    ```
 
 2. Then tell Composer to load the plugin:
 
-        composer require craftcms/contact-form
+    ```bash
+    composer require craftcms/contact-form
+    ```
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Contact Form.
 
@@ -76,7 +80,9 @@ If you have a `redirect` hidden input, the user will get redirected to it upon s
 
 For example, if you wanted to redirect to a `contact/thanks` page and pass the sender’s name to it, you could set the input like this:
 
-    {{ redirectInput('contact/thanks?from={fromName}') }}
+```twig
+{{ redirectInput('contact/thanks?from={fromName}') }}
+```
 
 On your `contact/thanks.html` template, you can access that `from` parameter using `craft.app.request.getQueryParam()`:
 
@@ -146,26 +152,30 @@ a handy way to have different settings across multiple environments.
 Here’s what that config file might look like along with a list of all of the possible values you can override.
 
 ```php
-    <?php
+<?php
 
-    return [
-        'toEmail'             => 'bond@007.com',
-        'prependSubject'      => '',
-        'prependSender'       => '',
-        'allowAttachments'    => false,
-        'successFlashMessage' => 'Message sent!'
-    ];
+return [
+    'toEmail'             => 'bond@007.com',
+    'prependSubject'      => '',
+    'prependSender'       => '',
+    'allowAttachments'    => false,
+    'successFlashMessage' => 'Message sent!'
+];
 ```
 
 ### Dynamically adding email recipients
 
 You can programmatically add email recipients from your template by adding a hidden input field named `toEmail` like so:
 
-    <input type="hidden" name="toEmail" value="{{ 'me@example.com'|hash }}">
+```twig
+<input type="hidden" name="toEmail" value="{{ 'me@example.com'|hash }}">
+```
 
 If you want to add multiple recipients, you can provide a comma separated list of emails like so:
 
-    <input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
+```twig
+<input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
+```
 
 Then from your `craft/config/contact-form.php` config file, you’ll need to add a bit of logic:
 
