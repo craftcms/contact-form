@@ -185,7 +185,7 @@ Then from your `config/contact-form.php` config file, you’ll need to add a bit
 $config = [];
 
 if (($toEmail = Craft::$app->request->getValidatedBodyParam('toEmail')) !== null) {
-    $config['toEmail'] =  $toEmail;
+    $config['toEmail'] = $toEmail;
 }
 
 return $config;
