@@ -9,6 +9,7 @@ use craft\elements\User;
 use craft\helpers\FileHelper;
 use craft\helpers\StringHelper;
 use craft\mail\Message;
+use Swift_TransportException;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
@@ -99,7 +100,13 @@ class Mailer extends Component
 
         foreach ($toEmails as $toEmail) {
             $message->setTo($toEmail);
-            $mailer->send($message);
+            try {
+                return $mailer->send($message);
+            } catch (Swift_TransportException $e) {
+                Craft::error('Error sending email: '.$e->getMessage());
+                Craft::$app->getErrorHandler()->logException($e);
+                return false;
+            }
         }
 
         // Fire an 'afterSend' event
