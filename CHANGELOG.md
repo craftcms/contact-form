@@ -3,6 +3,9 @@ Changelog
 
 ## Unreleased
 
+### Changed
+- Event listeners for `craft\contactform\Mailer::EVENT_BEFORE_SEND` can now make changes to `craft\contactform\events\SendEvent::$toEmails`, and they will be respected. ([#112](https://github.com/craftcms/contact-form/pull/112))  
+
 ### Fixed
 - Fixed a bug where single carriage returns in a `<textarea>` would be lost in the email. ([#118](https://github.com/craftcms/contact-form/issues/118))
 - Fixed a bug where HTML was not being properly escaped in an email body. ([#104](https://github.com/craftcms/contact-form/issues/104))
