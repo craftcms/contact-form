@@ -97,7 +97,7 @@ class Mailer extends Component
             return true;
         }
 
-        foreach ($toEmails as $toEmail) {
+        foreach ($event->toEmails as $toEmail) {
             $message->setTo($toEmail);
             $mailer->send($message);
         }
@@ -107,7 +107,7 @@ class Mailer extends Component
             $this->trigger(self::EVENT_AFTER_SEND, new SendEvent([
                 'submission' => $submission,
                 'message' => $message,
-                'toEmails' => $toEmails,
+                'toEmails' => $event->toEmails,
             ]));
         }
 
