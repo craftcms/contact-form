@@ -90,17 +90,12 @@ class Mailer extends Component
         ]);
         $this->trigger(self::EVENT_BEFORE_SEND, $event);
 
-        // Use (updated) values from 'beforeSend' event handlers
-        $submission = $event->submission;
-        $message = $event->message;
-        $toEmails = $event->toEmails;
-
         if ($event->isSpam) {
             Craft::info('Contact form submission suspected to be spam.', __METHOD__);
             return true;
         }
 
-        foreach ($toEmails as $toEmail) {
+        foreach ($event->toEmails as $toEmail) {
             $message->setTo($toEmail);
             $mailer->send($message);
         }
@@ -110,7 +105,7 @@ class Mailer extends Component
             $this->trigger(self::EVENT_AFTER_SEND, new SendEvent([
                 'submission' => $submission,
                 'message' => $message,
-                'toEmails' => $toEmails,
+                'toEmails' => $event->toEmails,
             ]));
         }
 
