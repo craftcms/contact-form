@@ -7,6 +7,7 @@ Changelog
 - Contact Form is now translated into Arabic. ([#125](https://github.com/craftcms/contact-form/pull/125))
 
 ### Changed
+- Contact emails no longer list the Name field if none was provided. ([#126](https://github.com/craftcms/contact-form/issues/126))
 - Event listeners for `craft\contactform\Mailer::EVENT_BEFORE_SEND` can now make changes to `craft\contactform\events\SendEvent::$toEmails`, and they will be respected. ([#112](https://github.com/craftcms/contact-form/pull/112))  
 
 ### Fixed

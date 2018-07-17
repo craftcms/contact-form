@@ -172,10 +172,13 @@ class Mailer extends Component
      */
     public function compileTextBody(Submission $submission): string
     {
-        $fields = [
-            Craft::t('contact-form', 'Name') => $submission->fromName,
-            Craft::t('contact-form', 'Email') => $submission->fromEmail,
-        ];
+        $fields = [];
+
+        if ($submission->fromName) {
+            $fields[Craft::t('contact-form', 'Name')] = $submission->fromName;
+        }
+
+        $fields[Craft::t('contact-form', 'Email')] = $submission->fromEmail;
 
         if (is_array($submission->message)) {
             $body = $submission->message['body'] ?? '';
