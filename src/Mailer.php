@@ -191,6 +191,11 @@ class Mailer extends Component
         $text = '';
 
         foreach ($fields as $key => $value) {
+            // Skip displaying Name field if fromName is blank
+            if ($key == 'Name' and $value == '') {
+                continue;
+            }
+
             $text .= ($text ? "\n" : '')."- **{$key}:** ";
             if (is_array($value)) {
                 $text .= implode(', ', $value);
