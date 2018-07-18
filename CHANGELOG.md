@@ -1,6 +1,6 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 2.2.0 - 2017-07-18
 
 ### Added
 - Contact Form is now translated into Arabic. ([#125](https://github.com/craftcms/contact-form/pull/125))
