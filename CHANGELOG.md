@@ -1,5 +1,4 @@
-Changelog
-=========
+# Release Notes for Contact Form
 
 ## Unreleased
 
