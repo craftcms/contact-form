@@ -1,5 +1,10 @@
 # Release Notes for Contact Form
 
+## 2.2.1 - 2017-07-18
+
+## Fixed
+- Fixed a bug where blank messages wouldn’t fail validation if the message was split into multiple fields.
+
 ## 2.2.0 - 2017-07-18
 
 ### Added
