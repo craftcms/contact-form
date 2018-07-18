@@ -183,8 +183,12 @@ Then from your `config/contact-form.php` config file, you’ll need to add a bit
 <?php
 
 $config = [];
+$request = Craft::$app->request;
 
-if (($toEmail = Craft::$app->request->getValidatedBodyParam('toEmail')) !== null) {
+if (
+    !$request->getIsConsoleRequest() &&
+    ($toEmail = $request->getValidatedBodyParam('toEmail')) !== null
+) {
     $config['toEmail'] = $toEmail;
 }
 
