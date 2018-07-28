@@ -38,9 +38,15 @@ class SendController extends Controller
         $submission->fromEmail = $request->getBodyParam('fromEmail');
         $submission->fromName = $request->getBodyParam('fromName');
         $submission->subject = $request->getBodyParam('subject');
-        $submission->message = array_filter($request->getBodyParam('message'), function($value) {
-            return $value !== '';
-        });
+
+        $message = $request->getBodyParam('message');
+        if (is_array($message)) {
+            $submission->message = array_filter($message, function($value) {
+                return $value !== '';
+            });
+        } else {
+            $submission->message = $message;
+        }
 
         if ($settings->allowAttachments && isset($_FILES['attachment']) && isset($_FILES['attachment']['name'])) {
             if (is_array($_FILES['attachment']['name'])) {

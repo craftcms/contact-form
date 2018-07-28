@@ -1,5 +1,15 @@
 # Release Notes for Contact Form
 
+## Unreleased
+
+### Added
+- Contact Form is now translated into Dutch. ([#139](https://github.com/craftcms/contact-form/pull/139))
+
+## 2.2.2 - 2017-07-19
+
+### Fixed
+- Fixed a PHP error introduced in 2.2.1 that broke submissions that were using a single `message` form input.
+
 ## 2.2.1 - 2017-07-18
 
 ### Fixed
