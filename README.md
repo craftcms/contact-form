@@ -1,4 +1,4 @@
-# Contact Form plugin for Craft
+# Contact Form for Craft CMS
 
 This plugin allows you to add an email contact form to your website.
 
