@@ -31,6 +31,16 @@ composer require craftcms/contact-form
 ./craft install/plugin contact-form
 ```
 
+## Upgrading from Craft 2
+
+If you’re in the process of upgrading a Craft 2 project to Craft 3, follow these instructions to get Contact Form back up and running:
+
+1. [Install Contact Form 2.x](#installation).
+2. Update the `action` input values in your form templates from `contactForm/sendMessage` to `contact-form/send`.
+3. Make sure the `redirect` input values in your form templates are [hashed](https://docs.craftcms.com/v3/changes-in-craft-3.html#request-params).
+4. If you have a `craft/config/contactform.php` file, move it to `config/` and rename it to `contact-form.php`.
+5. If you were using the honeypot captcha feature, install the new [Contact Form Honeypot](https://github.com/craftcms/contact-form-honeypot) plugin.
+
 ## Usage
 
 Your contact form template can look something like this:
