@@ -249,25 +249,26 @@ $('#my-form').submit(function(ev) {
 });
 ```
 
-### The `beforeValidate` event
+### The `afterValidate` event
 
-Plugins can be notified when a submission is being validated, providing their own custom validation logic, using the `beforeValidate` event on the `Submission` model:
+Modules and plugins can be notified when a submission is being validated, providing their own custom validation logic, using the `afterValidate` event on the `Submission` model:
 
 ```php
 use craft\contactform\models\Submission;
 use yii\base\Event;
-use yii\base\ModelEvent;
+use yii\base\Event;
 
 // ...
 
-Event::on(Submission::class, Submission::EVENT_BEFORE_VALIDATE, function(ModelEvent $e) {
+Event::on(Submission::class, Submission::EVENT_AFTER_VALIDATE, function(Event $e) {
     /** @var Submission $submission */
     $submission = $e->sender;
-    $validates = // custom validation logic...
     
-    if (!$validates) {
-        $submission->addError('someAttribute', 'Error message');
-        $e->isValid = false;
+    // Make sure that `message[Phone]` was filled in
+    if (empty($submission->message['Phone']) {
+        // Add the error
+        // (This will be accessible via `message.getErrors('message.phone')` in the template.)
+        $submission->addError('message.phone', 'A phone number is required.');
     }
 });
 ```
@@ -275,7 +276,7 @@ Event::on(Submission::class, Submission::EVENT_BEFORE_VALIDATE, function(ModelEv
 
 ### The `beforeSend` event
 
-Plugins can be notified right before a message is sent out to the recipients using the `beforeSend` event. This is also an opportunity to flag the message as spam, preventing it from getting sent:
+Modules and plugins can be notified right before a message is sent out to the recipients using the `beforeSend` event. This is also an opportunity to flag the message as spam, preventing it from getting sent:
 
 ```php
 use craft\contactform\events\SendEvent;
@@ -286,7 +287,7 @@ use yii\base\Event;
 
 Event::on(Mailer::class, Mailer::EVENT_BEFORE_SEND, function(SendEvent $e) {
     $isSpam = // custom spam detection logic...
-    
+
     if (!$isSpam) {
         $e->isSpam = true;
     }
@@ -296,7 +297,7 @@ Event::on(Mailer::class, Mailer::EVENT_BEFORE_SEND, function(SendEvent $e) {
 
 ### The `afterSend` event
 
-Plugins can be notified right after a message is sent out to the recipients using the `afterSend` event.
+Modules and plugins can be notified right after a message is sent out to the recipients using the `afterSend` event.
 
 ```php
 use craft\contactform\events\SendEvent;
