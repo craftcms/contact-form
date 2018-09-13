@@ -97,10 +97,8 @@ class Mailer extends Component
             return true;
         }
 
-        foreach ($event->toEmails as $toEmail) {
-            $message->setTo($toEmail);
-            $mailer->send($message);
-        }
+        $message->setTo($event->toEmails);
+        $mailer->send($message);
 
         // Fire an 'afterSend' event
         if ($this->hasEventHandlers(self::EVENT_AFTER_SEND)) {
