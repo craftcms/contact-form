@@ -57,9 +57,9 @@ class Mailer extends Component
 
         // Prep the message
         $fromEmail = $this->getFromEmail($mailer->from);
-        $fromName = $this->compileFromName($submission->fromName);
-        $subject = $this->compileSubject($submission->subject);
-        $textBody = $this->compileTextBody($submission);
+        $fromName = $submission->compileFromName();
+        $subject = $submission->compileSubject();
+        $textBody = $submission->compileTextBody();
         $htmlBody = $this->compileHtmlBody($textBody);
 
         $message = (new Message())
@@ -138,73 +138,6 @@ class Mailer extends Component
             return $key;
         }
         throw new InvalidConfigException('Can\'t determine "From" email from email config settings.');
-    }
-
-    /**
-     * Compiles the "From" name value from the submitted name.
-     *
-     * @param string|null $fromName
-     * @return string
-     */
-    public function compileFromName(string $fromName = null): string
-    {
-        $settings = Plugin::getInstance()->getSettings();
-        return $settings->prependSender.($settings->prependSender && $fromName ? ' ' : '').$fromName;
-    }
-
-    /**
-     * Compiles the real email subject from the submitted subject.
-     *
-     * @param string|null $subject
-     * @return string
-     */
-    public function compileSubject(string $subject = null): string
-    {
-        $settings = Plugin::getInstance()->getSettings();
-        return $settings->prependSubject.($settings->prependSubject && $subject ? ' - ' : '').$subject;
-    }
-
-    /**
-     * Compiles the real email textual body from the submitted message.
-     *
-     * @param Submission $submission
-     * @return string
-     */
-    public function compileTextBody(Submission $submission): string
-    {
-        $fields = [];
-
-        if ($submission->fromName) {
-            $fields[Craft::t('contact-form', 'Name')] = $submission->fromName;
-        }
-
-        $fields[Craft::t('contact-form', 'Email')] = $submission->fromEmail;
-
-        if (is_array($submission->message)) {
-            $body = $submission->message['body'] ?? '';
-            $fields = array_merge($fields, $submission->message);
-            unset($fields['body']);
-        } else {
-            $body = (string)$submission->message;
-        }
-
-        $text = '';
-
-        foreach ($fields as $key => $value) {
-            $text .= ($text ? "\n" : '')."- **{$key}:** ";
-            if (is_array($value)) {
-                $text .= implode(', ', $value);
-            } else {
-                $text .= $value;
-            }
-        }
-
-        if ($body !== '') {
-            $body = preg_replace('/\R/', "\n\n", $body);
-            $text .= "\n\n".$body;
-        }
-
-        return $text;
     }
 
     /**

@@ -33,11 +33,13 @@ class SendController extends Controller
         $request = Craft::$app->getRequest();
         $plugin = Plugin::getInstance();
         $settings = $plugin->getSettings();
+        
+        if (class_exists($settings->submissionModel)) {
+            $submissionModel = $settings->submissionModel;
+        }
 
-        $submission = new Submission();
-        $submission->fromEmail = $request->getBodyParam('fromEmail');
-        $submission->fromName = $request->getBodyParam('fromName');
-        $submission->subject = $request->getBodyParam('subject');
+        $submission = new $submissionModel();
+        $submission = $submission->populateModel($request);
 
         $message = $request->getBodyParam('message');
         if (is_array($message)) {

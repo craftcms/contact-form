@@ -37,6 +37,11 @@ class Settings extends Model
     public $successFlashMessage;
 
     /**
+     * @var string|null
+     */
+    public $submissionModel = "craft\\contactform\\models\\Submission";
+
+    /**
      * @inheritdoc
      */
     public function init()

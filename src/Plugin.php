@@ -8,6 +8,7 @@
 namespace craft\contactform;
 
 use Craft;
+use craft\base\Plugin as BasePlugin;
 use craft\contactform\models\Settings;
 
 /**
@@ -17,7 +18,7 @@ use craft\contactform\models\Settings;
  * @property Mailer $mailer
  * @method Settings getSettings()
  */
-class Plugin extends \craft\base\Plugin
+class Plugin extends BasePlugin
 {
     /**
      * @inheritdoc
