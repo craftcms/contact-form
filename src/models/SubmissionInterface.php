@@ -25,7 +25,7 @@ interface SubmissionInterface
      * 
      * @return Submission model
      */
-    public function populateModel(Request $request): Submission;
+    public function populateModel(Request $request);
 
     /**
      * Compiles the "From" name value from the submitted name.

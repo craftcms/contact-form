@@ -48,7 +48,7 @@ class Submission extends Model implements SubmissionInterface
     /**
      * 
      */
-    public function populateModel(Request $request): Submission
+    public function populateModel(Request $request)
     {
         $this->fromEmail = $request->getBodyParam('fromEmail');
         $this->fromName = $request->getBodyParam('fromName');
