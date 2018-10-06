@@ -4,6 +4,7 @@ namespace craft\contactform\controllers;
 
 use Craft;
 use craft\contactform\models\Submission;
+use craft\contactform\models\SubmissionInterface;
 use craft\contactform\Plugin;
 use craft\web\Controller;
 use craft\web\UploadedFile;
@@ -39,6 +40,11 @@ class SendController extends Controller
         }
 
         $submission = new $submissionModel();
+
+        if (!$submission instanceof SubmissionInterface) {
+            throw new \Exception("Submission class provided must implement the SubmissionInterface");
+        }
+
         $submission = $submission->populateModel($request);
 
         $message = $request->getBodyParam('message');
