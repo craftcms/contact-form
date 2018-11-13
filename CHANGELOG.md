@@ -6,7 +6,7 @@
 - Contact Form is now translated into Dutch. ([#139](https://github.com/craftcms/contact-form/pull/139))
 
 ### Fixed
-- Fixed a bug where the submission email address was not being validated. ([#145]()https://github.com/craftcms/contact-form/issues/145))
+- Fixed a bug where the submission email address was not being validated. ([#145](https://github.com/craftcms/contact-form/issues/145))
 
 ## 2.2.2 - 2017-07-19
 
