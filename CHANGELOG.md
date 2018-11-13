@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.2.3 - 2018-11-13
+
 ### Added
 - Contact Form is now translated into Dutch. ([#139](https://github.com/craftcms/contact-form/pull/139))
 
