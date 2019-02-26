@@ -9,6 +9,7 @@
 
 ### Fixed
 - Fixed a bug where the submission email address was not being validated. ([#145](https://github.com/craftcms/contact-form/issues/145))
+- Fixed an issue with Japanese Characters. ([#158](https://github.com/craftcms/contact-form/pull/158))
 
 ## 2.2.2 - 2018-07-19
 
