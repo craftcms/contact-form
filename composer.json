@@ -21,7 +21,7 @@
     "email": "support@craftcms.com",
     "issues": "https://github.com/craftcms/contact-form/issues?state=open",
     "source": "https://github.com/craftcms/contact-form",
-    "docs": "https://github.com/craftcms/contact-form",
+    "docs": "https://github.com/craftcms/contact-form/blob/v2/README.md",
     "rss": "https://github.com/craftcms/contact-form/commits/v2.atom"
   },
   "require": {
@@ -35,8 +35,7 @@
   "extra": {
     "name": "Contact Form",
     "handle": "contact-form",
-    "changelogUrl": "https://raw.githubusercontent.com/craftcms/contact-form/v2/CHANGELOG.md",
-    "downloadUrl": "https://github.com/craftcms/contact-form/archive/v2.zip",
+    "documentationUrl": "https://github.com/craftcms/contact-form/blob/v2/README.md",
     "components": {
       "mailer": "craft\\contactform\\Mailer"
     }
