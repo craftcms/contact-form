@@ -2,20 +2,26 @@
 
 ## Unreleased
 
+## 2.2.3 - 2018-11-13
+
 ### Added
 - Contact Form is now translated into Dutch. ([#139](https://github.com/craftcms/contact-form/pull/139))
 
-## 2.2.2 - 2017-07-19
+### Fixed
+- Fixed a bug where the submission email address was not being validated. ([#145](https://github.com/craftcms/contact-form/issues/145))
+- Fixed an issue with Japanese Characters. ([#158](https://github.com/craftcms/contact-form/pull/158))
+
+## 2.2.2 - 2018-07-19
 
 ### Fixed
 - Fixed a PHP error introduced in 2.2.1 that broke submissions that were using a single `message` form input.
 
-## 2.2.1 - 2017-07-18
+## 2.2.1 - 2018-07-18
 
 ### Fixed
 - Fixed a bug where blank messages wouldn’t fail validation if the message was split into multiple fields.
 
-## 2.2.0 - 2017-07-18
+## 2.2.0 - 2018-07-18
 
 ### Added
 - Contact Form is now translated into Arabic. ([#125](https://github.com/craftcms/contact-form/pull/125))
