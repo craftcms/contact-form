@@ -1,6 +1,7 @@
 # Release Notes for Contact Form
 
 ## Unreleased
+## 2.2.4 - 2019-04-03
 
 ### Fixed
 - Fixed an issue with Japanese Characters. ([#158](https://github.com/craftcms/contact-form/pull/158))
