@@ -256,7 +256,6 @@ Modules and plugins can be notified when a submission is being validated, provid
 ```php
 use craft\contactform\models\Submission;
 use yii\base\Event;
-use yii\base\Event;
 
 // ...
 
