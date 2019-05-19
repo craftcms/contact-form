@@ -265,7 +265,7 @@ Event::on(Submission::class, Submission::EVENT_AFTER_VALIDATE, function(Event $e
     $submission = $e->sender;
     
     // Make sure that `message[Phone]` was filled in
-    if (empty($submission->message['Phone']) {
+    if (empty($submission->message['Phone'])) {
         // Add the error
         // (This will be accessible via `message.getErrors('message.phone')` in the template.)
         $submission->addError('message.phone', 'A phone number is required.');
