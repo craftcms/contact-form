@@ -70,10 +70,21 @@ class Mailer extends Component
             ->setHtmlBody($htmlBody);
 
         if ($submission->attachment !== null) {
+            $allowedFileTypes = Craft::$app->getConfig()->getGeneral()->allowedFileExtensions;
+
             foreach ($submission->attachment as $attachment) {
                 if (!$attachment) {
                     continue;
                 }
+
+                // Validate that the file is safe to send by e-mail
+                $extension = pathinfo($attachment->name, PATHINFO_EXTENSION);
+
+                if(! in_array($extension, $allowedFileTypes)) {
+                    Craft::error('Contact form submission contains a not-allowed filetype.', __METHOD__);
+                    return false;
+                }
+
                 $message->attach($attachment->tempName, [
                     'fileName' => $attachment->name,
                     'contentType' => FileHelper::getMimeType($attachment->tempName),
