@@ -62,6 +62,9 @@ class Mailer extends Component
         $textBody = $this->compileTextBody($submission);
         $htmlBody = $this->compileHtmlBody($textBody);
 
+        // Flag for validation
+        $validAttachments = true;
+
         $message = (new Message())
             ->setFrom([$fromEmail => $fromName])
             ->setReplyTo([$submission->fromEmail => $submission->fromName])
@@ -71,6 +74,7 @@ class Mailer extends Component
 
         if ($submission->attachment !== null) {
             $allowedFileTypes = Craft::$app->getConfig()->getGeneral()->allowedFileExtensions;
+            $validAttachments = true;
 
             foreach ($submission->attachment as $attachment) {
                 if (!$attachment) {
@@ -81,8 +85,7 @@ class Mailer extends Component
                 $extension = pathinfo($attachment->name, PATHINFO_EXTENSION);
 
                 if(! in_array($extension, $allowedFileTypes)) {
-                    Craft::error('Contact form submission contains a not-allowed filetype.', __METHOD__);
-                    return false;
+                    $validAttachments = false;
                 }
 
                 $message->attach($attachment->tempName, [
@@ -106,6 +109,11 @@ class Mailer extends Component
         if ($event->isSpam) {
             Craft::info('Contact form submission suspected to be spam.', __METHOD__);
             return true;
+        }
+
+        if($validAttachments === false) {
+            Craft::error('Contact form submission contains a not-allowed filetype.', __METHOD__);
+            return false;
         }
 
         foreach ($event->toEmails as $toEmail) {
