@@ -62,7 +62,7 @@ class Mailer extends Component
         $textBody = $this->compileTextBody($submission);
         $htmlBody = $this->compileHtmlBody($textBody);
 
-        // Flag for validation
+        // Flag for file attachment validation.
         $validAttachments = true;
 
         $message = (new Message())
@@ -83,7 +83,7 @@ class Mailer extends Component
                 // Validate that the file is safe to send by e-mail
                 $extension = pathinfo($attachment->name, PATHINFO_EXTENSION);
 
-                if(! in_array($extension, $allowedFileTypes)) {
+                if (!in_array($extension, $allowedFileTypes)) {
                     $validAttachments = false;
                 }
 
@@ -111,7 +111,7 @@ class Mailer extends Component
         }
 
         if($validAttachments === false) {
-            Craft::error('Contact form submission contains a not-allowed filetype.', __METHOD__);
+            Craft::error('Contact form submission contains a disallowed filetype.', __METHOD__);
             return false;
         }
 
