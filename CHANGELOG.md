@@ -4,6 +4,7 @@
 
 ### Changed
 - Contact Form now respects Craft’s [allowedFileExtensions](https://docs.craftcms.com/v3/config/config-settings.html#allowedfileextensions) config setting.
+- Contact Form now logs a `warning` instead of `info` to the log files when an email is flagged as spam. ([#163](https://github.com/craftcms/contact-form/issues/163))
 
 ## 2.2.4 - 2019-04-03
 

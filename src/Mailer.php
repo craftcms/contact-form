@@ -106,7 +106,7 @@ class Mailer extends Component
         $this->trigger(self::EVENT_BEFORE_SEND, $event);
 
         if ($event->isSpam) {
-            Craft::info('Contact form submission suspected to be spam.', __METHOD__);
+            Craft::warning('Contact form submission suspected to be spam.', __METHOD__);
             return true;
         }
 
