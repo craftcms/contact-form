@@ -74,7 +74,6 @@ class Mailer extends Component
 
         if ($submission->attachment !== null) {
             $allowedFileTypes = Craft::$app->getConfig()->getGeneral()->allowedFileExtensions;
-            $validAttachments = true;
 
             foreach ($submission->attachment as $attachment) {
                 if (!$attachment) {
