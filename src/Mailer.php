@@ -62,6 +62,9 @@ class Mailer extends Component
         $textBody = $this->compileTextBody($submission);
         $htmlBody = $this->compileHtmlBody($textBody);
 
+        // Flag for file attachment validation.
+        $validAttachments = true;
+
         $message = (new Message())
             ->setFrom([$fromEmail => $fromName])
             ->setReplyTo([$submission->fromEmail => $submission->fromName])
@@ -70,10 +73,20 @@ class Mailer extends Component
             ->setHtmlBody($htmlBody);
 
         if ($submission->attachment !== null) {
+            $allowedFileTypes = Craft::$app->getConfig()->getGeneral()->allowedFileExtensions;
+
             foreach ($submission->attachment as $attachment) {
                 if (!$attachment) {
                     continue;
                 }
+
+                // Validate that the file is safe to send by e-mail
+                $extension = pathinfo($attachment->name, PATHINFO_EXTENSION);
+
+                if (!in_array($extension, $allowedFileTypes)) {
+                    $validAttachments = false;
+                }
+
                 $message->attach($attachment->tempName, [
                     'fileName' => $attachment->name,
                     'contentType' => FileHelper::getMimeType($attachment->tempName),
@@ -95,6 +108,11 @@ class Mailer extends Component
         if ($event->isSpam) {
             Craft::info('Contact form submission suspected to be spam.', __METHOD__);
             return true;
+        }
+
+        if($validAttachments === false) {
+            Craft::error('Contact form submission contains a disallowed filetype.', __METHOD__);
+            return false;
         }
 
         foreach ($event->toEmails as $toEmail) {
