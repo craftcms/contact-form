@@ -1,6 +1,10 @@
 # Release Notes for Contact Form
 
 ## Unreleased
+
+### Changed
+- Contact Form now respects Craft’s [allowedFileExtensions](https://docs.craftcms.com/v3/config/config-settings.html#allowedfileextensions) config setting.
+
 ## 2.2.4 - 2019-04-03
 
 ### Fixed
