@@ -141,19 +141,20 @@ If you have a primary “Message” field, you should name it `message[body]`, l
 
 An email sent with the above form might result in the following message:
 
-    Phone: (555) 123-4567
-
-    Services: Design, Development
+    • Name: John Doe
+    • Email: example@email.com
+    • Phone: (555) 123-4567
+    • Services: Design, Development
 
     Hey guys, I really loved this simple contact form (I'm so tired of agencies
     asking for everything but my social security number up front), so I trust
     you guys know a thing or two about usability.
-
+    
     I run a small coffee shop and we want to start attracting more freelancer-
     types to spend their days working from our shop (and sipping fine coffee!).
     A clean new website with lots of social media integration would probably
     help us out quite a bit there. Can you help us with that?
-
+    
     Hope to hear from you soon.
 
     Cathy Chino
