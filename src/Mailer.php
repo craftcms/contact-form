@@ -107,7 +107,7 @@ class Mailer extends Component
 
         if ($event->isSpam) {
             Craft::warning('Contact form submission suspected to be spam.', __METHOD__);
-            return false;
+            return true;
         }
 
         if($validAttachments === false) {
