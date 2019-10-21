@@ -95,7 +95,8 @@ class Mailer extends Component
         }
 
         // Grab any "to" emails set in the plugin settings.
-        $toEmails = is_string($settings->toEmail) ? StringHelper::split($settings->toEmail) : $settings->toEmail;
+        $toEmails = Craft::parseEnv($settings->toEmail);
+        $toEmails = is_string($toEmails) ? StringHelper::split($toEmails) : $toEmails;
 
         // Fire a 'beforeSend' event
         $event = new SendEvent([
