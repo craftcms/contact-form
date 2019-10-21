@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Changed
+- The Contact Form “To Email” setting can now be set to environment variables (e.g. `$CONTACT_TO_EMAIL`). ([#179](https://github.com/craftcms/contact-form/pull/179))
+
 ## 2.2.5 - 2019-05-31
 
 ### Changed
