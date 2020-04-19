@@ -10,8 +10,42 @@ This plugin requires Craft CMS 3.0.0-RC11 or later. (For Craft 2 use the [`v1` b
 
 ## Installation
 
+````notes von alex````
+
+checkout this repo in parallel to craft-installation     
+- .
+- ..
+- craft
+- contact-form
+
+add this to craft/composer.json to the root {}
+```
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../contact-form"
+    }
+  ]
+```
+```
+# tell Composer to load the plugin
+composer require craftcms/contact-form
+  
+# tell Craft to install the plugin
+./craft install/plugin contact-form
+```
+you'll see sth. like:
+```
+Package operations: 1 install, 0 updates, 0 removals
+  - Installing craftcms/contact-form (2.2.6): Symlinking from ../contact-form
+```  
+````notes von alex````
+
 You can install this plugin from the Plugin Store or with Composer.
 
+checkout the project
 #### From the Plugin Store
 
 Go to the Plugin Store in your project’s Control Panel and search for “Contact Form”. Then click on the “Install” button in its modal window.
