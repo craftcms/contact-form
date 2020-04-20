@@ -1,10 +1,10 @@
 <?php
 
-namespace craft\contactform;
+namespace craft\orderform;
 
 use Craft;
-use craft\contactform\events\SendEvent;
-use craft\contactform\models\Submission;
+use craft\orderform\events\SendEvent;
+use craft\orderform\models\Submission;
 use craft\elements\User;
 use craft\helpers\FileHelper;
 use craft\helpers\StringHelper;

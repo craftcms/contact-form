@@ -25,16 +25,16 @@ add this to craft/composer.json to the root {}
   "repositories": [
     {
       "type": "path",
-      "url": "../contact-form"
+      "url": "../order-form"
     }
   ]
 ```
 ```
 # tell Composer to load the plugin
-composer require craftcms/contact-form
+composer require craftcms/order-form
   
 # tell Craft to install the plugin
-./craft install/plugin contact-form
+./craft install/plugin order-form
 ```
 you'll see sth. like:
 ```
@@ -45,39 +45,15 @@ Package operations: 1 install, 0 updates, 0 removals
 
 You can install this plugin from the Plugin Store or with Composer.
 
-checkout the project
-#### From the Plugin Store
-
-Go to the Plugin Store in your project’s Control Panel and search for “Contact Form”. Then click on the “Install” button in its modal window.
-
-#### With Composer
-
-Open your terminal and run the following commands:
-
-```bash
-# go to the project directory
-cd /path/to/my-project.test
-
-# tell Composer to load the plugin
-composer require craftcms/contact-form
-
-# tell Craft to install the plugin
-./craft install/plugin contact-form
-```
-
-## Upgrading from Craft 2
-
-If you’re in the process of upgrading a Craft 2 project to Craft 3, follow these instructions to get Contact Form back up and running:
-
-1. [Install Contact Form 2.x](#installation).
-2. Update the `action` input values in your form templates from `contactForm/sendMessage` to `contact-form/send`.
-3. Make sure the `redirect` input values in your form templates are [hashed](https://docs.craftcms.com/v3/changes-in-craft-3.html#request-params).
-4. If you have a `craft/config/contactform.php` file, move it to `config/` and rename it to `contact-form.php`.
-5. If you were using the honeypot captcha feature, install the new [Contact Form Honeypot](https://github.com/craftcms/contact-form-honeypot) plugin.
 
 ## Usage
 
 Your contact form template can look something like this:
+
+```
+copy the templates/order-form into craft/templates
+and customize
+```
 
 ```twig
 {% macro errorList(errors) %}

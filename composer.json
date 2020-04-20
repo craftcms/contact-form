@@ -1,7 +1,7 @@
 {
-  "name": "craftcms/contact-form",
-  "description": "Add a simple contact form to your Craft CMS site",
-  "version": "2.2.6",
+  "name": "craftcms/order-form",
+  "description": "orderform",
+  "version": "1.0.0",
   "type": "craft-plugin",
   "keywords": [
     "cms",
@@ -11,33 +11,16 @@
     "yii2"
   ],
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Pixel & Tonic",
-      "homepage": "https://pixelandtonic.com/"
-    }
-  ],
-  "support": {
-    "email": "support@craftcms.com",
-    "issues": "https://github.com/craftcms/contact-form/issues?state=open",
-    "source": "https://github.com/craftcms/contact-form",
-    "docs": "https://github.com/craftcms/contact-form/blob/v2/README.md",
-    "rss": "https://github.com/craftcms/contact-form/commits/v2.atom"
-  },
   "require": {
     "craftcms/cms": "^3.0.0-RC11"
   },
   "autoload": {
     "psr-4": {
-      "craft\\contactform\\": "src/"
+      "craft\\orderform\\": "src/"
     }
   },
   "extra": {
-    "name": "Contact Form",
-    "handle": "contact-form",
-    "documentationUrl": "https://github.com/craftcms/contact-form/blob/v2/README.md",
-    "components": {
-      "mailer": "craft\\contactform\\Mailer"
-    }
+    "name": "Order Form",
+    "handle": "order-form"
   }
 }

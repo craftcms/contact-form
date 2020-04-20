@@ -5,10 +5,10 @@
  * @license MIT
  */
 
-namespace craft\contactform;
+namespace craft\orderform;
 
 use Craft;
-use craft\contactform\models\Settings;
+use craft\orderform\models\Settings;
 
 /**
  * Class Plugin
@@ -24,13 +24,6 @@ class Plugin extends \craft\base\Plugin
      */
     public $hasCpSettings = true;
 
-    /**
-     * @return Mailer
-     */
-    public function getMailer(): Mailer
-    {
-        return $this->get('mailer');
-    }
 
     /**
      * @inheritdoc

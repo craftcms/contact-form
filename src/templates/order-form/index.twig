@@ -1,0 +1,54 @@
+{% macro errorList(errors) %}
+    {% if errors %}
+        <ul class="errors">
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+{% from _self import errorList %}
+
+<form method="post" action="" accept-charset="UTF-8">
+    {{ csrfInput() }}
+    <input type="hidden" name="action" value="order-form/send">
+    {{ redirectInput('order-form/thanks') }}
+
+    <label for="firstname">Vorname</label>
+    <input id="firstname" type="text" name="firstName" value="{{ message.firstName ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('firstName')) }}
+    <label for="lastname">Nachname</label>
+    <input id="lastname" type="text" name="lastName" value="{{ message.lastName ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('lastName')) }}<br/>
+
+    <label for="email">E-mail</label>
+    <input id="email" type="email" name="email" value="{{ message.email ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('email')) }}<br/>
+
+    <label for="birthday">Geburtstag dd.mm.yyyy</label>
+    <input id="birthday" type="text" name="birthday" value="{{ message.birthday ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('birthday')) }}<br/>
+
+    <label for="street1">Straße Nr</label>
+    <input id="street1" type="text" name="street1" value="{{ message.street ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('street1')) }}<br/>
+
+    <label for="street2">weitere Angaben</label>
+    <input id="street2" type="text" name="street2" value="{{ message.street2 ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('street2')) }}<br/>
+
+    <label for="zip">Postleitzahl</label>
+    <input id="zip" type="text" name="zip" value="{{ message.zip ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('zip')) }}
+
+    <label for="city">Stadt</label>
+    <input id="city" type="text" name="city" value="{{ message.city ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('city')) }}<br/>
+
+    <label for="country">Land</label>
+    <input id="country" type="text" name="country" value="{{ message.country ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('country')) }}<br/>
+
+    <input type="submit" value="Send">
+</form>

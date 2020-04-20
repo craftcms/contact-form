@@ -5,9 +5,9 @@
  * @license MIT
  */
 
-namespace craft\contactform\events;
+namespace craft\orderform\events;
 
-use craft\contactform\models\Submission;
+use craft\orderform\models\Submission;
 use craft\mail\Message;
 use yii\base\Event;
 

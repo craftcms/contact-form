@@ -1,13 +1,15 @@
 <?php
 
-namespace craft\contactform\controllers;
+namespace craft\orderform\controllers;
 
 use Craft;
-use craft\contactform\models\Submission;
-use craft\contactform\Plugin;
+use craft\orderform\models\Submission;
+use craft\orderform\Plugin;
 use craft\web\Controller;
 use craft\web\UploadedFile;
 use yii\web\Response;
+use GuzzleHttp\Client;
+
 
 class SendController extends Controller
 {
@@ -35,27 +37,13 @@ class SendController extends Controller
         $settings = $plugin->getSettings();
 
         $submission = new Submission();
-        $submission->fromEmail = $request->getBodyParam('fromEmail');
-        $submission->fromName = $request->getBodyParam('fromName');
-        $submission->subject = $request->getBodyParam('subject');
+        $submission->firstName = $request->getBodyParam('firstName');
+        $submission->lastName = $request->getBodyParam('lastName');
+        $submission->email = $request->getBodyParam('email');
+        $submission->birthday = $request->getBodyParam('birthday');
 
-        $message = $request->getBodyParam('message');
-        if (is_array($message)) {
-            $submission->message = array_filter($message, function($value) {
-                return $value !== '';
-            });
-        } else {
-            $submission->message = $message;
-        }
-
-        if ($settings->allowAttachments && isset($_FILES['attachment']) && isset($_FILES['attachment']['name'])) {
-            if (is_array($_FILES['attachment']['name'])) {
-                $submission->attachment = UploadedFile::getInstancesByName('attachment');
-            } else {
-                $submission->attachment = [UploadedFile::getInstanceByName('attachment')];
-            }
-        }
-
+        $shit = json_encode($submission);
+/*
         if (!$plugin->getMailer()->send($submission)) {
             if ($request->getAcceptsJson()) {
                 return $this->asJson(['errors' => $submission->getErrors()]);
@@ -68,7 +56,8 @@ class SendController extends Controller
 
             return null;
         }
-
+*/
+        // return null;
         if ($request->getAcceptsJson()) {
             return $this->asJson(['success' => true]);
         }
