@@ -15,40 +15,75 @@
     <input type="hidden" name="action" value="order-form/send">
     {{ redirectInput('order-form/thanks') }}
 
+    <h3>Stammdaten</h3>
     <label for="firstname">Vorname</label>
     <input id="firstname" type="text" name="firstName" value="{{ message.firstName ?? '' }}">
-    {{ message is defined and message ? errorList(message.getErrors('firstName')) }}
+    {{ message is defined and message ? errorList(message.getErrors('firstName')) }}<br/>
     <label for="lastname">Nachname</label>
     <input id="lastname" type="text" name="lastName" value="{{ message.lastName ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('lastName')) }}<br/>
 
+    <label for="gender">Geschlecht</label>
+    <label><input type="radio" name="gender[male][]" value="male">m</label>
+    <label><input type="radio" name="gender[female][]" value="female">w</label>
+    <label><input type="radio" name="gender[divers][]" value="divers">d</label><br/>
+    <label for="birthday">Geburtstag dd.mm.yyyy</label>
+    <input id="birthday" type="text" name="birthday" value="{{ message.birthday ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('birthday')) }}<br/>
     <label for="email">E-mail</label>
     <input id="email" type="email" name="email" value="{{ message.email ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('email')) }}<br/>
 
-    <label for="birthday">Geburtstag dd.mm.yyyy</label>
-    <input id="birthday" type="text" name="birthday" value="{{ message.birthday ?? '' }}">
-    {{ message is defined and message ? errorList(message.getErrors('birthday')) }}<br/>
+    <h3>Abrechnungsfähigkeit</h3>
+    <label for="insuranceNumber">Krankenversicherungsnummer</label>
+    <input id="insuranceNumber" type="insuranceNumber" name="insuranceNumber" value="{{ message.insuranceNumber ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('insuranceNumber')) }}<br/>
+    <label for="insuranceType">Versicherungstyp</label>
+    <label><input type="radio" name="insuranceType[private][]" value="private">privat</label>
+    <label><input type="radio" name="insuranceType[regular][]" value="regular">gesetzlich</label><br/>
+    <label for="insuranceName">Krankenkasse</label>
+    <input id="insuranceName" type="insuranceName" name="insuranceName" value="{{ message.insuranceName ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('insuranceName')) }}<br/>
 
-    <label for="street1">Straße Nr</label>
+    <h3>Für den Rückruf</h3>
+    <label for="caseName">Grund der Kontaktaufnahme (Fallbezeichnung)</label>
+    <input id="caseName" type="caseName" name="caseName" value="{{ message.caseName ?? '' }}"><br/>
+    <label for="callbackDate">Datum des Rückrufwunschs dd.mm.yyyy hh:mm</label>
+    <input id="callbackDate" type="callbackDate" name="callbackDate" value="{{ message.callbackDate ?? '' }}"><br/>
+    <label for="callbackType">Rückruf über Telefon/App (Installationsanleitung folgt)</label>
+    <label><input type="radio" name="callbackType[call][]" value="call">per Telefon</label>
+    <label><input type="radio" name="callbackType[app][]" value="app">über die Betreuungs-App</label><br/>
+    <label for="callbackNumber">Rückrufnummer</label>
+    <input id="callbackNumber" type="callbackNumber" name="callbackNumber" value="{{ message.callbackNumber ?? '' }}"><br/>
+
+    <h3>Für die Lieferung</h3>
+    <label for="street1">Adresse</label>
     <input id="street1" type="text" name="street1" value="{{ message.street ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('street1')) }}<br/>
-
-    <label for="street2">weitere Angaben</label>
+    <label for="street2">Adresszusatz</label>
     <input id="street2" type="text" name="street2" value="{{ message.street2 ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('street2')) }}<br/>
-
     <label for="zip">Postleitzahl</label>
     <input id="zip" type="text" name="zip" value="{{ message.zip ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('zip')) }}
-
-    <label for="city">Stadt</label>
+    <label for="city">Wohnort</label>
     <input id="city" type="text" name="city" value="{{ message.city ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('city')) }}<br/>
-
     <label for="country">Land</label>
     <input id="country" type="text" name="country" value="{{ message.country ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('country')) }}<br/>
+
+    <h3>Datenschutz</h3>
+    <label for="agbCompany">Kenntnisnahme der AGB</label>
+    <input id="agbCompany" type="checkbox" name="agbCompany" value="{{ message.agbCompany ?? '' }}"><br/>
+    <label for="agbWebSite">Kenntnisnahme der Datenschutzerklärung der Webseite</label>
+    <input id="agbWebSite" type="checkbox" name="agbWebSite" value="{{ message.agbWebSite ?? '' }}"><br/>
+    <label for="agbEHealth">Einwilligung in die Nutzung von Gesundheitsdaten</label>
+    <input id="agbEHealth" type="checkbox" name="agbEHealth" value="{{ message.agbEHealth ?? '' }}"><br/>
+    <label for="agbTeleHealth">Kenntnisnahme der Patienteninformation für die telemedizinischen Anwendung</label>
+    <input id="agbTeleHealth" type="checkbox" name="agbTeleHealth" value="{{ message.agbTeleHealth ?? '' }}"><br/>
+    <label for="agbEmailLogin">Einwilligung zur Pushkommunikation per eMail (double-opt-in)</label>
+    <input id="agbEmailLogin" type="checkbox" name="agbEmailLogin" value="{{ message.agbEmailLogin ?? '' }}"><br/>
 
     <input type="submit" value="Send">
 </form>

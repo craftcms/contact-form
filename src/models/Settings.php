@@ -71,8 +71,9 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['toEmail', 'successFlashMessage'], 'required'],
+/*            [['toEmail', 'successFlashMessage'], 'required'],
             [['toEmail', 'prependSender', 'prependSubject', 'successFlashMessage'], 'string'],
+*/
         ];
     }
 }

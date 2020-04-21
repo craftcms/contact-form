@@ -38,6 +38,11 @@ class Submission extends Model
     public $birthday;
 
     /**
+     * @var string
+     */
+    public $gender;
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
