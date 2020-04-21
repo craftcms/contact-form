@@ -24,9 +24,9 @@
     {{ message is defined and message ? errorList(message.getErrors('lastName')) }}<br/>
 
     <label for="gender">Geschlecht</label>
-    <label><input type="radio" name="gender[male][]" value="male">m</label>
-    <label><input type="radio" name="gender[female][]" value="female">w</label>
-    <label><input type="radio" name="gender[divers][]" value="divers">d</label><br/>
+    <label><input type="radio" name="gender[]" value="male">m</label>
+    <label><input type="radio" name="gender[]" value="female">w</label>
+    <label><input type="radio" name="gender[]" value="divers">d</label><br/>
     <label for="birthday">Geburtstag dd.mm.yyyy</label>
     <input id="birthday" type="text" name="birthday" value="{{ message.birthday ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('birthday')) }}<br/>
@@ -39,8 +39,8 @@
     <input id="insuranceNumber" type="insuranceNumber" name="insuranceNumber" value="{{ message.insuranceNumber ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('insuranceNumber')) }}<br/>
     <label for="insuranceType">Versicherungstyp</label>
-    <label><input type="radio" name="insuranceType[private][]" value="private">privat</label>
-    <label><input type="radio" name="insuranceType[regular][]" value="regular">gesetzlich</label><br/>
+    <label><input type="radio" name="insuranceType[]" value="private">privat</label>
+    <label><input type="radio" name="insuranceType[]" value="regular">gesetzlich</label><br/>
     <label for="insuranceName">Krankenkasse</label>
     <input id="insuranceName" type="insuranceName" name="insuranceName" value="{{ message.insuranceName ?? '' }}">
     {{ message is defined and message ? errorList(message.getErrors('insuranceName')) }}<br/>
@@ -51,8 +51,8 @@
     <label for="callbackDate">Datum des Rückrufwunschs dd.mm.yyyy hh:mm</label>
     <input id="callbackDate" type="callbackDate" name="callbackDate" value="{{ message.callbackDate ?? '' }}"><br/>
     <label for="callbackType">Rückruf über Telefon/App (Installationsanleitung folgt)</label>
-    <label><input type="radio" name="callbackType[call][]" value="call">per Telefon</label>
-    <label><input type="radio" name="callbackType[app][]" value="app">über die Betreuungs-App</label><br/>
+    <label><input type="radio" name="callbackType[]" value="call">per Telefon</label>
+    <label><input type="radio" name="callbackType[]" value="app">über die Betreuungs-App</label><br/>
     <label for="callbackNumber">Rückrufnummer</label>
     <input id="callbackNumber" type="callbackNumber" name="callbackNumber" value="{{ message.callbackNumber ?? '' }}"><br/>
 
