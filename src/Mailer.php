@@ -83,7 +83,7 @@ class Mailer extends Component
                 // Validate that the file is safe to send by e-mail
                 $extension = pathinfo($attachment->name, PATHINFO_EXTENSION);
 
-                if (!in_array($extension, $allowedFileTypes)) {
+                if (!in_array(strtolower($extension), $allowedFileTypes)) {
                     $validAttachments = false;
                 }
 

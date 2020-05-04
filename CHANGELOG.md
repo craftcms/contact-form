@@ -1,6 +1,9 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 2.2.7 - 2020-05-04
+
+### Changed
+- Added case-insensitive extension check for attachments
 
 ## 2.2.6 - 2019-12-17
 
