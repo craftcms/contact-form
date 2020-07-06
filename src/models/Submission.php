@@ -58,7 +58,7 @@ class Submission extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function defineRules(): array
     {
         return [
             [['fromEmail', 'message'], 'required'],
