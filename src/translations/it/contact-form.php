@@ -3,14 +3,14 @@
 return [
     //model
     "To Email" => "Destinatario",
-    'Your Name' => "Il tuo nome",
-    'Your Email' => "La tua email",
+    'Your Name' => "Nominativo",
+    'Your Email' => "Email",
     'Message' => "Messaggio",
     'Subject' => "Oggetto",
 
     //error messages
     'There was a problem with your submission, please check the form and try again!'
-    => "Si è verificato un problema con l'invio, controlla il modulo e riprova",
+    => "Si è verificato un problema con l'invio, controlla il modulo e riprova!",
 
     //plugin settings
     "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."
