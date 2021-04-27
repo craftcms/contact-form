@@ -288,7 +288,7 @@ use yii\base\Event;
 Event::on(Mailer::class, Mailer::EVENT_BEFORE_SEND, function(SendEvent $e) {
     $isSpam = // custom spam detection logic...
 
-    if (!$isSpam) {
+    if ($isSpam) {
         $e->isSpam = true;
     }
 });
