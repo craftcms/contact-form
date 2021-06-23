@@ -28,7 +28,7 @@ cd /path/to/my-project.test
 composer require craftcms/contact-form
 
 # tell Craft to install the plugin
-./craft install/plugin contact-form
+php craft plugin/install contact-form
 ```
 
 ## Upgrading from Craft 2
@@ -48,38 +48,48 @@ Your contact form template can look something like this:
 ```twig
 {% macro errorList(errors) %}
     {% if errors %}
-        <ul class="errors">
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
+        {{ ul(errors, {class: 'errors'}) }}
     {% endif %}
 {% endmacro %}
 
-{% from _self import errorList %}
+{% set message = message ?? null %}
 
 <form method="post" action="" accept-charset="UTF-8">
     {{ csrfInput() }}
-    <input type="hidden" name="action" value="contact-form/send">
+    {{ actionInput('contact-form/send') }}
     {{ redirectInput('contact/thanks') }}
 
     <h3><label for="from-name">Your Name</label></h3>
-    <input id="from-name" type="text" name="fromName" value="{{ message.fromName ?? '' }}">
-    {{ message is defined and message ? errorList(message.getErrors('fromName')) }}
+    {{ input('text', 'fromName', message.fromName ?? '', {
+        id: 'from-name',
+        autocomplete: 'name',
+    }) }}
+    {{ message ? _self.errorList(message.getErrors('fromName')) }}
 
     <h3><label for="from-email">Your Email</label></h3>
-    <input id="from-email" type="email" name="fromEmail" value="{{ message.fromEmail ?? '' }}">
-    {{ message is defined and message ? errorList(message.getErrors('fromEmail')) }}
+    {{ input('email', 'fromEmail', message.fromEmail ?? '', {
+        id: 'from-email',
+        autocomplete: 'email',
+    }) }}
+    {{ message ? _self.errorList(message.getErrors('fromEmail')) }}
 
     <h3><label for="subject">Subject</label></h3>
-    <input id="subject" type="text" name="subject" value="{{ message.subject ?? '' }}">
-    {{ message is defined and message ? errorList(message.getErrors('subject')) }}
+    {{ input('text', 'subject', message.subject ?? '', {
+        id: 'subject',
+    }) }}
+    {{ message ? _self.errorList(message.getErrors('subject')) }}
 
     <h3><label for="message">Message</label></h3>
-    <textarea rows="10" cols="40" id="message" name="message">{{ message.message ?? '' }}</textarea>
-    {{ message is defined and message ? errorList(message.getErrors('message')) }}
+    {{ tag('textarea', {
+        text: message.message ?? '',
+        id: 'message',
+        name: 'message',
+        rows: 10,
+        cols: 40,
+    }) }}
+    {{ message ? _self.errorList(message.getErrors('message')) }}
 
-    <input type="submit" value="Send">
+    <button type="submit">Send</button>
 </form>
 ```
 
