@@ -1,5 +1,10 @@
 # Release Notes for Contact Form
 
+## 2.2.8 - 2021-07-09
+
+### Changed
+- Adds success flash message into JSON response
+
 ## 2.2.7 - 2020-05-04
 
 ### Changed
