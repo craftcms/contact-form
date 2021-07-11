@@ -249,7 +249,7 @@ $('#my-form').submit(function(ev) {
         data: $(this).serialize(),
         success: function(response) {
             if (response.success) {
-                $('#thanks').fadeIn();
+                $('#thanks').text(response.message).fadeIn();
             } else {
                 // response.error will be an object containing any validation errors that occurred, indexed by field name
                 // e.g. response.error.fromName => ['From Name is required']

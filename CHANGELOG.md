@@ -1,9 +1,14 @@
 # Release Notes for Contact Form
 
+## Unreleased
+
+### Changed
+- The success flash message is now returned in the response for AJAX calls.
+
 ## 2.2.7 - 2020-05-04
 
 ### Changed
-- Added case-insensitive extension check for attachments
+- Added case-insensitive extension check for attachments.
 
 ## 2.2.6 - 2019-12-17
 
