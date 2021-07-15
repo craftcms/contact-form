@@ -210,7 +210,14 @@ class Mailer extends Component
         $text = '';
 
         foreach ($fields as $key => $value) {
-            $text .= ($text ? "\n" : '')."- **{$key}:** ";
+
+            $transKey = 'contact_form.' . lcfirst($key);
+            $transLabel = Craft::t('site', $transKey);
+            if ($transLabel === $transKey) {
+                $transLabel = $key;
+            }
+
+            $text .= ($text ? "\n" : '') . sprintf('- **%s:** ', $transLabel);
             if (is_array($value)) {
                 $text .= implode(', ', $value);
             } else {
