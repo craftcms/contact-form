@@ -1,14 +1,14 @@
 <?php
 
 return [
-    //model
+    // model
     "To Email" => "E-mail naar",
     'Your Name' => "Jouw naam",
     'Your Email' => "Jouw e-mailadres",
     'Message' => "Bericht",
     'Subject' => "Onderwerp",
 
-    //plugin settings
+    // plugin settings
     "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."
     => "Het e-mailadres of de e-mailadressen naar waar het contactformulier dient te verzenden. Scheid meerdere e-mailadressen met komma's.",
     "Sender Text"

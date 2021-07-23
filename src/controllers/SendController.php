@@ -11,16 +11,10 @@ use yii\web\Response;
 
 class SendController extends Controller
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @inheritdoc
      */
     public $allowAnonymous = true;
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * Sends a contact form submission.

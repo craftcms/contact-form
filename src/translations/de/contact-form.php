@@ -1,18 +1,18 @@
 <?php
 
 return [
-    //model
+    // model
     "To Email" => "Empfängeradresse",
     'Your Name' => "Ihr Name",
     'Your Email' => "Ihre Email",
     'Message' => "Nachricht",
     'Subject' => "Betreff",
 
-    //error messages
+    // error messages
     'There was a problem with your submission, please check the form and try again!'
     => 'Es gab ein Problem beim Abschicken des Formulars, bitte Eingaben prüfen und erneut versuchen!',
 
-    //plugin settings
+    // plugin settings
     "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."
     => "Die Email-Adresse(n) an welche das Kontaktformular senden wird. Trennen Sie mehrere Email-Adressen mit Kommas.",
     "Sender Text"
