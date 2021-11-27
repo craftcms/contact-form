@@ -36,10 +36,10 @@ class Settings extends Model
      */
     public $successFlashMessage;
 
-	/**
-	 * @var int
-	 */
-	public $validationFailStatusCode = 200;
+    /**
+     * @var int
+     */
+    public $validationFailStatusCode = 200;
 
     /**
      * @inheritdoc
