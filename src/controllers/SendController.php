@@ -52,7 +52,15 @@ class SendController extends Controller
 
         if (!$plugin->getMailer()->send($submission)) {
             if ($request->getAcceptsJson()) {
-                return $this->asJson(['errors' => $submission->getErrors()]);
+				/**
+				 * Set the HTTP Status Code
+				 */
+				$this->response->statusCode = $settings->validationFailStatusCode;
+
+				/**
+				 * Return the JSON response.
+				 */
+				return $this->asJson(['errors' => $submission->getErrors()]);
             }
 
             Craft::$app->getSession()->setError(Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'));
