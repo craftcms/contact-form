@@ -58,11 +58,13 @@ class Submission extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function defineRules(): array
     {
-        return [
-            [['fromEmail', 'message'], 'required'],
-            [['fromEmail'], 'email']
-        ];
+        $rules = parent::defineRules();
+
+        $rules[] = [['fromEmail', 'message'], 'required'];
+        $rules[] = [['fromEmail'], 'email'];
+
+        return $rules;
     }
 }
