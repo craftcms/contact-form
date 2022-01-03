@@ -273,13 +273,33 @@ use yii\base\Event;
 Event::on(Submission::class, Submission::EVENT_AFTER_VALIDATE, function(Event $e) {
     /** @var Submission $submission */
     $submission = $e->sender;
-    
+
     // Make sure that `message[Phone]` was filled in
     if (empty($submission->message['Phone'])) {
         // Add the error
         // (This will be accessible via `message.getErrors('message.phone')` in the template.)
         $submission->addError('message.phone', 'A phone number is required.');
     }
+});
+```
+
+It's also possible to inject rules directly, via the inherited `Submission::EVENT_DEFINE_RULES` event:
+
+```php
+use craft\contactform\models\Submission;
+use craft\events\DefineRulesEvent;
+use yii\base\Event;
+
+// ...
+
+Event::on(Submission::class, Submission::EVENT_DEFINE_RULES, function(DefineRulesEvent $e) {
+    $e->rules[] = [['fromName'], 'required'];
+    $e->rules[] = [
+        ['subject'],
+        'in',
+        'range' => ['General', 'Booking', 'Catering'],
+        'message' => 'Please select one of the predefined options.',
+    ];
 });
 ```
 
