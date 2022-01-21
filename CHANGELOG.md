@@ -1,6 +1,6 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 2.3.0 - 2022-01-21
 
 ### Changed
 - Craft 3.4 or later is now required.
