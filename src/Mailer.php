@@ -16,9 +16,6 @@ use yii\helpers\Markdown;
 
 class Mailer extends Component
 {
-    // Constants
-    // =========================================================================
-
     /**
      * @event SubmissionEvent The event that is triggered before a message is sent
      */
@@ -28,9 +25,6 @@ class Mailer extends Component
      * @event SubmissionEvent The event that is triggered after a message is sent
      */
     const EVENT_AFTER_SEND = 'afterSend';
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * Sends an email submitted through a contact form.

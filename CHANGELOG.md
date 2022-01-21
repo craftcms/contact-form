@@ -1,14 +1,20 @@
 # Release Notes for Contact Form
 
+## Unreleased
+
+### Changed
+- The success flash message is now returned in the response for AJAX calls.
+
 ## 2.2.7 - 2020-05-04
 
 ### Changed
-- Added case-insensitive extension check for attachments
+- Added case-insensitive extension check for attachments.
 
 ## 2.2.6 - 2019-12-17
 
 ### Changed
 - The Contact Form “To Email” setting can now be set to environment variables (e.g. `$CONTACT_TO_EMAIL`). ([#179](https://github.com/craftcms/contact-form/pull/179))
+- Contact Form now requires Craft 3.1 or later.
 
 ## 2.2.5 - 2019-05-31
 

@@ -1,14 +1,14 @@
 <?php
 
 return [
-    //model
+    // model
     "To Email" => "البريد الإلكتروني للمستلم",
     'Your Name' => "الاسم",
     'Your Email' => "بريدك الإلكتروني",
     'Message' => "الرسالة",
     'Subject' => "الموضوع",
 
-    //plugin settings
+    // plugin settings
     "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."
     => "عنوان (عناوين) البريد الإلكتروني التي سيرسل اليها نموذج الاتصال. يجب فصل عناوين البريد الإلكتروني المتعددة باستخدام الفواصل.",
     "Sender Text"
