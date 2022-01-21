@@ -61,7 +61,7 @@ class Settings extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    protected function defineRules(): array
     {
         return [
             [['toEmail', 'successFlashMessage'], 'required'],
