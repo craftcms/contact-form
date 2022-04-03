@@ -1,7 +1,7 @@
 {
   "name": "craftcms/contact-form",
   "description": "Add a simple contact form to your Craft CMS site",
-  "version": "2.2.7",
+  "version": "2.3.0",
   "type": "craft-plugin",
   "keywords": [
     "cms",
@@ -25,7 +25,7 @@
     "rss": "https://github.com/craftcms/contact-form/commits/v2.atom"
   },
   "require": {
-    "craftcms/cms": "^3.1.0"
+    "craftcms/cms": "^3.4.0"
   },
   "autoload": {
     "psr-4": {
