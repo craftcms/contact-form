@@ -16,20 +16,20 @@ class SendEvent extends Event
     /**
      * @var Submission The user submission.
      */
-    public $submission;
+    public Submission $submission;
 
     /**
      * @var Message The message about to be sent.
      */
-    public $message;
+    public Message $message;
 
     /**
      * @var string[] The email address(es) the submission will get sent to.
      */
-    public $toEmails;
+    public string|array $toEmails;
 
     /**
      * @var bool Whether the message appears to be spam, and should not really be sent.
      */
-    public $isSpam = false;
+    public bool $isSpam = false;
 }

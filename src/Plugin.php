@@ -22,7 +22,7 @@ class Plugin extends \craft\base\Plugin
     /**
      * @inheritdoc
      */
-    public $hasCpSettings = true;
+    public bool $hasCpSettings = true;
 
     /**
      * @return Mailer

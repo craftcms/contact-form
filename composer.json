@@ -1,7 +1,7 @@
 {
-  "name": "craftcms/contact-form",
+  "name": "craftcms/contact-form-c4",
   "description": "Add a simple contact form to your Craft CMS site",
-  "version": "2.3.0",
+  "version": "4.0.0",
   "type": "craft-plugin",
   "keywords": [
     "cms",

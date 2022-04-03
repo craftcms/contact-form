@@ -14,16 +14,17 @@ class SendController extends Controller
     /**
      * @inheritdoc
      */
-    public $allowAnonymous = true;
+    public array|bool|int $allowAnonymous = true;
 
     /**
      * Sends a contact form submission.
      *
      * @return Response|null
      */
-    public function actionIndex()
+    public function actionIndex(): ?Response
     {
         $this->requirePostRequest();
+
         $request = Craft::$app->getRequest();
         $plugin = Plugin::getInstance();
         $settings = $plugin->getSettings();

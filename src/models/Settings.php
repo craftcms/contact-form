@@ -8,45 +8,50 @@
 namespace craft\contactform\models;
 
 use craft\base\Model;
+use craft\helpers\App;
 
 class Settings extends Model
 {
     /**
      * @var string|string[]|null
      */
-    public $toEmail;
+    public string|array|null $toEmail = null;
 
     /**
      * @var string|null
      */
-    public $prependSender;
+    public ?string $prependSender = null;
 
     /**
      * @var string|null
      */
-    public $prependSubject;
+    public ?string $prependSubject = null;
 
     /**
      * @var bool
      */
-    public $allowAttachments = false;
+    public bool $allowAttachments = false;
 
     /**
      * @var string|null
      */
-    public $successFlashMessage;
+    public ?string $successFlashMessage = null;
 
     /**
      * @var int
      */
-    public $validationFailStatusCode = 200;
+    public int $validationFailStatusCode = 200;
 
     /**
      * @inheritdoc
      */
-    public function init()
+    public function init() : void
     {
         parent::init();
+
+        if($this->toEmail === null) {
+            $this->toEmail = App::mailSettings()->fromEmail;
+        }
 
         if ($this->prependSender === null) {
             $this->prependSender = \Craft::t('contact-form', 'On behalf of');
