@@ -1,9 +1,11 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 2.3.0 - 2022-01-21
 
 ### Changed
+- Craft 3.4 or later is now required.
 - The success flash message is now returned in the response for AJAX calls.
+- `craft\contactform\models\Submission` now supports `EVENT_DEFINE_RULES`. ([#196](https://github.com/craftcms/contact-form/pull/196))
 
 ## 2.2.7 - 2020-05-04
 
