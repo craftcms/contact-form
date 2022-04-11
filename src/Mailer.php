@@ -6,6 +6,7 @@ use Craft;
 use craft\contactform\events\SendEvent;
 use craft\contactform\models\Submission;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use craft\helpers\FileHelper;
 use craft\helpers\StringHelper;
 use craft\mail\Message;
@@ -194,9 +195,16 @@ class Mailer extends Component
         $fields[Craft::t('contact-form', 'Email')] = $submission->fromEmail;
 
         if (is_array($submission->message)) {
-            $body = $submission->message['body'] ?? '';
-            $fields = array_merge($fields, $submission->message);
-            unset($fields['body']);
+            $messageFields = array_merge($submission->message);
+            $body = ArrayHelper::remove($messageFields, 'body', '');
+            $messageKeys = array_map(function($key) {
+                if (is_string($key)) {
+                    return Craft::t('site', $key);
+                }
+                return $key;
+            }, array_keys($messageFields));
+            $otherBodyFields = array_combine($messageKeys, $messageFields);
+            $fields += $otherBodyFields;
         } else {
             $body = (string)$submission->message;
         }
