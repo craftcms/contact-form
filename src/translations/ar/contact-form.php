@@ -28,5 +28,5 @@ return [
     "The flash message displayed after successfully sending a message."
     => "رسالة الإخطار التي يتم عرضها بعد إرسال رسالة بنجاح.",
     "Your message has been sent."
-    => "تم ارسال رسالتك."
+    => "تم ارسال رسالتك.",
 ];

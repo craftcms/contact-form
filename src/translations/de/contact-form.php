@@ -32,5 +32,5 @@ return [
     "The flash message displayed after successfully sending a message."
     => "Die Statusnachricht welche angezeigt wird, wenn eine Nachricht erfolgreich versendet wurde.",
     "Your message has been sent."
-    => "Ihre Nachricht wurde versendet."
+    => "Ihre Nachricht wurde versendet.",
 ];

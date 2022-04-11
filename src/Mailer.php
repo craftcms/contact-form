@@ -105,7 +105,7 @@ class Mailer extends Component
             return true;
         }
 
-        if($validAttachments === false) {
+        if ($validAttachments === false) {
             Craft::error('Contact form submission contains a disallowed filetype.', __METHOD__);
             return false;
         }
@@ -162,7 +162,7 @@ class Mailer extends Component
     public function compileFromName(string $fromName = null): string
     {
         $settings = Plugin::getInstance()->getSettings();
-        return $settings->prependSender.($settings->prependSender && $fromName ? ' ' : '').$fromName;
+        return $settings->prependSender . ($settings->prependSender && $fromName ? ' ' : '') . $fromName;
     }
 
     /**
@@ -174,7 +174,7 @@ class Mailer extends Component
     public function compileSubject(string $subject = null): string
     {
         $settings = Plugin::getInstance()->getSettings();
-        return $settings->prependSubject.($settings->prependSubject && $subject ? ' - ' : '').$subject;
+        return $settings->prependSubject . ($settings->prependSubject && $subject ? ' - ' : '') . $subject;
     }
 
     /**
@@ -204,7 +204,7 @@ class Mailer extends Component
         $text = '';
 
         foreach ($fields as $key => $value) {
-            $text .= ($text ? "\n" : '')."- **{$key}:** ";
+            $text .= ($text ? "\n" : '') . "- **{$key}:** ";
             if (is_array($value)) {
                 $text .= implode(', ', $value);
             } else {
@@ -214,7 +214,7 @@ class Mailer extends Component
 
         if ($body !== '') {
             $body = preg_replace('/\R/u', "\n\n", $body);
-            $text .= "\n\n".$body;
+            $text .= "\n\n" . $body;
         }
 
         return $text;

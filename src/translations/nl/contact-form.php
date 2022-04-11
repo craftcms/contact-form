@@ -28,5 +28,5 @@ return [
     "The flash message displayed after successfully sending a message."
     => "Het statusbericht dat wordt getoond na het succesvol versturen van een bericht.",
     "Your message has been sent."
-    => "Jouw bericht is verstuurd."
+    => "Jouw bericht is verstuurd.",
 ];

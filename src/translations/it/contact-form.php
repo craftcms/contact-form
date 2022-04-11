@@ -26,5 +26,5 @@ return [
     "Success Flash Message" => "Messaggio di successo",
     "The flash message displayed after successfully sending a message."
     => "Il messaggio flash visualizzato dopo aver inviato con successo un messaggio.",
-    "Your message has been sent." => "Il tuo messaggio è stato inviato."
+    "Your message has been sent." => "Il tuo messaggio è stato inviato.",
 ];

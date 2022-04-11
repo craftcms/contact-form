@@ -33,12 +33,14 @@ class Submission extends Model
     public $subject;
 
     /**
-     * @var string|string[]|null
+     * @var string|string[]|string[][]|null
+     * @phpstan-var string|array<string|string[]>|null
      */
     public $message;
 
     /**
-     * @var UploadedFile[]|null
+     * @var UploadedFile[]|null[]|null
+     * @phpstan-var array<UploadedFile|null>|null
      */
     public $attachment;
 
@@ -62,7 +64,7 @@ class Submission extends Model
     {
         return [
             [['fromEmail', 'message'], 'required'],
-            [['fromEmail'], 'email']
+            [['fromEmail'], 'email'],
         ];
     }
 }

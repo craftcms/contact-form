@@ -7,6 +7,7 @@ use craft\contactform\models\Submission;
 use craft\contactform\Plugin;
 use craft\web\Controller;
 use craft\web\UploadedFile;
+use craft\web\UrlManager;
 use yii\web\Response;
 
 class SendController extends Controller
@@ -56,8 +57,10 @@ class SendController extends Controller
             }
 
             Craft::$app->getSession()->setError(Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'));
-            Craft::$app->getUrlManager()->setRouteParams([
-                'variables' => ['message' => $submission]
+            /** @var UrlManager $urlManager */
+            $urlManager = Craft::$app->getUrlManager();
+            $urlManager->setRouteParams([
+                'variables' => ['message' => $submission],
             ]);
 
             return null;
