@@ -5,6 +5,9 @@
 ### Added
 - Added Craft 4 compatibility.
 
+### Changed
+- The `contact-form/send` action now returns a 400 status on failure for Ajax requests.
+
 ## 2.4.0 - 2022-04-11
 
 ### Changed

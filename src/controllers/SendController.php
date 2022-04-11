@@ -7,7 +7,6 @@ use craft\contactform\models\Submission;
 use craft\contactform\Plugin;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use craft\web\UrlManager;
 use yii\web\Response;
 
 class SendController extends Controller
@@ -52,25 +51,20 @@ class SendController extends Controller
         }
 
         if (!$plugin->getMailer()->send($submission)) {
-            if ($request->getAcceptsJson()) {
-                return $this->asJson(['errors' => $submission->getErrors()]);
-            }
-
-            Craft::$app->getSession()->setError(Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'));
-            /** @var UrlManager $urlManager */
-            $urlManager = Craft::$app->getUrlManager();
-            $urlManager->setRouteParams([
-                'variables' => ['message' => $submission],
-            ]);
-
-            return null;
+            return $this->asModelFailure(
+                $submission,
+                Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'),
+                'message',
+                [
+                    'errors' => $submission->getErrors(),
+                ],
+            );
         }
 
-        if ($request->getAcceptsJson()) {
-            return $this->asJson(['success' => true, 'message' => $settings->successFlashMessage]);
-        }
-
-        Craft::$app->getSession()->setNotice($settings->successFlashMessage);
-        return $this->redirectToPostedUrl($submission);
+        return $this->asModelSuccess(
+            $submission,
+            $settings->successFlashMessage,
+            'message',
+        );
     }
 }
