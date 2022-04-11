@@ -1,6 +1,6 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 2.4.0 - 2022-04-11
 
 ### Changed
 - Custom message fields’ labels can now be translated using the `site` translation category. ([#161](https://github.com/craftcms/contact-form/pull/161))
