@@ -20,12 +20,12 @@ class Mailer extends Component
     /**
      * @event SubmissionEvent The event that is triggered before a message is sent
      */
-    const EVENT_BEFORE_SEND = 'beforeSend';
+    public const EVENT_BEFORE_SEND = 'beforeSend';
 
     /**
      * @event SubmissionEvent The event that is triggered after a message is sent
      */
-    const EVENT_AFTER_SEND = 'afterSend';
+    public const EVENT_AFTER_SEND = 'afterSend';
 
     /**
      * Sends an email submitted through a contact form.

@@ -15,7 +15,7 @@ class SendController extends Controller
     /**
      * @inheritdoc
      */
-    public $allowAnonymous = true;
+    public array|bool|int $allowAnonymous = true;
 
     /**
      * Sends a contact form submission.

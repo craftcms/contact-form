@@ -1,5 +1,10 @@
 # Release Notes for Contact Form
 
+## Unreleased
+
+### Added
+- Added Craft 4 compatibility.
+
 ## 2.4.0 - 2022-04-11
 
 ### Changed
