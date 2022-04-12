@@ -204,7 +204,7 @@ class Mailer extends Component
                 return $key;
             }, array_keys($messageFields));
             $otherBodyFields = array_combine($messageKeys, $messageFields);
-            $fields += $otherBodyFields;
+            $fields = array_merge($fields, $otherBodyFields);
         } else {
             $body = (string)$submission->message;
         }
