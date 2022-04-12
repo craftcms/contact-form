@@ -9,9 +9,13 @@ jobs:
   ecs:
     name: ECS
     uses: craftcms/.github/.github/workflows/ecs.yml@v1
+    with:
+      php_version: '7.2'
   phpstan:
     name: PHPStan
     uses: craftcms/.github/.github/workflows/phpstan.yml@v1
+    with:
+      php_version: '7.2'
   notify-slack:
     name: Notify Slack
     needs: [ ecs, phpstan ]
