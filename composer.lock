@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75d34ec36cb816f55fd8bce6a822b759",
+    "content-hash": "8b5f37d6881512f0766ec8be1edd07a3",
     "packages": [
         {
             "name": "cebe/markdown",
@@ -1729,7 +1729,7 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v9.7.0",
+            "version": "v9.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
@@ -1784,7 +1784,7 @@
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v9.7.0",
+            "version": "v9.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -1830,7 +1830,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v9.7.0",
+            "version": "v9.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -1878,7 +1878,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v9.7.0",
+            "version": "v9.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -6510,12 +6510,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/ecs.git",
-                "reference": "8547a813e62a7f76019cda04f7761b09e19fa9c2"
+                "reference": "6534ed578927b9e1da0acd44584c9341e0e87fbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/ecs/zipball/8547a813e62a7f76019cda04f7761b09e19fa9c2",
-                "reference": "8547a813e62a7f76019cda04f7761b09e19fa9c2",
+                "url": "https://api.github.com/repos/craftcms/ecs/zipball/6534ed578927b9e1da0acd44584c9341e0e87fbe",
+                "reference": "6534ed578927b9e1da0acd44584c9341e0e87fbe",
                 "shasum": ""
             },
             "require": {
@@ -6535,7 +6535,7 @@
                 "issues": "https://github.com/craftcms/ecs/issues",
                 "source": "https://github.com/craftcms/ecs/tree/main"
             },
-            "time": "2022-03-08T16:53:16+00:00"
+            "time": "2022-04-12T20:55:14+00:00"
         },
         {
             "name": "craftcms/phpstan",
@@ -6543,12 +6543,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/phpstan.git",
-                "reference": "8bffa2fd3f55d65747573bd6fdf4f2f9bdad520b"
+                "reference": "b61bba102b5ec8599406e6e29a28a20c915a6abc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/phpstan/zipball/8bffa2fd3f55d65747573bd6fdf4f2f9bdad520b",
-                "reference": "8bffa2fd3f55d65747573bd6fdf4f2f9bdad520b",
+                "url": "https://api.github.com/repos/craftcms/phpstan/zipball/b61bba102b5ec8599406e6e29a28a20c915a6abc",
+                "reference": "b61bba102b5ec8599406e6e29a28a20c915a6abc",
                 "shasum": ""
             },
             "require": {
@@ -6562,7 +6562,7 @@
                 "issues": "https://github.com/craftcms/phpstan/issues",
                 "source": "https://github.com/craftcms/phpstan/tree/main"
             },
-            "time": "2022-03-04T21:21:54+00:00"
+            "time": "2022-04-12T20:50:18+00:00"
         },
         {
             "name": "craftcms/rector",
@@ -6823,12 +6823,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "b5cb7d46ba91f9018774d593c1a0f05550631df7"
+                "reference": "b1c203510337d64c63dc6b2dfbec6f0b6bad0d10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/b5cb7d46ba91f9018774d593c1a0f05550631df7",
-                "reference": "b5cb7d46ba91f9018774d593c1a0f05550631df7",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/b1c203510337d64c63dc6b2dfbec6f0b6bad0d10",
+                "reference": "b1c203510337d64c63dc6b2dfbec6f0b6bad0d10",
                 "shasum": ""
             },
             "require": {
@@ -6876,7 +6876,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-04-11T22:52:54+00:00"
+            "time": "2022-04-12T15:58:47+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -7750,5 +7750,8 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
+    "platform-overrides": {
+        "php": "8.0.2"
+    },
     "plugin-api-version": "2.2.0"
 }
