@@ -6,6 +6,7 @@ use Craft;
 use craft\contactform\events\SendEvent;
 use craft\contactform\models\Submission;
 use craft\elements\User;
+use craft\helpers\App;
 use craft\helpers\ArrayHelper;
 use craft\helpers\FileHelper;
 use craft\helpers\StringHelper;
@@ -90,7 +91,7 @@ class Mailer extends Component
         }
 
         // Grab any "to" emails set in the plugin settings.
-        $toEmails = Craft::parseEnv($settings->toEmail);
+        $toEmails = App::parseEnv($settings->toEmail);
         $toEmails = is_string($toEmails) ? StringHelper::split($toEmails) : $toEmails;
 
         // Fire a 'beforeSend' event
