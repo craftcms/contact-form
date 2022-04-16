@@ -195,16 +195,15 @@ class Mailer extends Component
         $fields[Craft::t('contact-form', 'Email')] = $submission->fromEmail;
 
         if (is_array($submission->message)) {
+            $settings = Plugin::getInstance()->getSettings();
             $messageFields = array_merge($submission->message);
             $body = ArrayHelper::remove($messageFields, 'body', '');
-            $messageKeys = array_map(function($key) {
-                if (is_string($key)) {
-                    return Craft::t('site', $key);
+            foreach ($messageFields as $key => $value) {
+                if ($settings->allowedMessageFields === null || in_array($key, $settings->allowedMessageFields)) {
+                    $label = Craft::t('site', $key);
+                    $fields[$label] = $value;
                 }
-                return $key;
-            }, array_keys($messageFields));
-            $otherBodyFields = array_combine($messageKeys, $messageFields);
-            $fields = array_merge($fields, $otherBodyFields);
+            }
         } else {
             $body = (string)$submission->message;
         }

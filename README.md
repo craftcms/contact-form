@@ -169,6 +169,16 @@ An email sent with the above form might result in the following message:
 
     Cathy Chino
 
+By default, there’s no restriction on which keys can be included on `message`. You can limit which fields are allowed using the `allowedMessageFields` setting in `config/contact-form.php`:
+
+```php
+<?php
+
+return [
+    'allowedMessageFields' => ['Phone', 'Services'],
+];
+```
+
 ### Overriding plugin settings
 
 If you create a [config file](https://craftcms.com/docs/config-settings) in your `config/` folder called `contact-form.php`, you can override

@@ -8,6 +8,11 @@
 ### Changed
 - The `contact-form/send` action now returns a 400 status on failure for Ajax requests.
 
+## 2.5.0 - 2022-04-15
+
+### Added
+- Added the `allowedMessageFields` setting, which can be used to restrict which `message` fields are allowed to be submitted.
+
 ## 2.4.1 - 2022-04-12
 
 ### Fixed
