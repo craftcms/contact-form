@@ -37,6 +37,12 @@ class Settings extends Model
     public $successFlashMessage;
 
     /**
+     * @var string[]|null List of allowed `message` sub-keys that can be posted to `contact-form/send` (besides `body`).
+     * @since 2.5.0
+     */
+    public $allowedMessageFields;
+
+    /**
      * @inheritdoc
      */
     public function init()
