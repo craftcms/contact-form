@@ -1,5 +1,10 @@
 # Release Notes for Contact Form
 
+## 3.0.0-beta.2 - 2022-04-15
+
+### Added
+- Added the `allowedMessageFields` setting, which can be used to restrict which `message` fields are allowed to be submitted.
+
 ## 3.0.0-beta.1 - 2022-04-11
 
 ### Added
