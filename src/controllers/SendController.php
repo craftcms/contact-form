@@ -54,7 +54,7 @@ class SendController extends Controller
             return $this->asModelFailure(
                 $submission,
                 Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'),
-                'message',
+                'submission',
                 [
                     'errors' => $submission->getErrors(),
                 ],
@@ -64,7 +64,7 @@ class SendController extends Controller
         return $this->asModelSuccess(
             $submission,
             $settings->successFlashMessage,
-            'message',
+            'submission',
         );
     }
 }
