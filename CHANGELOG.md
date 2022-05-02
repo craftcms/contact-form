@@ -1,6 +1,6 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 2.5.1 - 2022-05-02
 
 ### Fixed
 - Fixed a bug where newlines were getting replaced with double newlines in message bodies. ([#214](https://github.com/craftcms/contact-form/issues/214))
