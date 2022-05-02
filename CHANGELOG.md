@@ -13,6 +13,11 @@
 ### Changed
 - The `contact-form/send` action now returns a 400 status on failure for Ajax requests.
 
+## 2.5.1 - 2022-05-02
+
+### Fixed
+- Fixed a bug where newlines were getting replaced with double newlines in message bodies. ([#214](https://github.com/craftcms/contact-form/issues/214))
+
 ## 2.5.0 - 2022-04-15
 
 ### Added

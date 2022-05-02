@@ -221,7 +221,7 @@ class Mailer extends Component
         }
 
         if ($body !== '') {
-            $body = preg_replace('/\R/u', "\n\n", $body);
+            $body = preg_replace('/\R/u', "\n", $body);
             $text .= "\n\n" . $body;
         }
 
