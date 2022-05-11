@@ -42,7 +42,7 @@ Your contact form template can look something like this:
     {% endif %}
 {% endmacro %}
 
-{% set message = message ?? null %}
+{% set submission = submission ?? null %}
 
 <form method="post" action="" accept-charset="UTF-8">
     {{ csrfInput() }}
@@ -50,34 +50,34 @@ Your contact form template can look something like this:
     {{ redirectInput('contact/thanks') }}
 
     <h3><label for="from-name">Your Name</label></h3>
-    {{ input('text', 'fromName', message.fromName ?? '', {
+    {{ input('text', 'fromName', submission.fromName ?? '', {
         id: 'from-name',
         autocomplete: 'name',
     }) }}
-    {{ message ? _self.errorList(message.getErrors('fromName')) }}
+    {{ submission ? _self.errorList(submission.getErrors('fromName')) }}
 
     <h3><label for="from-email">Your Email</label></h3>
-    {{ input('email', 'fromEmail', message.fromEmail ?? '', {
+    {{ input('email', 'fromEmail', submission.fromEmail ?? '', {
         id: 'from-email',
         autocomplete: 'email',
     }) }}
-    {{ message ? _self.errorList(message.getErrors('fromEmail')) }}
+    {{ submission ? _self.errorList(submission.getErrors('fromEmail')) }}
 
     <h3><label for="subject">Subject</label></h3>
-    {{ input('text', 'subject', message.subject ?? '', {
+    {{ input('text', 'subject', submission.subject ?? '', {
         id: 'subject',
     }) }}
-    {{ message ? _self.errorList(message.getErrors('subject')) }}
+    {{ submission ? _self.errorList(submission.getErrors('subject')) }}
 
     <h3><label for="message">Message</label></h3>
     {{ tag('textarea', {
-        text: message.message ?? '',
+        text: submission.message ?? '',
         id: 'message',
         name: 'message',
         rows: 10,
         cols: 40,
     }) }}
-    {{ message ? _self.errorList(message.getErrors('message')) }}
+    {{ submission ? _self.errorList(submission.getErrors('message')) }}
 
     <button type="submit">Send</button>
 </form>
@@ -125,7 +125,7 @@ You can add additional fields to your form by splitting your `message` field int
 
 ```twig
 <h3><label for="message">Message</label></h3>
-<textarea rows="10" cols="40" id="message" name="message[body]">{{ message.message.body ?? '' }}</textarea>
+<textarea rows="10" cols="40" id="message" name="message[body]">{{ submission.message.body ?? '' }}</textarea>
 
 <h3><label for="phone">Your phone number</label></h3>
 <input id="phone" type="text" name="message[Phone]" value="">
