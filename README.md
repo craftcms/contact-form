@@ -252,7 +252,7 @@ $('#my-form').submit(function(ev) {
                 $('#thanks').text(response.message).fadeIn();
             } else {
                 // response.error will be an object containing any validation errors that occurred, indexed by field name
-                // e.g. response.error.fromName => ['From Name is required']
+                // e.g. response.errors.fromName => ['From Name is required']
                 alert('An error occurred. Please try again.');
             }
         }
