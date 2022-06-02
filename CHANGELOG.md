@@ -7,6 +7,7 @@
 - Added the `allowedMessageFields` setting, which can be used to restrict which `message` fields are allowed to be submitted.
 
 ### Changed
+- Failed submissions are now passed back to the template as a `submission` variable, instead of `message`.
 - The `contact-form/send` action now returns a 400 status on failure for Ajax requests.
 
 ## 2.5.1 - 2022-05-02

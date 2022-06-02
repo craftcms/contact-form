@@ -248,13 +248,14 @@ $('#my-form').submit(function(ev) {
         dataType: 'json',
         data: $(this).serialize(),
         success: function(response) {
-            if (response.success) {
-                $('#thanks').text(response.message).fadeIn();
-            } else {
-                // response.error will be an object containing any validation errors that occurred, indexed by field name
-                // e.g. response.errors.fromName => ['From Name is required']
-                alert('An error occurred. Please try again.');
-            }
+            $('#thanks').text(response.message).fadeIn();
+        },
+        error: function(jqXHR) {
+          // The response body will be an object containing the following keys:
+          // - `message` – A high level message for the response
+          // - `submission` – An object containing data from the attempted submission
+          // - `errors` – An object containing validation errors from the submission, indexed by attribute name
+          alert(jqXHR.responseJSON.message);
         }
     });
 });
