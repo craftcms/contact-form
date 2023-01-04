@@ -8,6 +8,10 @@ return [
     'Message' => "Messaggio",
     'Subject' => "Oggetto",
 
+    // email body
+    'Email' => 'Email',
+    'Name' => 'Nome',
+
     //error messages
     'There was a problem with your submission, please check the form and try again!'
     => "Si è verificato un problema con l'invio, controlla il modulo e riprova!",

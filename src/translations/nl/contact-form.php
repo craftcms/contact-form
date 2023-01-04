@@ -8,6 +8,10 @@ return [
     'Message' => "Bericht",
     'Subject' => "Onderwerp",
 
+    // email body
+    'Email' => 'E-mail',
+    'Name' => 'Naam',
+
     // plugin settings
     "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."
     => "Het e-mailadres of de e-mailadressen naar waar het contactformulier dient te verzenden. Scheid meerdere e-mailadressen met komma's.",
