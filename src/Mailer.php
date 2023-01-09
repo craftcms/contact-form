@@ -63,7 +63,7 @@ class Mailer extends Component
 
         $message = (new Message())
             ->setFrom([$fromEmail => $fromName])
-            ->setReplyTo([$submission->fromEmail => $submission->fromName])
+            ->setReplyTo([$fromEmail => (string)$submission->fromName])
             ->setSubject($subject)
             ->setTextBody($textBody)
             ->setHtmlBody($htmlBody);
