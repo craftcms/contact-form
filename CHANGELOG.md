@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Added translations for for `Email` and `Name`. ([#235](https://github.com/craftcms/contact-form/issues/235))
+- Fixed an error that occurred if `fromName` was not specified on submissions. ([#228](https://github.com/craftcms/contact-form/issues/228))
 
 ## 3.0.0 - 2022-05-02
 
