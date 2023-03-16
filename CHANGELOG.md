@@ -15,6 +15,10 @@
 - Failed submissions are now passed back to the template as a `submission` variable, instead of `message`.
 - The `contact-form/send` action now returns a 400 status on failure for Ajax requests.
 
+## 2.5.2 - 2023-03-16
+
+- Added translations for for `Email` and `Name`. ([#235](https://github.com/craftcms/contact-form/issues/235))
+
 ## 2.5.1 - 2022-05-02
 
 ### Fixed
