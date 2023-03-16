@@ -1,5 +1,9 @@
 # Release Notes for Contact Form
 
+## Unreleased
+
+- Added translations for for `Email` and `Name`. ([#235](https://github.com/craftcms/contact-form/issues/235))
+
 ## 2.5.1 - 2022-05-02
 
 ### Fixed
