@@ -1,6 +1,6 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 3.0.1 - 2023-03-16
 
 - Added translations for for `Email` and `Name`. ([#235](https://github.com/craftcms/contact-form/issues/235))
 - Fixed an error that occurred if `fromName` was not specified on submissions. ([#228](https://github.com/craftcms/contact-form/issues/228))
