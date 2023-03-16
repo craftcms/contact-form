@@ -8,6 +8,10 @@ return [
     'Message' => "الرسالة",
     'Subject' => "الموضوع",
 
+    // email body
+    'Email' => 'البريد',
+    'Name' => 'الاسم',
+
     // plugin settings
     "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."
     => "عنوان (عناوين) البريد الإلكتروني التي سيرسل اليها نموذج الاتصال. يجب فصل عناوين البريد الإلكتروني المتعددة باستخدام الفواصل.",
