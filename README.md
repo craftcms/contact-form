@@ -171,8 +171,8 @@ return [
 
 ### Overriding plugin settings
 
-If you create a [config file](https://craftcms.com/docs/config-settings) in your `config/` folder called `contact-form.php`, you can override
-the plugin’s settings in the Control Panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/multi-environment-configs) aware, this is
+If you create a [config file](https://craftcms.com/docs/4.x/config/general.html) in your `config/` folder called `contact-form.php`, you can override
+the plugin’s settings in the Control Panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/4.x/config/#multi-environment-configs) aware, this is
 a handy way to have different settings across multiple environments.
 
 Here’s what that config file might look like along with a list of all of the possible values you can override.
