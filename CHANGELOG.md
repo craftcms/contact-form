@@ -2,7 +2,7 @@
 
 ## 2.5.2 - 2023-03-16
 
-- Added translations for for `Email` and `Name`. ([#235](https://github.com/craftcms/contact-form/issues/235))
+- Added translations for `Email` and `Name`. ([#235](https://github.com/craftcms/contact-form/issues/235))
 
 ## 2.5.1 - 2022-05-02
 
