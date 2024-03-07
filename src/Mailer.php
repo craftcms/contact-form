@@ -70,6 +70,10 @@ class Mailer extends Component
         if ($submission->attachment !== null) {
             $allowedFileTypes = Craft::$app->getConfig()->getGeneral()->allowedFileExtensions;
 
+            if (!is_array($submission->attachment)) {
+                $submission->attachment = [$submission->attachment];
+            }
+
             foreach ($submission->attachment as $attachment) {
                 if (!$attachment) {
                     continue;
