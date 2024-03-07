@@ -2,11 +2,9 @@
 
 This plugin allows you to add an email contact form to your website.
 
-
 ## Requirements
 
-This plugin requires Craft CMS 4.0 or later.
-
+This plugin requires Craft CMS 4.0.0+ or 5.0.0+.
 
 ## Installation
 

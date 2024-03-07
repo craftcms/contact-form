@@ -1,5 +1,9 @@
 # Release Notes for Contact Form
 
+## Unreleased
+
+- Added Craft 5 compatibility.
+
 ## 3.0.1 - 2023-03-16
 
 - Added translations for `Email` and `Name`. ([#235](https://github.com/craftcms/contact-form/issues/235))
