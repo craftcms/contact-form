@@ -12,6 +12,10 @@ return [
     'Email' => 'E-mail',
     'Name' => 'Naam',
 
+    // error messages
+    "There was a problem with your submission, please check the form and try again!"
+    => "Er was een probleem met je inzending, controleer het formulier en probeer het opnieuw!",
+
     // plugin settings
     "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."
     => "Het e-mailadres of de e-mailadressen naar waar het contactformulier dient te verzenden. Scheid meerdere e-mailadressen met komma's.",
