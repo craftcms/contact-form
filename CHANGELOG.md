@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Added Craft 5 compatibility.
+- Added a missing Dutch translation. ([#257](https://github.com/craftcms/contact-form/issues/257))
 
 ## 3.0.1 - 2023-03-16
 
