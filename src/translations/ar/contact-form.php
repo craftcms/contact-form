@@ -12,6 +12,10 @@ return [
     'Email' => 'البريد',
     'Name' => 'الاسم',
 
+    // error messages
+    //'There was a problem with your submission, please check the form and try again!'
+    //=> '',
+
     // plugin settings
     "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."
     => "عنوان (عناوين) البريد الإلكتروني التي سيرسل اليها نموذج الاتصال. يجب فصل عناوين البريد الإلكتروني المتعددة باستخدام الفواصل.",
