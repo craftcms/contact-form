@@ -1,6 +1,6 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 3.1.0 - 2024-03-11
 
 - Added Craft 5 compatibility.
 - Added a missing Dutch translation. ([#257](https://github.com/craftcms/contact-form/issues/257))
