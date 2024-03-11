@@ -1,5 +1,9 @@
 # Release Notes for Contact Form
 
+## Unreleased
+
+- Fixed a bug where it wasn’t possible to upload a single file with the `attachment` param. ([#254](https://github.com/craftcms/contact-form/issues/254))
+
 ## 2.5.2 - 2023-03-16
 
 - Added translations for `Email` and `Name`. ([#235](https://github.com/craftcms/contact-form/issues/235))

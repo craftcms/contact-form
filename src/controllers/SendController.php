@@ -47,7 +47,7 @@ class SendController extends Controller
             if (is_array($_FILES['attachment']['name'])) {
                 $submission->attachment = UploadedFile::getInstancesByName('attachment');
             } else {
-                $submission->attachment = [UploadedFile::getInstanceByName('attachment')];
+                $submission->attachment = UploadedFile::getInstanceByName('attachment');
             }
         }
 
