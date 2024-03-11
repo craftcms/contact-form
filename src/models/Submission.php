@@ -39,8 +39,8 @@ class Submission extends Model
     public $message;
 
     /**
-     * @var UploadedFile[]|null[]|null
-     * @phpstan-var array<UploadedFile|null>|null
+     * @var UploadedFile|UploadedFile[]|null[]|null
+     * @phpstan-var UploadedFile|array<UploadedFile|null>|null
      */
     public $attachment;
 
