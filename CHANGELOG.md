@@ -1,6 +1,6 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 2.5.3 - 2024-03-11
 
 - Fixed a bug where it wasn’t possible to upload a single file with the `attachment` param. ([#254](https://github.com/craftcms/contact-form/issues/254))
 
