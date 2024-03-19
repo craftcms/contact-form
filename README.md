@@ -107,11 +107,11 @@ Note that if you don’t include a `redirect` input, the current page will get r
 
 ### Displaying flash messages
 
-When a contact form is submitted, the plugin will set a `notice` or `success` flash message on the user session. You can display it in your template like this:
+When a contact form is submitted, the plugin will set a `notice` (Craft 4) or `success` (Craft 5+) flash message on the user session. You can display it in your template like this:
 
 ```twig
-{% if craft.app.session.hasFlash('notice') %}
-    <p class="message notice">{{ craft.app.session.getFlash('notice') }}</p>
+{% if craft.app.session.hasFlash('success') %}
+    <p class="message success">{{ craft.app.session.getFlash('success') }}</p>
 {% elseif craft.app.session.hasFlash('error') %}
     <p class="message error">{{ craft.app.session.getFlash('error') }}</p>
 {% endif %}
