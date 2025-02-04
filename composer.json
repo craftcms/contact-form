@@ -42,7 +42,7 @@
   "extra": {
     "name": "Contact Form",
     "handle": "contact-form",
-    "documentationUrl": "https://github.com/craftcms/contact-form/blob/v2/README.md",
+    "documentationUrl": "https://github.com/craftcms/contact-form/blob/3.x/README.md",
     "components": {
       "mailer": "craft\\contactform\\Mailer"
     }
