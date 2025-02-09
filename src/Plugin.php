@@ -47,7 +47,11 @@ class Plugin extends \craft\base\Plugin
     {
         // Get and pre-validate the settings
         $settings = $this->getSettings();
-        $settings->validate();
+
+        $readOnly = !Craft::$app->getConfig()->getGeneral()->allowAdminChanges;
+        if (!$readOnly) {
+            $settings->validate();
+        }
 
         // Get the settings that are being defined by the config file
         $overrides = Craft::$app->getConfig()->getConfigFromFile(strtolower($this->handle));
