@@ -4,7 +4,7 @@ namespace CraftCms\ContactForm\Http\Controllers;
 
 use Craft;
 use craft\web\UploadedFile;
-use CraftCms\Cms\Http\RespondsWithModel;
+use CraftCms\Cms\Http\RespondsWithFlash;
 use CraftCms\ContactForm\Facades\Mailer;
 use CraftCms\ContactForm\Models\Submission;
 use CraftCms\ContactForm\Plugin;
@@ -15,14 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SendController
 {
-    use RespondsWithModel;
+    use RespondsWithFlash;
 
     /**
      * Sends a contact form submission.
      */
     public function __invoke(Request $request): ?Response
     {
-        // TODO: will we still have something like asModelFailure, asModelSuccess or should we approach this differently?
         $plugin = Plugin::getInstance();
         $settings = $plugin->getSettings();
 
@@ -41,9 +40,6 @@ final class SendController
                 $submission,
                 Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'),
                 'submission',
-                [
-                    'errors' => $submission->getErrors(),
-                ],
             );
         }
 
