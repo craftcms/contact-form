@@ -17,19 +17,10 @@ use craft\web\UploadedFile;
  */
 class Submission extends Model
 {
-    /**
-     * @var string|null
-     */
     public ?string $fromName;
 
-    /**
-     * @var string|null
-     */
     public ?string $fromEmail;
 
-    /**
-     * @var string|null
-     */
     public ?string $subject;
 
     /**
