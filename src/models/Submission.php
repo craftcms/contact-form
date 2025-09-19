@@ -58,15 +58,4 @@ class Submission extends Model
             'subject' => \Craft::t('contact-form', 'Subject'),
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function defineRules(): array
-    {
-        return [
-            [['fromEmail', 'message'], 'required'],
-            [['fromEmail'], 'email'],
-        ];
-    }
 }

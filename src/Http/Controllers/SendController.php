@@ -8,6 +8,8 @@ use CraftCms\Cms\Http\RespondsWithModel;
 use CraftCms\ContactForm\Facades\Mailer;
 use CraftCms\ContactForm\Models\Submission;
 use CraftCms\ContactForm\Plugin;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SendController
@@ -17,25 +19,35 @@ final class SendController
     /**
      * Sends a contact form submission.
      */
-    public function index(): ?Response
+    public function __invoke(Request $request): ?Response
     {
-        $request = Craft::$app->getRequest();
         $plugin = Plugin::getInstance();
         $settings = $plugin->getSettings();
 
-        $submission = new Submission;
-        $submission->fromEmail = $request->getBodyParam('fromEmail');
-        $submission->fromName = $request->getBodyParam('fromName');
-        $submission->subject = $request->getBodyParam('subject');
+        $this->prepareData($request);
 
-        $message = $request->getBodyParam('message');
-        if (is_array($message)) {
-            $submission->message = array_filter($message, function ($value) {
-                return $value !== '';
-            });
-        } else {
-            $submission->message = $message;
+        $validator = Validator::make($request->all(), [
+            'fromEmail' => ['required', 'email'],
+            'fromName' => ['required', 'string'],
+            'message' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            $submission = $this->populateModel($validator->getData());
+
+            return $this->asModelFailure(
+                $submission,
+                Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'),
+                'submission',
+                [
+                    'errors' => $validator->errors(),
+                ],
+            );
         }
+
+        $data = $request->validated();
+
+        $submission = $this->populateModel($data);
 
         if ($settings->allowAttachments && isset($_FILES['attachment']) && isset($_FILES['attachment']['name'])) {
             if (is_array($_FILES['attachment']['name'])) {
@@ -50,9 +62,6 @@ final class SendController
                 $submission,
                 Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'),
                 'submission',
-                [
-                    'errors' => $submission->getErrors(),
-                ],
             );
         }
 
@@ -61,5 +70,29 @@ final class SendController
             $settings->successFlashMessage,
             'submission',
         );
+    }
+
+    private function prepareData(Request $request)
+    {
+        $message = $request->input('message');
+        if (is_array($message)) {
+            $message = array_filter($message, function ($value) {
+                return $value !== '' && $value !== null;
+            });
+        }
+        $request->merge([
+            'message' => $message,
+        ]);
+    }
+
+    private function populateModel(array $data): Submission
+    {
+        $submission = new Submission;
+        $submission->fromEmail = $data['fromEmail'];
+        $submission->fromName = $data['fromName'];
+        $submission->subject = $data['subject'];
+        $submission->message = $data['message'];
+
+        return $submission;
     }
 }
