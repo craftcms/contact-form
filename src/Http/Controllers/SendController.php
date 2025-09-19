@@ -46,7 +46,7 @@ final class SendController
             );
         }
 
-        $data = $request->validated();
+        $data = $validator->validated();
 
         $submission = $this->populateModel($data);
 
@@ -89,10 +89,10 @@ final class SendController
     private function populateModel(array $data, ?IlluminateValidator $validator = null): Submission
     {
         $submission = new Submission;
-        $submission->fromEmail = $data['fromEmail'];
-        $submission->fromName = $data['fromName'];
-        $submission->subject = $data['subject'];
-        $submission->message = $data['message'];
+        $submission->fromEmail = $data['fromEmail'] ?? null;
+        $submission->fromName = $data['fromName'] ?? null;
+        $submission->subject = $data['subject'] ?? null;
+        $submission->message = $data['message'] ?? null;
 
         if ($validator !== null) {
             $errors = $validator->errors()->getMessages();
