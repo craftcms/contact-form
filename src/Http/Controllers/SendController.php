@@ -10,6 +10,7 @@ use CraftCms\ContactForm\Models\Submission;
 use CraftCms\ContactForm\Plugin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Validator as IlluminateValidator;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SendController
@@ -33,14 +34,14 @@ final class SendController
         ]);
 
         if ($validator->fails()) {
-            $submission = $this->populateModel($validator->getData());
+            $submission = $this->populateModel($validator->getData(), $validator);
 
             return $this->asModelFailure(
                 $submission,
                 Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'),
                 'submission',
                 [
-                    'errors' => $validator->errors(),
+                    'errors' => $submission->getErrors(),
                 ],
             );
         }
@@ -85,13 +86,18 @@ final class SendController
         ]);
     }
 
-    private function populateModel(array $data): Submission
+    private function populateModel(array $data, ?IlluminateValidator $validator = null): Submission
     {
         $submission = new Submission;
         $submission->fromEmail = $data['fromEmail'];
         $submission->fromName = $data['fromName'];
         $submission->subject = $data['subject'];
         $submission->message = $data['message'];
+
+        if ($validator !== null) {
+            $errors = $validator->errors()->getMessages();
+            $submission->addErrors($errors);
+        }
 
         return $submission;
     }
