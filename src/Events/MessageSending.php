@@ -1,15 +1,17 @@
 <?php
+
 /**
  * @link https://craftcms.com/
+ *
  * @copyright Copyright (c) Pixel & Tonic, Inc.
  * @license MIT
  */
 
 namespace CraftCms\ContactForm\Events;
 
+use craft\mail\Message;
 use CraftCms\Cms\Shared\Concerns\ValidatableEvent;
 use CraftCms\ContactForm\Models\Submission;
-use craft\mail\Message;
 
 final class MessageSending
 {

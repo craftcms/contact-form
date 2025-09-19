@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @link https://craftcms.com/
+ *
  * @copyright Copyright (c) Pixel & Tonic, Inc.
  * @license MIT
  */
@@ -12,8 +14,6 @@ use craft\web\UploadedFile;
 
 /**
  * Class Submission
- *
- * @package CraftCms\ContactForm
  */
 class Submission extends Model
 {
@@ -34,18 +34,20 @@ class Submission extends Model
 
     /**
      * @var string|string[]|string[][]|null
+     *
      * @phpstan-var string|array<string|string[]>|null
      */
     public $message;
 
     /**
      * @var UploadedFile|UploadedFile[]|null[]|null
+     *
      * @phpstan-var UploadedFile|array<UploadedFile|null>|null
      */
     public $attachment;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -58,7 +60,7 @@ class Submission extends Model
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function defineRules(): array
     {

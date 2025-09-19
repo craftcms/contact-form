@@ -3,10 +3,6 @@
 namespace CraftCms\ContactForm;
 
 use Craft;
-use CraftCms\ContactForm\Events\MessageSending;
-use CraftCms\ContactForm\Events\MessageSent;
-use CraftCms\ContactForm\Events\SendEvent;
-use CraftCms\ContactForm\Models\Submission;
 use craft\elements\User;
 use craft\helpers\FileHelper;
 use craft\helpers\StringHelper;
@@ -14,7 +10,9 @@ use craft\mail\Message;
 use CraftCms\Cms\Component\Concerns\HasComponentEvents;
 use CraftCms\Cms\Support\Arr;
 use CraftCms\Cms\Support\Env;
-use CraftCms\Cms\Support\Str;
+use CraftCms\ContactForm\Events\MessageSending;
+use CraftCms\ContactForm\Events\MessageSent;
+use CraftCms\ContactForm\Models\Submission;
 use Illuminate\Container\Attributes\Singleton;
 use Illuminate\Support\Facades\Event;
 use yii\base\InvalidConfigException;
@@ -39,21 +37,21 @@ final readonly class Mailer
     /**
      * Sends an email submitted through a contact form.
      *
-     * @param Submission $submission
-     * @param bool $runValidation Whether the section should be validated
+     * @param  bool  $runValidation  Whether the section should be validated
+     *
      * @throws InvalidConfigException if the plugin settings don't validate
-     * @return bool
      */
     public function send(Submission $submission, bool $runValidation = true): bool
     {
         // Get the plugin settings and make sure they validate before doing anything
         $settings = Plugin::getInstance()->getSettings();
-        if (!$settings->validate()) {
+        if (! $settings->validate()) {
             throw new InvalidConfigException('The Contact Form settings don’t validate.');
         }
 
-        if ($runValidation && !$submission->validate()) {
+        if ($runValidation && ! $submission->validate()) {
             Craft::info('Contact form submission not saved due to validation error.', __METHOD__);
+
             return false;
         }
 
@@ -69,9 +67,9 @@ final readonly class Mailer
         // Flag for file attachment validation.
         $validAttachments = true;
 
-        $message = (new Message())
+        $message = (new Message)
             ->setFrom([$fromEmail => $fromName])
-            ->setReplyTo([$submission->fromEmail => (string)$submission->fromName])
+            ->setReplyTo([$submission->fromEmail => (string) $submission->fromName])
             ->setSubject($subject)
             ->setTextBody($textBody)
             ->setHtmlBody($htmlBody);
@@ -79,19 +77,19 @@ final readonly class Mailer
         if ($submission->attachment !== null) {
             $allowedFileTypes = Craft::$app->getConfig()->getGeneral()->allowedFileExtensions;
 
-            if (!is_array($submission->attachment)) {
+            if (! is_array($submission->attachment)) {
                 $submission->attachment = [$submission->attachment];
             }
 
             foreach ($submission->attachment as $attachment) {
-                if (!$attachment) {
+                if (! $attachment) {
                     continue;
                 }
 
                 // Validate that the file is safe to send by e-mail
                 $extension = pathinfo($attachment->name, PATHINFO_EXTENSION);
 
-                if (!in_array(strtolower($extension), $allowedFileTypes)) {
+                if (! in_array(strtolower($extension), $allowedFileTypes)) {
                     $validAttachments = false;
                 }
 
@@ -115,11 +113,13 @@ final readonly class Mailer
 
         if ($event->isSpam) {
             Craft::warning('Contact form submission suspected to be spam.', __METHOD__);
+
             return true;
         }
 
         if ($validAttachments === false) {
             Craft::error('Contact form submission contains a disallowed filetype.', __METHOD__);
+
             return false;
         }
 
@@ -140,12 +140,11 @@ final readonly class Mailer
         return true;
     }
 
-
     /**
      * Returns the "From" email value on the given mailer $from property object.
      *
-     * @param string|array|User|User[]|null $from
-     * @return string
+     * @param  string|array|User|User[]|null  $from
+     *
      * @throws InvalidConfigException if it can’t be determined
      */
     public function getFromEmail($from): string
@@ -162,6 +161,7 @@ final readonly class Mailer
             if (is_numeric($key)) {
                 return $this->getFromEmail($first);
             }
+
             return $key;
         }
         throw new InvalidConfigException('Can\'t determine "From" email from email config settings.');
@@ -169,33 +169,26 @@ final readonly class Mailer
 
     /**
      * Compiles the "From" name value from the submitted name.
-     *
-     * @param string|null $fromName
-     * @return string
      */
-    public function compileFromName(string $fromName = null): string
+    public function compileFromName(?string $fromName = null): string
     {
         $settings = Plugin::getInstance()->getSettings();
-        return $settings->prependSender . ($settings->prependSender && $fromName ? ' ' : '') . $fromName;
+
+        return $settings->prependSender.($settings->prependSender && $fromName ? ' ' : '').$fromName;
     }
 
     /**
      * Compiles the real email subject from the submitted subject.
-     *
-     * @param string|null $subject
-     * @return string
      */
-    public function compileSubject(string $subject = null): string
+    public function compileSubject(?string $subject = null): string
     {
         $settings = Plugin::getInstance()->getSettings();
-        return $settings->prependSubject . ($settings->prependSubject && $subject ? ' - ' : '') . $subject;
+
+        return $settings->prependSubject.($settings->prependSubject && $subject ? ' - ' : '').$subject;
     }
 
     /**
      * Compiles the real email textual body from the submitted message.
-     *
-     * @param Submission $submission
-     * @return string
      */
     public function compileTextBody(Submission $submission): string
     {
@@ -218,13 +211,13 @@ final readonly class Mailer
                 }
             }
         } else {
-            $body = (string)$submission->message;
+            $body = (string) $submission->message;
         }
 
         $text = '';
 
         foreach ($fields as $key => $value) {
-            $text .= ($text ? "\n" : '') . "- **{$key}:** ";
+            $text .= ($text ? "\n" : '')."- **{$key}:** ";
             if (is_array($value)) {
                 $text .= implode(', ', $value);
             } else {
@@ -234,7 +227,7 @@ final readonly class Mailer
 
         if ($body !== '') {
             $body = preg_replace('/\R/u', "\n", $body);
-            $text .= "\n\n" . $body;
+            $text .= "\n\n".$body;
         }
 
         return $text;
@@ -242,9 +235,6 @@ final readonly class Mailer
 
     /**
      * Compiles the real email HTML body from the compiled textual body.
-     *
-     * @param string $textBody
-     * @return string
      */
     public function compileHtmlBody(string $textBody): string
     {

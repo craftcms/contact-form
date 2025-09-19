@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @link https://craftcms.com/
+ *
  * @copyright Copyright (c) Pixel & Tonic, Inc.
  * @license MIT
  */
@@ -38,12 +40,13 @@ class Settings extends PluginSettings
 
     /**
      * @var string[]|null List of allowed `message` sub-keys that can be posted to `contact-form/send` (besides `body`).
+     *
      * @since 2.5.0
      */
     public $allowedMessageFields;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init(): void
     {
@@ -65,7 +68,7 @@ class Settings extends PluginSettings
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function defineRules(): array
     {

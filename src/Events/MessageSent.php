@@ -1,14 +1,16 @@
 <?php
+
 /**
  * @link https://craftcms.com/
+ *
  * @copyright Copyright (c) Pixel & Tonic, Inc.
  * @license MIT
  */
 
 namespace CraftCms\ContactForm\Events;
 
-use CraftCms\ContactForm\Models\Submission;
 use craft\mail\Message;
+use CraftCms\ContactForm\Models\Submission;
 
 final readonly class MessageSent
 {
