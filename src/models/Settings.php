@@ -70,11 +70,13 @@ class Settings extends PluginSettings
     /**
      * {@inheritdoc}
      */
-    protected function defineRules(): array
+    public static function getRules(): array
     {
         return [
-            [['toEmail', 'successFlashMessage'], 'required'],
-            [['toEmail', 'prependSender', 'prependSubject', 'successFlashMessage'], 'string'],
+            'toEmail' => ['required', 'string'],
+            'successFlashMessage' => ['required', 'string'],
+            'prependSender' => ['nullable', 'string'],
+            'prependSubject'=> ['nullable', 'string'],
         ];
     }
 }
