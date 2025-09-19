@@ -1,23 +1,31 @@
 <?php
 
-namespace craft\contactform;
+namespace CraftCms\ContactForm;
 
 use Craft;
-use craft\contactform\events\SendEvent;
-use craft\contactform\models\Submission;
+use CraftCms\ContactForm\Events\MessageSending;
+use CraftCms\ContactForm\Events\MessageSent;
+use CraftCms\ContactForm\Events\SendEvent;
+use CraftCms\ContactForm\Models\Submission;
 use craft\elements\User;
-use craft\helpers\App;
-use craft\helpers\ArrayHelper;
 use craft\helpers\FileHelper;
 use craft\helpers\StringHelper;
 use craft\mail\Message;
-use yii\base\Component;
+use CraftCms\Cms\Component\Concerns\HasComponentEvents;
+use CraftCms\Cms\Support\Arr;
+use CraftCms\Cms\Support\Env;
+use CraftCms\Cms\Support\Str;
+use Illuminate\Container\Attributes\Singleton;
+use Illuminate\Support\Facades\Event;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Markdown;
 
-class Mailer extends Component
+#[Singleton]
+final readonly class Mailer
 {
+    use HasComponentEvents;
+
     /**
      * @event SubmissionEvent The event that is triggered before a message is sent
      */
@@ -95,16 +103,15 @@ class Mailer extends Component
         }
 
         // Grab any "to" emails set in the plugin settings.
-        $toEmails = App::parseEnv($settings->toEmail);
+        $toEmails = Env::parse($settings->toEmail);
         $toEmails = is_string($toEmails) ? StringHelper::split($toEmails) : $toEmails;
 
-        // Fire a 'beforeSend' event
-        $event = new SendEvent([
-            'submission' => $submission,
-            'message' => $message,
-            'toEmails' => $toEmails,
-        ]);
-        $this->trigger(self::EVENT_BEFORE_SEND, $event);
+        // Fire a message sending event (formerly 'beforeSend')
+        Event::dispatch($event = new MessageSending(
+            submission: $submission,
+            message: $message,
+            toEmails: $toEmails,
+        ));
 
         if ($event->isSpam) {
             Craft::warning('Contact form submission suspected to be spam.', __METHOD__);
@@ -121,17 +128,18 @@ class Mailer extends Component
             $mailer->send($message);
         }
 
-        // Fire an 'afterSend' event
-        if ($this->hasEventHandlers(self::EVENT_AFTER_SEND)) {
-            $this->trigger(self::EVENT_AFTER_SEND, new SendEvent([
-                'submission' => $submission,
-                'message' => $message,
-                'toEmails' => $event->toEmails,
-            ]));
+        // Fire a message sent event (formerly 'afterSend')
+        if (Event::hasListeners(MessageSent::class)) {
+            Event::dispatch(new MessageSent(
+                submission: $submission,
+                message: $message,
+                toEmails: $event->toEmails,
+            ));
         }
 
         return true;
     }
+
 
     /**
      * Returns the "From" email value on the given mailer $from property object.
@@ -202,7 +210,7 @@ class Mailer extends Component
         if (is_array($submission->message)) {
             $settings = Plugin::getInstance()->getSettings();
             $messageFields = array_merge($submission->message);
-            $body = ArrayHelper::remove($messageFields, 'body', '');
+            $body = Arr::pull($messageFields, 'body', '');
             foreach ($messageFields as $key => $value) {
                 if ($settings->allowedMessageFields === null || in_array($key, $settings->allowedMessageFields)) {
                     $label = Craft::t('site', $key);

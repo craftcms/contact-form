@@ -1,29 +1,26 @@
 <?php
 
-namespace craft\contactform\controllers;
+namespace CraftCms\ContactForm\Http\Controllers;
 
 use Craft;
-use craft\contactform\models\Submission;
-use craft\contactform\Plugin;
-use craft\web\Controller;
+use CraftCms\ContactForm\Facades\Mailer;
+use CraftCms\ContactForm\Models\Submission;
+use CraftCms\ContactForm\Plugin;
+use CraftCms\Cms\Http\RespondsWithModel;
 use craft\web\UploadedFile;
-use yii\web\Response;
+use Symfony\Component\HttpFoundation\Response;
 
-class SendController extends Controller
+final class SendController
 {
-    /**
-     * @inheritdoc
-     */
-    public array|bool|int $allowAnonymous = true;
+    use RespondsWithModel;
 
     /**
      * Sends a contact form submission.
      *
      * @return Response|null
      */
-    public function actionIndex()
+    public function index(): ?Response
     {
-        $this->requirePostRequest();
         $request = Craft::$app->getRequest();
         $plugin = Plugin::getInstance();
         $settings = $plugin->getSettings();
@@ -50,7 +47,7 @@ class SendController extends Controller
             }
         }
 
-        if (!$plugin->getMailer()->send($submission)) {
+        if (!Mailer::send($submission)) {
             return $this->asModelFailure(
                 $submission,
                 Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'),

@@ -26,8 +26,8 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": "^8.0.2",
-    "craftcms/cms": "^4.0.0-beta.1|^5.0.0-beta.1"
+    "php": "^8.4",
+    "craftcms/cms": "^5.6.16|^6.0.0"
   },
   "require-dev": {
     "craftcms/ecs": "dev-main",
@@ -36,16 +36,13 @@
   },
   "autoload": {
     "psr-4": {
-      "craft\\contactform\\": "src/"
+      "CraftCms\\ContactForm\\": "src/"
     }
   },
   "extra": {
     "name": "Contact Form",
     "handle": "contact-form",
-    "documentationUrl": "https://github.com/craftcms/contact-form/blob/3.x/README.md",
-    "components": {
-      "mailer": "craft\\contactform\\Mailer"
-    }
+    "documentationUrl": "https://github.com/craftcms/contact-form/blob/3.x/README.md"
   },
   "scripts": {
     "check-cs": "ecs check --ansi",
@@ -54,7 +51,7 @@
   },
   "config": {
     "platform": {
-      "php": "8.0.2"
+      "php": "8.4"
     },
     "allow-plugins": {
       "yiisoft/yii2-composer": true,

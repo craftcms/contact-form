@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-namespace craft\contactform\models;
+namespace CraftCms\ContactForm\Models;
 
 use craft\base\Model;
 use craft\web\UploadedFile;
@@ -13,7 +13,7 @@ use craft\web\UploadedFile;
 /**
  * Class Submission
  *
- * @package craft\contactform
+ * @package CraftCms\ContactForm
  */
 class Submission extends Model
 {

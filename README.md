@@ -288,7 +288,7 @@ Event::on(Submission::class, Submission::EVENT_AFTER_VALIDATE, function(Event $e
 Modules and plugins can be notified right before a message is sent out to the recipients using the `beforeSend` event. This is also an opportunity to flag the message as spam, preventing it from getting sent:
 
 ```php
-use craft\contactform\events\SendEvent;
+use craft\contactform\Events\SendEvent;
 use craft\contactform\Mailer;
 use yii\base\Event;
 
@@ -309,7 +309,7 @@ Event::on(Mailer::class, Mailer::EVENT_BEFORE_SEND, function(SendEvent $e) {
 Modules and plugins can be notified right after a message is sent out to the recipients using the `afterSend` event.
 
 ```php
-use craft\contactform\events\SendEvent;
+use craft\contactform\Events\SendEvent;
 use craft\contactform\Mailer;
 use yii\base\Event;
 

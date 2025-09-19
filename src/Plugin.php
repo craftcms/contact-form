@@ -5,10 +5,13 @@
  * @license MIT
  */
 
-namespace craft\contactform;
+namespace CraftCms\ContactForm;
 
 use Craft;
-use craft\contactform\models\Settings;
+use CraftCms\Cms\Plugin\Plugin as CraftPlugin;
+use Illuminate\Support\Facades\Config;
+use CraftCms\ContactForm\Models\Settings;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Plugin
@@ -17,19 +20,35 @@ use craft\contactform\models\Settings;
  * @property Mailer $mailer
  * @method Settings getSettings()
  */
-class Plugin extends \craft\base\Plugin
+class Plugin extends CraftPlugin
 {
-    /**
-     * @inheritdoc
-     */
+    public string $schemaVersion = '1.0.0';
+
     public bool $hasCpSettings = true;
 
-    /**
-     * @return Mailer
-     */
-    public function getMailer(): Mailer
+//    protected array $vite = [
+//        'input' => [
+//            'resources/js/plugin.js',
+//            'resources/css/plugin.css',
+//        ],
+//        'publicDirectory' => 'resources/dist',
+//    ];
+
+    protected array $scripts = [];
+
+    protected array $styles = [];
+
+    protected array $publishables = [];
+
+    public function bootPlugin(): void
     {
-        return $this->get('mailer');
+        Log::info(
+            sprintf(
+                '%s plugin loaded',
+                static::getInstance()->name
+            ),
+            [__METHOD__]
+        );
     }
 
     /**
@@ -50,9 +69,9 @@ class Plugin extends \craft\base\Plugin
         $settings->validate();
 
         // Get the settings that are being defined by the config file
-        $overrides = Craft::$app->getConfig()->getConfigFromFile(strtolower($this->handle));
+        $overrides = Config::get("craft.".strtolower($this->handle), []);
 
-        return Craft::$app->view->renderTemplate('contact-form/_settings', [
+        return Craft::$app->view->renderTemplate('contact-form/_settings.twig', [
             'settings' => $settings,
             'overrides' => array_keys($overrides),
         ]);

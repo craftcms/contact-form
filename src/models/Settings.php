@@ -5,11 +5,11 @@
  * @license MIT
  */
 
-namespace craft\contactform\models;
+namespace CraftCms\ContactForm\models;
 
-use craft\base\Model;
+use CraftCms\Cms\Plugin\PluginSettings;
 
-class Settings extends Model
+class Settings extends PluginSettings
 {
     /**
      * @var string|string[]|null
