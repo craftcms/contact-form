@@ -22,6 +22,7 @@ final class SendController
      */
     public function __invoke(Request $request): ?Response
     {
+        // TODO: will we still have something like asModelFailure, asModelSuccess or should we approach this differently?
         $plugin = Plugin::getInstance();
         $settings = $plugin->getSettings();
 

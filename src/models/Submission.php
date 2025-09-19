@@ -15,27 +15,30 @@ use craft\web\UploadedFile;
 /**
  * Class Submission
  */
+// TODO: should we still extend craft\base\Model?
+// TODO: how about using the new CraftCms\Cms\Component\Concerns\ValidatableComponent trait?
+// TODO: what about before and after validate events? for now, the old EVENT_AFTER_VALIDATE still triggers and can be used
 class Submission extends Model
 {
-    public ?string $fromName;
+    public ?string $fromName = null;
 
-    public ?string $fromEmail;
+    public ?string $fromEmail = null;
 
-    public ?string $subject;
+    public ?string $subject = null;
 
     /**
      * @var string|string[]|string[][]|null
      *
      * @phpstan-var string|array<string|string[]>|null
      */
-    public string|array|null $message;
+    public string|array|null $message = null;
 
     /**
      * @var UploadedFile|UploadedFile[]|null[]|null
      *
      * @phpstan-var UploadedFile|array<UploadedFile|null>|null
      */
-    public UploadedFile|array|null $attachment;
+    public UploadedFile|array|null $attachment = null;
 
     /**
      * {@inheritdoc}
