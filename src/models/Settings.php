@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-namespace CraftCms\ContactForm\models;
+namespace CraftCms\ContactForm\Models;
 
 use CraftCms\Cms\Plugin\PluginSettings;
 
@@ -16,34 +16,34 @@ class Settings extends PluginSettings
     /**
      * @var string|string[]|null
      */
-    public $toEmail;
+    public string|array|null $toEmail;
 
     /**
      * @var string|null
      */
-    public $prependSender;
+    public ?string $prependSender;
 
     /**
      * @var string|null
      */
-    public $prependSubject;
+    public ?string $prependSubject;
 
     /**
      * @var bool
      */
-    public $allowAttachments = false;
+    public bool $allowAttachments = false;
 
     /**
      * @var string|null
      */
-    public $successFlashMessage;
+    public ?string $successFlashMessage;
 
     /**
      * @var string[]|null List of allowed `message` sub-keys that can be posted to `contact-form/send` (besides `body`).
      *
      * @since 2.5.0
      */
-    public $allowedMessageFields;
+    public array|null $allowedMessageFields;
 
     /**
      * {@inheritdoc}

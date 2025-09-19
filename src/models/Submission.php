@@ -20,36 +20,36 @@ class Submission extends Model
     /**
      * @var string|null
      */
-    public $fromName;
+    public ?string $fromName;
 
     /**
      * @var string|null
      */
-    public $fromEmail;
+    public ?string $fromEmail;
 
     /**
      * @var string|null
      */
-    public $subject;
+    public ?string $subject;
 
     /**
      * @var string|string[]|string[][]|null
      *
      * @phpstan-var string|array<string|string[]>|null
      */
-    public $message;
+    public string|array|null $message;
 
     /**
      * @var UploadedFile|UploadedFile[]|null[]|null
      *
      * @phpstan-var UploadedFile|array<UploadedFile|null>|null
      */
-    public $attachment;
+    public UploadedFile|array|null $attachment;
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'fromName' => \Craft::t('contact-form', 'Your Name'),

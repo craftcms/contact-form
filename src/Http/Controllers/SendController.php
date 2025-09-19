@@ -73,7 +73,7 @@ final class SendController
         );
     }
 
-    private function prepareData(Request $request)
+    private function prepareData(Request $request): void
     {
         $message = $request->input('message');
         if (is_array($message)) {
