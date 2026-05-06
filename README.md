@@ -4,7 +4,7 @@ This plugin allows you to add an email contact form to your website.
 
 ## Requirements
 
-This plugin requires Craft CMS 4.0.0+ or 5.0.0+.
+This plugin requires Craft CMS 4.0.0+ or 5.0.0+ or 6.0.0-alpha.1+ with the `craftcms/yii2-adapter` package.
 
 ## Installation
 
@@ -169,7 +169,7 @@ return [
 
 ### Overriding plugin settings
 
-If you create a [config file](https://craftcms.com/docs/4.x/config/) in your `config/` folder called `contact-form.php`, you can override
+If you create a [config file](https://craftcms.com/docs/4.x/config/) in your `config/` folder (or `config/craft/` if you’re using Craft CMS v6) called `contact-form.php`, you can override
 the plugin’s settings in the Control Panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/4.x/config/#multi-environment-configs) aware, this is
 a handy way to have different settings across multiple environments.
 
