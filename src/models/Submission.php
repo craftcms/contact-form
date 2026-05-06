@@ -47,7 +47,7 @@ class Submission extends Model
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'fromName' => \Craft::t('contact-form', 'Your Name'),
