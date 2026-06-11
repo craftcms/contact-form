@@ -38,6 +38,12 @@ class Settings extends PluginSettings
      */
     public ?array $allowedMessageFields = null;
 
+    /**
+     * @var int|null How many requets per minute (per IP address) the application will allow.
+     * @since 5.0.0
+     */
+    public ?int $rateLimit = null;
+
     public function __construct(array $config = [])
     {
         if (! isset($config['prependSender'])) {

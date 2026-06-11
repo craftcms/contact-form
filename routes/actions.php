@@ -2,5 +2,5 @@
 
 use CraftCms\ContactForm\Http\Controllers\SendController;
 
-Route::post('contact-form/send', SendController::class);
-
+Route::post('send', SendController::class)
+    ->middleware('throttle:contact-form');

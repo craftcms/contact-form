@@ -5,9 +5,11 @@ namespace CraftCms\ContactForm;
 use CraftCms\Cms\Plugin\Plugin as BasePlugin;
 use CraftCms\Cms\SystemMessage\Events\SystemMessagesResolving;
 use CraftCms\Cms\SystemMessage\Models\SystemMessage;
-use CraftCms\ContactForm\Http\Requests\SettingsRequest;
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\RateLimiter;
 use function CraftCms\Cms\template;
 
 class Plugin extends BasePlugin
@@ -18,6 +20,17 @@ class Plugin extends BasePlugin
 
     public function bootPlugin(): void
     {
+        RateLimiter::for('contact-form', function (Request $request) {
+            $limit = $this->getSettings()->rateLimit;
+
+            // `null` has special significance, but isn't handled by other limit methods:
+            if ($limit === null) {
+                return Limit::none();
+            }
+
+            return Limit::perMinute($limit)->by($request->getClientIp());
+        });
+
         Event::listen(function (SystemMessagesResolving $event) {
             $event->messages->push(new SystemMessage([
                 'key' => 'contactform_submission',
