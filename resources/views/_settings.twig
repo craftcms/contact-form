@@ -1,10 +1,10 @@
 {% import "_includes/forms" as forms %}
 
+{{ dump(errors) }}
 {% macro configWarning(setting) -%}
-  {% set setting = '<code>'~setting~'</code>' %}
-  {{ "This is being overridden by the {setting} config setting in your {file} config file."|t('contact-form', {
-    setting: setting,
-    file: 'contact-form.php'
+  {{ 'This is being overridden by the {setting} config setting in your {file} config file.'|t('contact-form', {
+    setting: "<code>#{setting}</code>",
+    file: 'craft/config/contact-form.php',
   })|raw }}
 {%- endmacro %}
 
@@ -12,58 +12,58 @@
 
 {{ forms.autosuggestField({
   first:        true,
-  label:        "To Email"|t('contact-form'),
+  label:        'To Email'|t('contact-form'),
   required:     true,
   id:           'toEmail',
   name:         'toEmail',
-  instructions: "The email address(es) that the contact form will send to. Separate multiple email addresses with commas."|t('contact-form'),
-  value:        settings.toEmail,
+  instructions: 'The email address(es) that the contact form will send to. Separate multiple email addresses with commas.'|t('contact-form'),
+  value:        old('settings.toEmail', settings.toEmail),
   suggestEnvVars: true,
   autofocus:    true,
   disabled:     'toEmail' in overrides,
-  warning:      'toEmail' in overrides ? configWarning('toEmail'),
-  errors:       settings.getErrors('toEmail')
+  warning:      'toEmail' in overrides ? configWarning('toEmail')|string,
+  errors:       errors.get('settings.toEmail'),
 }) }}
 
 {{ forms.textField({
-  label:        "Sender Text"|t('contact-form'),
+  label:        'Sender Text'|t('contact-form'),
   id:           'prependSender',
   name:         'prependSender',
-  instructions: "Text that will be prepended to the email’s From Name to inform who the Contact Form actually was sent by."|t('contact-form'),
-  value:        (settings.prependSender ? settings.prependSender : ""),
+  instructions: 'Text that will be prepended to the email’s From Name to inform who the Contact Form actually was sent by.'|t('contact-form'),
+  value:        old('settings.prependSender', settings.prependSender),
   disabled:     'prependSender' in overrides,
   warning:      'prependSender' in overrides ? configWarning('prependSender'),
-  errors:       settings.getErrors('prependSender')
+  errors:       errors.get('settings.prependSender'),
 }) }}
 
 {{ forms.textField({
-  label:        "Subject Text"|t('contact-form'),
+  label:        'Subject Text'|t('contact-form'),
   id:           'prependSubject',
   name:         'prependSubject',
-  instructions: "Text that will be prepended to the email’s Subject to flag that it comes from the Contact Form."|t('contact-form'),
-  value:        (settings.prependSubject ? settings.prependSubject : ""),
+  instructions: 'Text that will be prepended to the email’s Subject to flag that it comes from the Contact Form.'|t('contact-form'),
+  value:        old('settings.prependSubject', settings.prependSubject),
   disabled:     'prependSubject' in overrides,
   warning:      'prependSubject' in overrides ? configWarning('prependSubject'),
-  errors:       settings.getErrors('prependSubject')
+  errors:       errors.get('settings.prependSubject'),
 }) }}
 
 {{ forms.lightswitchField({
-  label:        "Allow attachments?"|t('contact-form'),
+  label:        'Allow attachments?'|t('contact-form'),
   id:           'allowAttachments',
   name:         'allowAttachments',
-  on:           settings.allowAttachments,
+  on:           old('settings.allowAttachments', settings.allowAttachments),
   disabled:     'allowAttachments' in overrides,
   warning:      'allowAttachments' in overrides ? configWarning('allowAttachments'),
-  errors:       settings.getErrors('allowAttachments')
+  errors:       errors.get('settings.allowAttachments'),
 }) }}
 
 {{ forms.textField({
-  label:        "Success Flash Message"|t('contact-form'),
-  id:           "successFlashMessage",
-  name:         "successFlashMessage",
-  instructions: "The flash message displayed after successfully sending a message."|t('contact-form'),
-  value:        settings.successFlashMessage,
+  label:        'Success Flash Message'|t('contact-form'),
+  id:           'successFlashMessage',
+  name:         'successFlashMessage',
+  instructions: 'The flash message displayed after successfully sending a message.'|t('contact-form'),
+  value:        old('settings.successFlashMessage', settings.successFlashMessage),
   disabled:     'successFlashMessage' in overrides,
   warning:      'successFlashMessage' in overrides ? configWarning('successFlashMessage'),
-  errors:       settings.getErrors('successFlashMessage')
+  errors:       errors.get('settings.successFlashMessage'),
 }) }}

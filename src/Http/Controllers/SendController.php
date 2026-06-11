@@ -2,16 +2,19 @@
 
 namespace CraftCms\ContactForm\Http\Controllers;
 
-use Craft;
-use craft\web\UploadedFile;
+use CraftCms\Cms\Cms;
 use CraftCms\Cms\Http\RespondsWithFlash;
-use CraftCms\ContactForm\Facades\Mailer;
-use CraftCms\ContactForm\Models\Submission;
+use CraftCms\Cms\Support\Env;
+use CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable;
+use CraftCms\ContactForm\Data\Summary;
+use CraftCms\ContactForm\Http\Requests\SubmissionRequest;
 use CraftCms\ContactForm\Plugin;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Validator as IlluminateValidator;
+use CraftCms\ContactForm\Settings;
+use Illuminate\Mail\Attachment;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
+
+use function CraftCms\Cms\t;
 
 final class SendController
 {
@@ -20,82 +23,36 @@ final class SendController
     /**
      * Sends a contact form submission.
      */
-    public function __invoke(Request $request): ?Response
+    public function __invoke(SubmissionRequest $submission): ?Response
     {
         $plugin = Plugin::getInstance();
+        /** @var Settings $settings */
         $settings = $plugin->getSettings();
 
-        $this->prepareData($request);
+        $data = $submission->validated();
 
-        $validator = Validator::make($request->all(), [
-            'fromEmail' => ['required', 'email'],
-            'fromName' => ['required', 'string'],
-            'message' => ['required'],
-        ]);
+        $mailable = new SystemMessageMailable(
+            key: 'contactform_submission',
+            variables: [
+                ...$data,
+                'summary' => app(Summary::class)->compile($data['message']),
+            ],
+        )
+            ->to(Env::parse($settings->toEmail))
+            ->replyTo($data['fromEmail'], $data['fromName']);
 
-        if ($validator->fails()) {
-            $submission = $this->populateModel($validator->getData(), $validator);
-
-            return $this->asModelFailure(
-                $submission,
-                Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'),
-                'submission',
-            );
+        if ($files = $submission->file('attachment')) {
+            $attachments = array_map(Attachment::fromUploadedFile(...), $files);
+            $mailable->attachMany($attachments);
         }
 
-        $data = $validator->validated();
-
-        $submission = $this->populateModel($data);
-
-        if ($settings->allowAttachments && isset($_FILES['attachment']) && isset($_FILES['attachment']['name'])) {
-            if (is_array($_FILES['attachment']['name'])) {
-                $submission->attachment = UploadedFile::getInstancesByName('attachment');
-            } else {
-                $submission->attachment = UploadedFile::getInstanceByName('attachment');
-            }
+        if (! Mail::send($mailable)) {
+            abort(500, t('There was a problem with your submission, please check the form and try again!', category: 'contact-form'));
         }
 
-        if (! Mailer::send($submission)) {
-            return $this->asModelFailure(
-                $submission,
-                Craft::t('contact-form', 'There was a problem with your submission, please check the form and try again!'),
-                'submission',
-            );
-        }
-
-        return $this->asModelSuccess(
-            $submission,
+        return $this->asSuccess(
             $settings->successFlashMessage,
-            'submission',
+            $submission->validated(),
         );
-    }
-
-    private function prepareData(Request $request): void
-    {
-        $message = $request->input('message');
-        if (is_array($message)) {
-            $message = array_filter($message, function ($value) {
-                return $value !== '' && $value !== null;
-            });
-        }
-        $request->merge([
-            'message' => $message,
-        ]);
-    }
-
-    private function populateModel(array $data, ?IlluminateValidator $validator = null): Submission
-    {
-        $submission = new Submission;
-        $submission->fromEmail = $data['fromEmail'] ?? null;
-        $submission->fromName = $data['fromName'] ?? null;
-        $submission->subject = $data['subject'] ?? null;
-        $submission->message = $data['message'] ?? null;
-
-        if ($validator !== null) {
-            $errors = $validator->errors()->getMessages();
-            $submission->addErrors($errors);
-        }
-
-        return $submission;
     }
 }
