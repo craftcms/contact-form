@@ -32,7 +32,7 @@ class SubmissionRequest extends FormRequest
 
         $rules = [
             'fromEmail' => ['required', 'email'],
-            'fromName' => ['required', 'string'],
+            'fromName' => ['string'],
             'message' => ['required'],
             'attachment.*' => [Rule::excludeIf(fn () => ! $settings->allowAttachments), 'file'],
         ];
