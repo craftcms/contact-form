@@ -4,7 +4,7 @@
 {% macro configWarning(setting) -%}
   {{ 'This is being overridden by the {setting} config setting in your {file} config file.'|t('contact-form', {
     setting: "<code>#{setting}</code>",
-    file: 'craft/config/contact-form.php',
+    file: 'config/craft/contact-form.php',
   })|raw }}
 {%- endmacro %}
 
