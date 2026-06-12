@@ -7,6 +7,8 @@ use CraftCms\Cms\Http\RespondsWithFlash;
 use CraftCms\Cms\Support\Env;
 use CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable;
 use CraftCms\ContactForm\Data\Summary;
+use CraftCms\ContactForm\Events\MessageSending;
+use CraftCms\ContactForm\Events\MessageSent;
 use CraftCms\ContactForm\Http\Requests\SubmissionRequest;
 use CraftCms\ContactForm\Plugin;
 use CraftCms\ContactForm\Settings;
@@ -46,9 +48,16 @@ final class SendController
             $mailable->attachMany($attachments);
         }
 
+        // Emit an event, and check whether it was suppressed (a handler returned `false`) or marked as spam:
+        if (! event($sendingEvent = new MessageSending($mailable)) || $sendingEvent->isSpam) {
+            abort(t('Your message could not be sent.', category: 'contact-form'));
+        }
+
         if (! Mail::send($mailable)) {
             abort(500, t('There was a problem with your submission, please check the form and try again!', category: 'contact-form'));
         }
+
+        event(new MessageSent($mailable));
 
         return $this->asSuccess(
             $settings->successFlashMessage,
