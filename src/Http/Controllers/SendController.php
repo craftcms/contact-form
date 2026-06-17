@@ -2,11 +2,11 @@
 
 namespace CraftCms\ContactForm\Http\Controllers;
 
-use CraftCms\Cms\Cms;
 use CraftCms\Cms\Http\RespondsWithFlash;
 use CraftCms\Cms\Support\Env;
 use CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable;
-use CraftCms\ContactForm\Data\Summary;
+use CraftCms\ContactForm\Submission\Sender;
+use CraftCms\ContactForm\Submission\Summary;
 use CraftCms\ContactForm\Events\MessageSending;
 use CraftCms\ContactForm\Events\MessageSent;
 use CraftCms\ContactForm\Http\Requests\SubmissionRequest;
@@ -31,26 +31,41 @@ final class SendController
         /** @var Settings $settings */
         $settings = $plugin->getSettings();
 
-        $data = $submission->validated();
+        $data = $submission->safe();
 
         $mailable = new SystemMessageMailable(
             key: 'contactform_submission',
             variables: [
-                ...$data,
-                'summary' => app(Summary::class)->compile($data['message']),
+                ...$data->all(),
+                'settings' => $settings,
+                'summary' => app(Summary::class)->compile($data->input('message')),
             ],
-        )
-            ->to(Env::parse($settings->toEmail))
-            ->replyTo($data['fromEmail'], $data['fromName']);
+        );
 
-        if ($files = $submission->file('attachment')) {
+        // The anonymous user does not have control over the recipient:
+        $mailable->to(Env::parse($settings->toEmail));
+
+        $mailable->replyTo(
+            $data->string('fromEmail'),
+            app(Sender::class)->compile($data->string('fromName') ?? null),
+        );
+
+        // Attach any (valid) files that were uploaded:
+        $files = $data->input('attachment');
+
+        if ($files) {
+            // Normalize to an array (again):
+            if (! is_array($files)) {
+                $files = [$files];
+            }
+
             $attachments = array_map(Attachment::fromUploadedFile(...), $files);
             $mailable->attachMany($attachments);
         }
 
         // Emit an event, and check whether it was suppressed (a handler returned `false`) or marked as spam:
-        if (! event($sendingEvent = new MessageSending($mailable)) || $sendingEvent->isSpam) {
-            abort(t('Your message could not be sent.', category: 'contact-form'));
+        if (event($sendingEvent = new MessageSending($mailable), halt: true) === false || $sendingEvent->isSpam) {
+            abort(400, t('Your message could not be sent.', category: 'contact-form'));
         }
 
         if (! Mail::send($mailable)) {
@@ -61,7 +76,8 @@ final class SendController
 
         return $this->asSuccess(
             $settings->successFlashMessage,
-            $submission->validated(),
+            // Don’t attempt to flash the uploads:
+            $data->except('attachment'),
         );
     }
 }

@@ -35,12 +35,13 @@ class Plugin extends BasePlugin
             $event->messages->push(new SystemMessage([
                 'key' => 'contactform_submission',
                 'heading' => 'When the contact form is submitted',
-                'subject' => 'Contact form submission from {{ fromName }}!',
+                // This template is comparable to how the legacy mailer compiled subjects:
+                'subject' => '{{ [settings.prependSubject, subject]|filter|join(" - ") }}',
                 'body' => <<<BODY
 A contact form was just submitted on {{ systemName }}.
 
-- **From:** {{ fromName }}
-- **Email:** {{ fromEmail }}
+- **{{ 'From'|t }}:** {{ fromName }}
+- **{{ 'Email'|t }}:** {{ fromEmail }}
 {{ summary }}
 BODY,
             ]));

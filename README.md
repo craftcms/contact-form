@@ -225,22 +225,21 @@ In this example if `toEmail` does not exist or fails validation (it was tampered
 
 If you would like your contact form to accept file attachments, follow these steps:
 
-1. Go to Settings → Contact Form in the Control Panel, and make sure the plugin is set to allow attachments.
+1. Go to **Settings** → **Contact Form** in the Control Panel, and make sure the plugin is set to allow attachments. You may also set `allowAttachments` from your `contact-form.php` config file.
 2. Make sure your opening HTML `<form>` tag contains `enctype="multipart/form-data"`.
 3. Add a `<input type="file" name="attachment">` to your form.
-4. If you want to allow multiple file attachments, use multiple `<input type="file" name="attachment[]" multiple>` inputs.
-
+4. If you want to allow multiple file attachments, use [the `multiple` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/multiple), and add `[]` to the input’s name: `<input type="file" name="attachment[]" multiple>`.
 
 ### Ajax form submissions
 
-You can optionally post contact form submissions over Ajax if you’d like. Just send a POST request to your site with all of the same data that would normally be sent:
+Contact Form also supports submissions over Ajax. Send a POST request to the same route, with the same data that would normally be sent:
 
 ```js
 $('#my-form').submit(function(ev) {
-    // Prevent the form from actually submitting
+    // Prevent the form from submitting natively:
     ev.preventDefault();
 
-    // Send it to the server
+    // Send it to the server:
     $.post({
         url: '/',
         dataType: 'json',

@@ -13,14 +13,13 @@ use CraftCms\Cms\Plugin\PluginSettings;
 use CraftCms\Cms\Support\Arr;
 use CraftCms\Cms\Support\Facades\Sites;
 
+use CraftCms\Cms\Twig\Attributes\AllowedInSandbox;
 use CraftCms\Cms\Validation\Rules\EnvValueRule;
 use function CraftCms\Cms\t;
 
+#[AllowedInSandbox]
 class Settings extends PluginSettings
 {
-    /**
-     * @var string|string[]|null
-     */
     public string|array|null $toEmail = null;
 
     public ?string $prependSender = null;
@@ -32,7 +31,11 @@ class Settings extends PluginSettings
     public ?string $successFlashMessage = null;
 
     /**
-     * @var string[]|null List of allowed `message` sub-keys that can be posted to `contact-form/send` (besides `body`).
+     * @var string[]|null List of allowed `message` sub-keys that can be POSTed with the form.
+     * As of 4.0.0, you can also provide a Laravel validation configuration array,
+     *
+     * The default value (`null`) does not validate `message.*` fields!
+     * If you wish to forbid all nested fields, set to an empty array (`[]`).
      *
      * @since 2.5.0
      */
