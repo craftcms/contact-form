@@ -1,6 +1,6 @@
 <?php
 
-namespace CraftCms\ContactForm\Data;
+namespace CraftCms\ContactForm\Submission;
 
 use CraftCms\Cms\Support\Arr;
 use CraftCms\Cms\Support\Str;
