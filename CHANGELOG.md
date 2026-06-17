@@ -1,5 +1,22 @@
 # Release Notes for Contact Form
 
+## Unreleased
+
+Contact Form has been completely rebuilt for Craft 6.x! We are using this release to show off some cool new Laravel features, like validation, routing, and mailers.
+
+- You now have full control over the contents of email notifications, via **Utilities** &rarr; **System Messages**.
+- Additional fields (like `message[referralSource]`) can now be validated with rules defined in `config/craft/contact-form.php`.
+- Fields can now be nested (i.e. `message[referral][primary][name]`) and are output recursively in notifications.
+
+### Removed
+
+All classes in the `craft\contactform\` namespace have been removed. Here are 
+
+- `craft\contactform\models\Submission` was removed in favor of a form request.
+- The `craft\contactform\Mailer` class has been eliminated, in favor of a simple message builder.
+- `craft\contactform\Mailer::EVENT_BEFORE_SEND` (and `craft\contactform\events\SendEvent`) must be replaced with a listener for `CraftCms\ContactForm\Events\MessageSending`. Return `false` from a handler or set `$event->isSpam` to prevent sending. You can access all of the previous data via the single `CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable $submission` event property (i.e. `$submission->to` or `$submission->variables`).
+- `craft\contactform\Mailer::EVENT_AFTER_SEND` (and `craft\contactform\events\SendEvent`) must be replaced with a listener for `CraftCms\ContactForm\Events\MessageSent`.
+
 ## 3.1.0 - 2024-03-11
 
 - Added Craft 5 compatibility.
