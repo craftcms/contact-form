@@ -1,29 +1,30 @@
 <?php
 
-namespace CraftCms\ContactForm\Http\Requests;
+namespace CraftCms\ContactForm\Validation;
 
 use Closure;
+use CraftCms\Cms\Cms;
 use CraftCms\Cms\Support\Arr;
 use CraftCms\Cms\Support\Flash;
+use CraftCms\Cms\Validation\Ruleset;
 use CraftCms\ContactForm\Plugin;
 use CraftCms\ContactForm\Settings;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 use Override;
 use function CraftCms\Cms\t;
 
-class SubmissionRequest extends FormRequest
+class SubmissionRuleset extends Ruleset
 {
     public function prepareForValidation(): void
     {
-        $attachment = $this->file('attachment');
+        $request = $this->resolveSubject();
 
-        $this->merge([
+        $request->merge([
             // `message` can be a single string or a map of “fields”
-            'message' => array_filter($this->array('message'), fn ($val) => $val !== '' && $val !== null),
+            'message' => array_filter($request->array('message'), fn ($val) => $val !== '' && $val !== null),
         ]);
     }
 
@@ -39,19 +40,29 @@ class SubmissionRequest extends FormRequest
             'message' => ['required'],
             'attachment' => [
                 'nullable',
+                Rule::prohibitedIf(fn () => ! $settings->allowAttachments),
+                // function (string $attribute, mixed $value, Closure $fail) use ($settings) {
+                //     if (!$settings->allowAttachments) {
+                //         $fail(t('Attachments are not allowed.', category: 'contact-form'));
+                //     }
+                // },
                 function (string $attribute, mixed $value, Closure $fail) use ($settings) {
-                    if (! $settings->allowAttachments) {
-                        $fail(t('Attachments are not allowed.', category: 'contact-form'));
-                    }
-
                     // Normalize single files to an array:
                     if ($value instanceof UploadedFile) {
                         $value = [$value];
                     }
 
                     foreach ($value as $file) {
-                        if (! $this->isValidFile($file)) {
+                        // Was the file uploaded properly?
+                        if (! $file->isValid()) {
                             $fail(t('An attachment could not be uploaded.', category: 'contact-form'));
+                        }
+
+                        // Does it have a permitted extension?
+                        $extension = pathinfo((string) $file->getClientOriginalName(), PATHINFO_EXTENSION);
+
+                        if (! in_array(strtolower($extension), Cms::config()->allowedFileExtensions, true)) {
+                            $fail(t('{ext} files (like {filename}) are not allowed.', ['ext' => strtoupper($extension), 'filename' => $file->getClientOriginalName()], 'contact-form'));
                         }
                     }
                 },
@@ -78,7 +89,7 @@ class SubmissionRequest extends FormRequest
     }
 
     #[Override]
-    protected function failedValidation(Validator $validator): void
+    protected function failedValidation(Validator $validator): never
     {
         Flash::error(t('There was a problem with your submission, please check the form and try again!', category: 'contact-form'));
 

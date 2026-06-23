@@ -9,9 +9,9 @@ use CraftCms\ContactForm\Submission\Sender;
 use CraftCms\ContactForm\Submission\Summary;
 use CraftCms\ContactForm\Events\MessageSending;
 use CraftCms\ContactForm\Events\MessageSent;
-use CraftCms\ContactForm\Http\Requests\SubmissionRequest;
 use CraftCms\ContactForm\Plugin;
 use CraftCms\ContactForm\Settings;
+use CraftCms\ContactForm\Validation\SubmissionRuleset;
 use Illuminate\Mail\Attachment;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,12 +25,16 @@ final class SendController
     /**
      * Sends a contact form submission.
      */
-    public function __invoke(SubmissionRequest $submission): ?Response
+    public function __invoke(SubmissionRuleset $submission): ?Response
     {
         $plugin = Plugin::getInstance();
         /** @var Settings $settings */
         $settings = $plugin->getSettings();
 
+        // Pre-validate so our fail hooks run…
+        $submission->validate();
+
+        // …then grab the request-like `ValidatedInput`:
         $data = $submission->safe();
 
         $mailable = new SystemMessageMailable(
@@ -63,20 +67,26 @@ final class SendController
             $mailable->attachMany($attachments);
         }
 
-        // Emit an event, and check whether it was suppressed (a handler returned `false`) or marked as spam:
-        if (event($sendingEvent = new MessageSending($mailable), halt: true) === false || $sendingEvent->isSpam) {
-            abort(400, t('Your message could not be sent.', category: 'contact-form'));
+        $result = event($sendingEvent = new MessageSending($mailable), halt: true);
+
+        // All failure states are treated the same, to avoid disclosing the mode:
+        // - Handler suppressing the event (explicitly returning `false`)
+        // - Handler marking the submission as spam
+        // - Mailer failures
+        if (
+            $result === false
+            || $sendingEvent->isSpam
+            || ! Mail::send($mailable)
+        ) {
+            return $this->asFailure(t('There was a problem with your submission, please check the form and try again!', category: 'contact-form'), $data->except('attachment'));
         }
 
-        if (! Mail::send($mailable)) {
-            abort(500, t('There was a problem with your submission, please check the form and try again!', category: 'contact-form'));
-        }
-
+        // Ok, it definitely sent!
         event(new MessageSent($mailable));
 
         return $this->asSuccess(
             $settings->successFlashMessage,
-            // Don’t attempt to flash the uploads:
+            // Don’t attempt to flash the uploads (they can’t be serialized to the session):
             $data->except('attachment'),
         );
     }
