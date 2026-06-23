@@ -1,6 +1,5 @@
 {% import "_includes/forms" as forms %}
 
-{{ dump(errors) }}
 {% macro configWarning(setting) -%}
   {{ 'This is being overridden by the {setting} config setting in your {file} config file.'|t('contact-form', {
     setting: "<code>#{setting}</code>",
