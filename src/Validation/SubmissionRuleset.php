@@ -41,11 +41,6 @@ class SubmissionRuleset extends Ruleset
             'attachment' => [
                 'nullable',
                 Rule::prohibitedIf(fn () => ! $settings->allowAttachments),
-                // function (string $attribute, mixed $value, Closure $fail) use ($settings) {
-                //     if (!$settings->allowAttachments) {
-                //         $fail(t('Attachments are not allowed.', category: 'contact-form'));
-                //     }
-                // },
                 function (string $attribute, mixed $value, Closure $fail) use ($settings) {
                     // Normalize single files to an array:
                     if ($value instanceof UploadedFile) {
