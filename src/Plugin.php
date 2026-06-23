@@ -36,7 +36,7 @@ class Plugin extends BasePlugin
                 'key' => 'contactform_submission',
                 'heading' => 'When the contact form is submitted',
                 // This template is comparable to how the legacy mailer compiled subjects:
-                'subject' => '{{ [settings.prependSubject, subject]|filter|join(" - ") }}',
+                'subject' => '{{ [settings.prependSubject, subject ?? null]|filter|join(" - ") }}',
                 'body' => <<<BODY
 A contact form was just submitted on {{ systemName }}.
 
@@ -58,7 +58,7 @@ BODY,
         // Get the settings that are being defined by the config file
         $overrides = config('craft.'.strtolower($this->handle), []);
 
-        return template('contact-form/_settings.twig', [
+        return template('contact-form/_settings', [
             'settings' => $this->getSettings(),
             'overrides' => array_keys($overrides),
         ]);
