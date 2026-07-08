@@ -40,7 +40,7 @@
   "extra": {
     "name": "Contact Form",
     "handle": "contact-form",
-    "documentationUrl": "https://github.com/craftcms/contact-form/blob/3.x/README.md"
+    "documentationUrl": "https://github.com/craftcms/contact-form/blob/4.x/README.md"
   },
   "scripts": {
     "check-cs": "ecs check --ansi",
