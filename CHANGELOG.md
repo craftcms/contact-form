@@ -7,6 +7,7 @@ Contact Form has been completely rebuilt for Craft 6.x! We are using this releas
 - You now have full control over the contents of email notifications, via **Utilities** &rarr; **System Messages**.
 - Additional fields (like `message[referralSource]`) can now be validated with rules defined in `config/craft/contact-form.php`.
 - Fields can now be nested (i.e. `message[referral][primary][name]`) and are output recursively in notifications.
+- Suppressed notifications, spam submissions, and failures with the mail driver have been consolidated into a single error state.
 
 ### Deprecated
 
