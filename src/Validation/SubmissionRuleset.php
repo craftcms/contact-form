@@ -18,16 +18,6 @@ use function CraftCms\Cms\t;
 
 class SubmissionRuleset extends Ruleset
 {
-    public function prepareForValidation(): void
-    {
-        $request = $this->resolveSubject();
-
-        $request->merge([
-            // `message` can be a single string or a map of “fields”
-            'message' => array_filter($request->array('message'), fn ($val) => $val !== '' && $val !== null),
-        ]);
-    }
-
     public function rules(): array
     {
         /** @var Settings $settings */
@@ -37,7 +27,10 @@ class SubmissionRuleset extends Ruleset
             'fromEmail' => ['required', 'email'],
             'fromName' => ['nullable', 'string'],
             'subject' => ['nullable', 'string'],
+            // Some form of a `message` is required, but its type is flexible...
             'message' => ['required'],
+            // ...and `body` is always an allowed sub-field:
+            'message.body' => Rule::when(fn($data) => is_array($data['message']), ['string']),
             'attachment' => [
                 'nullable',
                 Rule::prohibitedIf(fn () => ! $settings->allowAttachments),
@@ -71,11 +64,12 @@ class SubmissionRuleset extends Ruleset
                 foreach ($settings->allowedMessageFields as $field => $fieldRules) {
                     $fieldKey = sprintf('message.%s', $field);
 
-                    $rules[$fieldKey] = $fieldRules;
+                    // These rules are added to specific nested keys using dot notation (not appended to the root `message` attribute):
+                    $rules[$fieldKey] = Rule::when(fn ($data) => is_array($data['message']), $fieldRules);
                 }
             } else {
                 // A “list” of fields just marks nested fields as permitted, so we can use a plain array rule:
-                $rules['message'][] = Rule::array($settings->allowedMessageFields);
+                $rules['message'][] = Rule::when(fn ($data) => is_array($data['message']), Rule::array($settings->allowedMessageFields));
                 // (Note that we’re *appending* this to the base `required` rule, defined above!)
             }
         }

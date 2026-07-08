@@ -9,32 +9,31 @@ use function CraftCms\Cms\t;
 class Summary
 {
     /**
-     * Builds a string representation of the submission, hoisting any nested/complex fields into a list.
+     * Builds a Markdown representation of the submission, hoisting any nested/complex fields into a list.
      */
-    public function compile(array $message): string
+    public function compile(string|array $message): string
     {
-        // Was a nested `body` field submitted, explicitly?
-        // (This has historically been used as the “default” message content, and will be handled later!)
-        $body = Arr::pull($message, 'body');
-
-        // Try one more time—the `SubmissionRequest` may have normalized it into a single-element, anonymous array, which we can return immediately:
-        if ($body === null && array_is_list($message) && count($message) === 1) {
-            return Arr::first($message);
+        // There may be nothing to do; plain-text messages can just be returned, verbatim:
+        if (is_string($message)) {
+            return $message;
         }
 
-        $text = $this->packNestedLists($message);
+        // Was a nested `body` field submitted, explicitly? We don’t want that in the bulleted list (it will get appended, later):
+        $body = Arr::pull($message, 'body');
+
+        $summary = $this->packNestedLists($message);
 
         if ($body) {
             $body = preg_replace('/\R/u', "\n", $body);
-            $text .= "\n\n".$body;
+            $summary .= "\n\n".$body;
         }
 
-        return $text;
+        return $summary;
     }
 
     private function packNestedLists(array $array, int $level = 0): string
     {
-        // Assume lists (no keys) can be flattened into a single line:
+        // Assume “lists” (non-associative arrays) can be flattened into a single line:
         if (array_is_list($array)) {
             return join(', ', $array);
         }
