@@ -16,6 +16,6 @@ final class MessageSending
     public bool $isSpam = false;
 
     public function __construct(
-        public SystemMessageMailable $submission,
+        public SystemMessageMailable $message,
     ) {}
 }
