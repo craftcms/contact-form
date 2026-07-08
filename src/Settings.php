@@ -24,7 +24,7 @@ class Settings extends PluginSettings
 
     public ?string $prependSender = null;
 
-    /** @deprecated 5.0.0 Full control over the subject format is possible via the registered system message. */
+    /** @deprecated 3.0.0 Full control over the subject format is possible via the registered system message. */
     public ?string $prependSubject = null;
 
     public bool $allowAttachments = false;
