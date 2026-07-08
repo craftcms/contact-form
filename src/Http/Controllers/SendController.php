@@ -48,7 +48,9 @@ final class SendController
 
         // The anonymous user does not have control over the recipient:
         $mailable->to(Env::parse($settings->toEmail));
+        /** @todo Allow control over recipient via signed params, using {@see \CraftCms\Cms\Http\Mixins\RequestMixin::getSigned()}. */
 
+        // A “from” address is required, but only set as the `Reply-To` address, not directly `From` (to avoid upsetting mail providers):
         $mailable->replyTo(
             $data->string('fromEmail'),
             app(Sender::class)->compile($data->string('fromName') ?? null),
