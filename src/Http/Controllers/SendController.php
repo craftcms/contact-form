@@ -13,6 +13,7 @@ use CraftCms\ContactForm\Plugin;
 use CraftCms\ContactForm\Settings;
 use CraftCms\ContactForm\Validation\SubmissionRuleset;
 use Illuminate\Mail\Attachment;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -78,8 +79,26 @@ final class SendController
         if (
             $result === false
             || $sendingEvent->isSpam
-            || ! Mail::send($mailable)
+            || ! $sent = Mail::send($mailable)
         ) {
+            $errorContext = [
+                'from' => $data->string('fromEmail'),
+            ];
+
+            // Log specific errors
+            if ($result === false) {
+                Log::error('Contact Form: A notification was suppressed by an event handler.', $errorContext);
+            }
+
+            if ($sendingEvent->isSpam) {
+                Log::error('Contact Form: A submission was marked as spam.', $errorContext);
+            }
+
+            if (! $sent) {
+                Log::error('Contact Form: There was an error when handing off a notification to the mailer.', $errorContext);
+            }
+
+            // Return generic failure notice:
             return $this->asFailure(t('There was a problem with your submission, please check the form and try again!', category: 'contact-form'), $data->except('attachment'));
         }
 
