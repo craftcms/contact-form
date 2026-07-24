@@ -18,7 +18,7 @@ class Plugin extends BasePlugin
 
     public bool $hasCpSettings = true;
 
-    public function bootPlugin(): void
+    public function boot(): void
     {
         RateLimiter::for('contact-form', function (Request $request) {
             $limit = $this->getSettings()->rateLimit;
