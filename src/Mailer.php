@@ -118,7 +118,9 @@ class Mailer extends Component
 
         foreach ($event->toEmails as $toEmail) {
             $message->setTo($toEmail);
-            $mailer->send($message);
+            if (!$mailer->send($message)) {
+                return false;
+            }
         }
 
         // Fire an 'afterSend' event
