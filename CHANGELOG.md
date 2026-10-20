@@ -1,5 +1,9 @@
 # Release Notes for Contact Form
 
+## 3.1.1 - 2026-10-13
+
+- Fixed a bug where failed email delivery was reported as a successful submission.
+
 ## 3.1.0 - 2024-03-11
 
 - Added Craft 5 compatibility.
