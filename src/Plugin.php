@@ -3,12 +3,10 @@
 namespace CraftCms\ContactForm;
 
 use CraftCms\Cms\Plugin\Plugin as BasePlugin;
-use CraftCms\Cms\SystemMessage\Events\SystemMessagesResolving;
 use CraftCms\Cms\SystemMessage\Models\SystemMessage;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use function CraftCms\Cms\template;
 
@@ -30,9 +28,12 @@ class Plugin extends BasePlugin
 
             return Limit::perMinute($limit)->by($request->getClientIp());
         });
+    }
 
-        Event::listen(function (SystemMessagesResolving $event) {
-            $event->messages->push(new SystemMessage([
+    protected function getSystemMessages(): array
+    {
+        return [
+            'contactform_submission' => fn () => new SystemMessage([
                 'key' => 'contactform_submission',
                 'heading' => 'When the contact form is submitted',
                 // This template is comparable to how the legacy mailer compiled subjects:
@@ -44,11 +45,11 @@ A contact form was just submitted on {{ systemName }}.
 - **{{ 'Email'|t }}:** {{ fromEmail }}
 {{ summary }}
 BODY,
-            ]));
-        });
+            ]),
+        ];
     }
 
-    protected function createSettingsModel(): ?Settings
+    protected static function createSettings(): Settings
     {
         return new Settings;
     }

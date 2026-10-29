@@ -30,16 +30,25 @@
   "require-dev": {
     "craftcms/ecs": "dev-main",
     "craftcms/phpstan": "dev-main",
-    "craftcms/rector": "dev-main"
+    "craftcms/rector": "dev-main",
+    "orchestra/testbench": "^11.0",
+    "pestphp/pest": "^5.0",
+    "pestphp/pest-plugin-laravel": "^5.0"
   },
   "autoload": {
     "psr-4": {
       "CraftCms\\ContactForm\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "CraftCms\\ContactForm\\Tests\\": "tests/"
+    }
+  },
   "extra": {
     "name": "Contact Form",
     "handle": "contact-form",
+    "class": "CraftCms\\ContactForm\\Plugin",
     "documentationUrl": "https://github.com/craftcms/contact-form/blob/4.x/README.md"
   },
   "scripts": {
@@ -50,7 +59,8 @@
   "config": {
     "allow-plugins": {
       "yiisoft/yii2-composer": true,
-      "craftcms/plugin-installer": true
+      "craftcms/plugin-installer": true,
+      "pestphp/pest-plugin": true
     }
   }
 }
