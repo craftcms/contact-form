@@ -2,9 +2,7 @@
 
 namespace CraftCms\ContactForm\Tests;
 
-use CraftCms\Aliases\AliasesServiceProvider;
 use CraftCms\Cms\Plugin\Testing\PluginTestCase;
-use CraftCms\DependencyAwareCache\CacheServiceProvider;
 
 abstract class TestCase extends PluginTestCase
 {
@@ -19,18 +17,6 @@ abstract class TestCase extends PluginTestCase
         'prependSender' => 'Via website:',
         'successFlashMessage' => 'Thanks, we got it!',
     ];
-
-    /**
-     * Register the supporting providers that a real app gets from package discovery.
-     */
-    protected function getPackageProviders($app): array
-    {
-        return [
-            AliasesServiceProvider::class,
-            CacheServiceProvider::class,
-            ...parent::getPackageProviders($app),
-        ];
-    }
 
     protected function defineEnvironment($app): void
     {

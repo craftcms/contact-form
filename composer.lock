@@ -417,16 +417,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "6.0.0-alpha.20",
+            "version": "6.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "5ed58ef29a9f9e264192b62842fd57a451120b02"
+                "reference": "8c7bc1ab2348e09feb50d6dfc5c824a054c77cb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/5ed58ef29a9f9e264192b62842fd57a451120b02",
-                "reference": "5ed58ef29a9f9e264192b62842fd57a451120b02",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/8c7bc1ab2348e09feb50d6dfc5c824a054c77cb0",
+                "reference": "8c7bc1ab2348e09feb50d6dfc5c824a054c77cb0",
                 "shasum": ""
             },
             "require": {
@@ -455,9 +455,10 @@
                 "guzzlehttp/guzzle": "^7.2.0",
                 "inertiajs/inertia-laravel": "^3.0",
                 "intervention/image": "^4.2",
-                "laravel/framework": "^13.17",
+                "laravel/ai": "^1.2",
+                "laravel/framework": "^13.38",
                 "laravel/passport": "^13.0",
-                "laravel/wayfinder": "^0.1.12",
+                "laravel/wayfinder": "^0.1.23",
                 "league/commonmark": "^2.8",
                 "league/flysystem-path-prefixing": "^3.31",
                 "league/uri": "^7.0",
@@ -489,11 +490,11 @@
                 "barryvdh/laravel-debugbar": "^4.2",
                 "craftcms/test-plugin": "1.0.1",
                 "dg/bypass-finals": "^1.9",
-                "driftingly/rector-laravel": "^2.1",
+                "driftingly/rector-laravel": "^2.6.2",
                 "fakerphp/faker": "^1.19.0",
                 "intervention/image-driver-vips": "^4.1",
-                "larastan/larastan": "^3.12",
-                "laravel/boost": "^2.6",
+                "larastan/larastan": "^3.13",
+                "laravel/boost": "^2.10.3",
                 "laravel/pao": "^1.0",
                 "laravel/pint": "^1.22",
                 "laravel/socialite": "^5.23",
@@ -518,6 +519,7 @@
             "extra": {
                 "laravel": {
                     "aliases": {
+                        "Ai": "CraftCms\\Cms\\Support\\Facades\\Ai",
                         "Gql": "CraftCms\\Cms\\Support\\Facades\\Gql",
                         "I18N": "CraftCms\\Cms\\Support\\Facades\\I18N",
                         "Path": "CraftCms\\Cms\\Support\\Facades\\Path",
@@ -607,22 +609,23 @@
                 "rss": "https://github.com/craftcms/cms/releases.atom",
                 "source": "https://github.com/craftcms/cms"
             },
-            "time": "2026-10-07T18:13:09+00:00"
+            "time": "2026-10-29T10:57:04+00:00"
         },
         {
             "name": "craftcms/cms-assets",
-            "version": "6.0.0-alpha.20",
+            "version": "6.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms-assets.git",
-                "reference": "2aab90bda2f18f7abfc750680984ee41a546db20"
+                "reference": "18eb5e7c56c2a85a74e72ccfb1f80e57f11963b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms-assets/zipball/2aab90bda2f18f7abfc750680984ee41a546db20",
-                "reference": "2aab90bda2f18f7abfc750680984ee41a546db20",
+                "url": "https://api.github.com/repos/craftcms/cms-assets/zipball/18eb5e7c56c2a85a74e72ccfb1f80e57f11963b7",
+                "reference": "18eb5e7c56c2a85a74e72ccfb1f80e57f11963b7",
                 "shasum": ""
             },
+            "default-branch": true,
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -630,9 +633,9 @@
             ],
             "description": "Built assets for Craft CMS.",
             "support": {
-                "source": "https://github.com/craftcms/cms-assets/tree/6.0.0-alpha.20"
+                "source": "https://github.com/craftcms/cms-assets/tree/6.x"
             },
-            "time": "2026-10-07T18:14:38+00:00"
+            "time": "2026-10-29T09:50:42+00:00"
         },
         {
             "name": "craftcms/laravel-aliases",
@@ -2544,6 +2547,88 @@
                 }
             ],
             "time": "2026-10-17T07:53:40+00:00"
+        },
+        {
+            "name": "laravel/ai",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/ai.git",
+                "reference": "6837b4c557f67e04e8a13d882fe7724032278c27"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/ai/zipball/6837b4c557f67e04e8a13d882fe7724032278c27",
+                "reference": "6837b4c557f67e04e8a13d882fe7724032278c27",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^12.0|^13.0",
+                "illuminate/container": "^12.0|^13.0",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/filesystem": "^12.0|^13.0",
+                "illuminate/json-schema": "^12.62|^13.15",
+                "illuminate/support": "^12.0|^13.0",
+                "laravel/prompts": "^0.3.6",
+                "laravel/serializable-closure": "^2.0",
+                "php": "^8.3",
+                "symfony/yaml": "^7.2|^8.0"
+            },
+            "conflict": {
+                "aws/aws-sdk-php": "<3.369.1",
+                "laravel/mcp": "<1.0"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "^3.369.1",
+                "driftingly/rector-laravel": "^2.5",
+                "jasonmccreary/double": "^1.0",
+                "laravel/mcp": "^1.0",
+                "laravel/pint": "^1.26",
+                "orchestra/testbench": "^10.6|^11.0",
+                "pestphp/pest": "^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+                "phpstan/phpstan": "^2.1",
+                "rector/rector": "^2.5"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Required to use the Bedrock provider.",
+                "laravel/mcp": "Required to use MCP client tools or MCP server tools with Laravel AI agents."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Ai\\AiServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "functions.php"
+                ],
+                "psr-4": {
+                    "Laravel\\Ai\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "The official AI SDK for Laravel.",
+            "homepage": "https://github.com/laravel/ai",
+            "keywords": [
+                "ai",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/ai/issues",
+                "source": "https://github.com/laravel/ai"
+            },
+            "time": "2026-10-19T16:50:18+00:00"
         },
         {
             "name": "laravel/framework",
@@ -15532,6 +15617,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "craftcms/cms": 20,
+        "craftcms/cms-assets": 20,
         "craftcms/ecs": 20,
         "craftcms/phpstan": 20,
         "craftcms/rector": 20
