@@ -1,5 +1,10 @@
 # Release Notes for Contact Form
 
+## Unreleased
+
+- Added Craft 6 compatibility, when the `craftcms/yii2-adapter` package is installed.
+- Fixed a PHP 8.4+ deprecation warning.
+
 ## 3.1.0 - 2024-03-11
 
 - Added Craft 5 compatibility.

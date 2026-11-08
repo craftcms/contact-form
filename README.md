@@ -221,6 +221,23 @@ return $config;
 
 In this example if `toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “To Email” defined in the plugin settings, so you must have that defined as well.
 
+On Craft CMS 6, `config/craft/contact-form.php` is loaded before Craft is bootstrapped, so it can’t reference `Craft::$app`. Set the recipients from a module’s [`beforeSend`](#the-beforesend-event) event handler instead. A tampered `toEmail` value results in a 400 response:
+
+```php
+use craft\contactform\events\SendEvent;
+use craft\contactform\Mailer;
+use craft\helpers\StringHelper;
+use yii\base\Event;
+
+Event::on(Mailer::class, Mailer::EVENT_BEFORE_SEND, function(SendEvent $e) {
+    $toEmail = Craft::$app->getRequest()->getValidatedBodyParam('toEmail');
+
+    if ($toEmail !== null) {
+        $e->toEmails = StringHelper::split($toEmail);
+    }
+});
+```
+
 ### File attachments
 
 If you would like your contact form to accept file attachments, follow these steps:

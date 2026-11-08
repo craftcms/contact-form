@@ -34,6 +34,9 @@
     "craftcms/phpstan": "dev-main",
     "craftcms/rector": "dev-main"
   },
+  "suggest": {
+    "craftcms/yii2-adapter": "Required to use Contact Form with Craft CMS 6."
+  },
   "autoload": {
     "psr-4": {
       "craft\\contactform\\": "src/"
