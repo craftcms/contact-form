@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm;
 
 use CraftCms\Cms\Cp\SelectOptions;
@@ -18,6 +20,9 @@ use Illuminate\Support\Facades\RateLimiter;
 
 use function CraftCms\Cms\t;
 
+/**
+ * @method Settings getSettings()
+ */
 class Plugin extends BasePlugin
 {
     public string $schemaVersion = '1.0.0';
@@ -26,8 +31,10 @@ class Plugin extends BasePlugin
 
     public function boot(): void
     {
+        $this->app->singleton(Settings::class, fn () => $this->getSettings());
+
         RateLimiter::for('contact-form', function (Request $request) {
-            $limit = $this->getSettings()->rateLimit;
+            $limit = app(Settings::class)->rateLimit;
 
             // `null` has special significance, but isn't handled by other limit methods:
             if ($limit === null) {

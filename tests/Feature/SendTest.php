@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 use CraftCms\ContactForm\Events\MessageSending;
-use CraftCms\ContactForm\Plugin;
+use CraftCms\ContactForm\Events\MessageSent;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
@@ -21,6 +23,8 @@ function sentEmails(): array
 }
 
 it('sends a valid submission using the configured settings', function () {
+    Event::fake([MessageSent::class]);
+
     $this->from('/contact')
         ->post('/actions/contact-form/send', [
             'fromName' => 'Jane Doe',
@@ -34,6 +38,8 @@ it('sends a valid submission using the configured settings', function () {
 
     $emails = sentEmails();
     expect($emails)->toHaveCount(1);
+
+    Event::assertDispatched(MessageSent::class, fn (MessageSent $event) => $event->message->hasTo('inbox@example.com'));
 
     $email = $emails[0];
     expect($email->getTo()[0]->getAddress())->toBe('inbox@example.com')
@@ -56,7 +62,7 @@ it('returns validation errors for an invalid submission', function () {
 });
 
 it('sends one notification to every configured recipient', function (string|array $toEmail) {
-    Plugin::getInstance()->getSettings()->toEmail = $toEmail;
+    config()->set('craft.contact-form.toEmail', $toEmail);
 
     $this->post('/actions/contact-form/send', [
         'fromEmail' => 'jane@example.com',
@@ -85,7 +91,7 @@ it('returns the failure response when the notification is not handed off', funct
         ->assertSessionHas('error', 'There was a problem with your submission, please check the form and try again!');
 })->with([
     'marked as spam' => [fn () => Event::listen(fn (MessageSending $event) => $event->isSpam = true)],
-    'suppressed by a listener' => [fn () => Event::listen(fn (MessageSending $event) => false)],
+    'stopped by a listener' => [fn () => Event::listen(fn (MessageSending $event) => $event->isValid = false)],
     'transport failure' => [function () {
         Mail::extend('failing', fn () => new class extends AbstractTransport
         {

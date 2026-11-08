@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm\Validation;
 
 use Closure;
@@ -7,7 +9,6 @@ use CraftCms\Cms\Cms;
 use CraftCms\Cms\Support\Arr;
 use CraftCms\Cms\Support\Flash;
 use CraftCms\Cms\Validation\Ruleset;
-use CraftCms\ContactForm\Plugin;
 use CraftCms\ContactForm\Settings;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
@@ -20,8 +21,7 @@ class SubmissionRuleset extends Ruleset
 {
     public function rules(): array
     {
-        /** @var Settings $settings */
-        $settings = Plugin::getInstance()->getSettings();
+        $settings = app(Settings::class);
 
         $rules = [
             'fromEmail' => ['required', 'email'],

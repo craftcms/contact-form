@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use CraftCms\Cms\Http\Controllers\PluginsController;
 use CraftCms\Cms\User\Elements\User;
 use Inertia\Testing\AssertableInertia;

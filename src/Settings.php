@@ -1,11 +1,6 @@
 <?php
 
-/**
- * @link https://craftcms.com/
- *
- * @copyright Copyright (c) Pixel & Tonic, Inc.
- * @license MIT
- */
+declare(strict_types=1);
 
 namespace CraftCms\ContactForm;
 
@@ -48,7 +43,7 @@ class Settings extends PluginSettings
     /**
      * @var int|null How many requets per minute (per IP address) the application will allow.
      *
-     * @since 5.0.0
+     * @since 4.0.0
      */
     public ?int $rateLimit = null;
 

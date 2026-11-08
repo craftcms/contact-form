@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm\Submission;
 
 use CraftCms\Cms\Support\Arr;

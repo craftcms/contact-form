@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm\Http\Controllers;
 
 use CraftCms\Cms\Http\Mixins\RequestMixin;
@@ -7,7 +9,6 @@ use CraftCms\Cms\Http\RespondsWithFlash;
 use CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable;
 use CraftCms\ContactForm\Events\MessageSending;
 use CraftCms\ContactForm\Events\MessageSent;
-use CraftCms\ContactForm\Plugin;
 use CraftCms\ContactForm\Settings;
 use CraftCms\ContactForm\Submission\Sender;
 use CraftCms\ContactForm\Submission\Summary;
@@ -27,12 +28,8 @@ final class SendController
     /**
      * Sends a contact form submission.
      */
-    public function __invoke(SubmissionRuleset $submission): ?Response
+    public function __invoke(SubmissionRuleset $submission, Settings $settings, Sender $sender, Summary $summary): Response
     {
-        $plugin = Plugin::getInstance();
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
-
         // Pre-validate so our fail hooks run…
         $submission->validate();
 
@@ -44,7 +41,7 @@ final class SendController
             variables: [
                 ...$data->all(),
                 'settings' => $settings,
-                'summary' => app(Summary::class)->compile($data->input('message')),
+                'summary' => $summary->compile($data->input('message')),
             ],
         );
 
@@ -54,8 +51,8 @@ final class SendController
 
         // A “from” address is required, but only set as the `Reply-To` address, not directly `From` (to avoid upsetting mail providers):
         $mailable->replyTo(
-            $data->string('fromEmail'),
-            app(Sender::class)->compile($data->string('fromName') ?? null),
+            $data->input('fromEmail'),
+            $sender->compile($data->input('fromName')),
         );
 
         // Attach any (valid) files that were uploaded:
@@ -74,34 +71,18 @@ final class SendController
         // Don’t attempt to flash the uploads (they can’t be serialized to the session):
         $submitted = $data->except('attachment');
 
-        $result = event($sendingEvent = new MessageSending($mailable), halt: true);
+        event($sendingEvent = new MessageSending($mailable));
 
-        // All failure states are treated the same, to avoid disclosing the mode:
-        // - Handler suppressing the event (explicitly returning `false`)
-        // - Handler marking the submission as spam
-        // - Mailer failures
-        if (
-            $result === false
-            || $sendingEvent->isSpam
-            || ! $this->handOff($mailable)
-        ) {
-            $errorContext = [
-                'from' => $data->string('fromEmail'),
-            ];
+        // All failure states are treated the same, to avoid disclosing the mode. The mailer is only reached when a listener didn’t stop the notification:
+        $failure = match (true) {
+            ! $sendingEvent->isValid => 'A notification was stopped by an event listener.',
+            $sendingEvent->isSpam => 'A submission was marked as spam.',
+            ! $this->handOff($mailable) => 'There was an error when handing off a notification to the mailer.',
+            default => null,
+        };
 
-            // Log specific errors
-            if ($result === false) {
-                Log::error('Contact Form: A notification was suppressed by an event handler.', $errorContext);
-            }
-
-            if ($sendingEvent->isSpam) {
-                Log::error('Contact Form: A submission was marked as spam.', $errorContext);
-            }
-
-            // Only reached when neither of the above short-circuited the send:
-            if ($result !== false && ! $sendingEvent->isSpam) {
-                Log::error('Contact Form: There was an error when handing off a notification to the mailer.', $errorContext);
-            }
+        if ($failure !== null) {
+            Log::error("Contact Form: $failure", ['from' => $data->input('fromEmail')]);
 
             // Return generic failure notice:
             return $this->asFailure(t('There was a problem with your submission, please check the form and try again!', category: 'contact-form'), [

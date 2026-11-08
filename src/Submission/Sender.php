@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm\Submission;
 
-use CraftCms\ContactForm\Plugin;
+use CraftCms\ContactForm\Settings;
 
 class Sender
 {
     public function __construct(
-        public Plugin $plugin,
+        public Settings $settings,
     ) {}
 
     public function compile(?string $name = null): string
     {
         return implode(' ', array_filter([
-            $this->plugin->getSettings()->prependSender,
+            $this->settings->prependSender,
             $name,
         ]));
     }
