@@ -4,6 +4,10 @@
 
 Contact Form has been completely rebuilt for Craft 6.x! We are using this release to show off some cool new Laravel features, like validation, routing, events, and mailers.
 
+- Contact Form now requires Craft CMS 6.0 or later and PHP 8.5 or later, and runs natively on Craft 6 without the `craftcms/yii2-adapter` package. See [UPGRADE.md](UPGRADE.md).
+- Plugin settings can now be overridden from `config/craft/contact-form.php`. Run `php artisan vendor:publish --tag=contact-form` to create it.
+- Added the `rateLimit` setting, which limits how many submissions each IP address can make per minute.
+- Notifications are now sent to all of the configured recipients at once, rather than as one message per recipient.
 - You now have full control over the contents of email notifications, via **Utilities** &rarr; **System Messages**.
 - Additional fields (like `message[referralSource]`) can now be validated with rules defined in `config/craft/contact-form.php`.
 - Fields can now be nested (i.e. `message[referral][primary][name]`) and are output recursively in notifications.
@@ -20,7 +24,7 @@ All classes in the `craft\contactform\*` namespace have been removed. Here are t
 - `craft\contactform\models\Submission` was removed in favor of a [ruleset](https://craftcms.com/docs/6.x/extend/validation.html#rulesets) that validates the plain request data.
 - The `craft\contactform\Mailer` class has been eliminated, in favor of building the message directly in the controller. The sender’s name is compiled by `CraftCms\ContactForm\Submission\Sender`, and the notification body/summary is compiled by `CraftCms\ContactForm\Submission\Summary`.
 - `craft\contactform\Mailer::EVENT_BEFORE_SEND` (and `craft\contactform\events\SendEvent`) must be replaced with a listener for `CraftCms\ContactForm\Events\MessageSending`.
-  - Return `false` from a handler or set `$event->isSpam = true` to prevent sending.
+  - Set `$event->isSpam = true` or `$event->isValid = false` to prevent sending.
   - You can access all of the previous data via the single `CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable $message` event property (i.e. `$message->to` or `$message->variables`).
 - `craft\contactform\Mailer::EVENT_AFTER_SEND` (and `craft\contactform\events\SendEvent`) must be replaced with a listener for `CraftCms\ContactForm\Events\MessageSent`.
 - Validation rules should be added via configuration (in `config/craft/contact-form.php`), or in a listener (for the `CraftCms\Cms\Validation\Events\ValidationRulesResolving` event).

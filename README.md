@@ -7,12 +7,14 @@ Allow your visitors to submit basic information via your website’s front-end, 
 > It may change in significant ways during this phase of the Laravel transition! 
 
 > [!IMPORTANT]
-> A few things have changed in version 3.x that affect how you deal with form data.
-> See the [Upgrading](#upgrading) section for more information!
+> A few things have changed in version 4.x that affect how you deal with form data.
+> See [UPGRADE.md](UPGRADE.md) for more information!
 
 ## Requirements
 
-This plugin requires Craft CMS 6.0.0-alpha.1 or later.
+This plugin requires Craft CMS 6.0 or later and PHP 8.5 or later. It doesn’t need the `craftcms/yii2-adapter` package.
+
+For Craft CMS 4 and 5, use Contact Form 3.x. If you’re upgrading from 3.x, see [UPGRADE.md](UPGRADE.md).
 
 ## Installation
 
@@ -20,7 +22,7 @@ You can install this plugin from the Plugin Store or with Composer.
 
 #### From the Plugin Store
 
-Go to the **Plugin Store** in your project’s [control panel](https://craftcms.com/docs/5.x/system/control-panel.html), search for _Contact Form_, then click on the **Install** button.
+Go to the **Plugin Store** in your project’s [control panel](https://craftcms.com/docs/6.x/system/control-panel.html), search for _Contact Form_, then click on the **Install** button.
 
 #### With Composer
 
@@ -31,55 +33,11 @@ Open your terminal and run the following commands:
 cd /path/to/my-project
 
 # Require the plugin package:
-ddev composer require craftcms/contact-form
+composer require craftcms/contact-form
 
 # Install the plugin:
-ddev artisan craft:plugin:install contact-form
+php artisan craft:plugin:install contact-form
 ```
-
-## Upgrading
-
-With the transition to Laravel, we’re taking advantage of a number of new features, and adopting some patterns that affect your templates.
-That said, [configuration](#configuration) and submission requests are entirely compatible.
-
-During the Craft 6.x migration, the [adapter](https://craftcms.com/docs/6.x/) was added to your project, which exposes legacy APIs to plugins and templates.
-While Contact Form doesn’t require the adapter itself, you can keep it around to reduce the work required to get your forms working again.
-
-Here is the minimum set of required changes:
-
-1. The `submission` variable is no longer available in templates, when validation fails. Instead, the submitted fields are flashed back to the session, and can be retrieved using the `old()` helper function:
-    ```twig
-    # Replace...
-    <input type="text" name="fromEmail" value="{{ submission.fromEmail ?? '' }}">
-    # ...with:
-    <input type="text" name="fromEmail" value="{{ old('fromEmail') }}">
-    ```
-1. Global success and error messages (like the one you configure in the plugin’s settings) are also retrieved differently. Look for instances of `craft.app.session` (in particular, `craft.app.session.getFlash('success')` and `.getFlash('error')`) and replace them with the new `session()` helper function: `session('success')` and `session('error')`. See the section on [flash messages](#displaying-flash-messages) for a complete example.
-1. Field-specific error messages are accessed via a new global `errors` variable. This is a new behavior throughout Craft (not specific to Contact Form), so other plugins may require similar updates.
-    ```twig
-    {# Replace this... #}
-    {% if submission.hasErrors('body') %}
-        {{ ul(submission.getErrors('body')) }}
-    {% endif %}
-
-    {# ...with this: #}
-    {% if errors.has('body') %}
-        {{ ul(errors.get('body')) }}
-    {% endif %}
-    ```
-    You can abstract this error discovery and output into a Twig macro, as described in the [templating](#displaying-flash-messages) guide, below.
-
-If your project customizes Contact Form behavior via [events](https://craftcms.com/docs/6.x/extend/events.html), you’ll need to adjust the bindings:
-
-| Old Event                                                   | New Event                                                   |
-|-------------------------------------------------------------|-------------------------------------------------------------|
-| `craft\contactform\models\Submission::EVENT_AFTER_VALIDATE` | See [custom validation rules](#validation-on-extra-fields). |
-| `craft\contactform\Mailer::EVENT_BEFORE_SEND`               | Use `CraftCms\ContactForm\Events\MessageSending`            |
-| `craft\contactform\Mailer::EVENT_AFTER_SEND`                | Use `CraftCms\ContactForm\Events\MessageSent`               |
-
-> [!IMPORTANT]
-> The model validation lifecycle has received significant changes in Craft 6.x.
-> If you had previously registered validation rules via `craft\contactform\models\Submission::EVENT_DEFINE_RULES`, you can either set them via configuration, or use the `CraftCms\Cms\Validation\Events\ValidationRulesResolving` event.
 
 ## Configuration
 
@@ -87,7 +45,7 @@ Contact Form’s features are controlled from a few different places:
 
 1. **Control Panel** — Visit **Settings** &rarr; **Contact Form** for a guided configuration experience.
 2. **System Messages** — The [notification template](#notifications) can be modified by visiting **Utilities** &rarr; **System Messages**.
-3. **Plugin Config File** — Create `config/craft/contact-form.php` for [advanced control](#config-reference), including [custom validation rules](#validation-on-extra-fields).
+3. **Plugin Config File** — Run `php artisan vendor:publish --tag=contact-form` to create `config/craft/contact-form.php`, for [advanced control](#config-reference), including [custom validation rules](#validation-on-extra-fields).
 
 ### Config Reference
 
@@ -105,6 +63,7 @@ return [
     'allowAttachments' => false,
     'successFlashMessage' => 'Message sent!',
     // Configurable via this file only:
+    'rateLimit' => 10, // Submissions per minute, per IP address
     'allowedMessageFields' => [
         // See “Validation on extra fields,” below!
     ],
@@ -112,7 +71,7 @@ return [
 ```
 
 > [!WARNING]
-> Unrecognized keys can cause errors.
+> Unrecognized keys can cause errors. Settings in this file can’t be changed from the control panel.
 
 `prependSubject` has been deprecated, in favor of customizing the subject template via **System Messages**.
 The default subject template includes this setting’s value, but it is safe to replace it with explicit, localized values.
@@ -475,7 +434,7 @@ Event::listen(function (MessageSending $event) {
 });
 ```
 
-You can suppress the email and return an error by setting `$event->isSpam = true` or returning `false` in the handler.
+You can stop the email and return an error by setting `$event->isSpam = true` or `$event->isValid = false` in the listener.
 The “message” (an instance of `CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable`) contains all the validated submission data (`$event->message->variables`), as well as the notification’s `To` and `From` headers (among others).
 
 > [!WARNING]
