@@ -9,12 +9,15 @@
 
 namespace CraftCms\ContactForm;
 
+use Closure;
 use CraftCms\Cms\Plugin\PluginSettings;
 use CraftCms\Cms\Support\Arr;
+use CraftCms\Cms\Support\Env;
 use CraftCms\Cms\Support\Facades\Sites;
 
 use CraftCms\Cms\Twig\Attributes\AllowedInSandbox;
 use CraftCms\Cms\Validation\Rules\EnvValueRule;
+use Illuminate\Support\Facades\Validator;
 use function CraftCms\Cms\t;
 
 #[AllowedInSandbox]
@@ -74,11 +77,40 @@ class Settings extends PluginSettings
     public function getRules(): array
     {
         return [
-            'toEmail' => [new EnvValueRule(['required', 'email'])],
+            'toEmail' => [new EnvValueRule([
+                'required',
+                function (string $attribute, mixed $value, Closure $fail) {
+                    if (Validator::make(['emails' => self::splitEmails($value)], ['emails.*' => 'email'])->fails()) {
+                        $fail('validation.email')->translate();
+                    }
+                },
+            ])],
             'successFlashMessage' => ['required', 'string'],
             'prependSender' => ['nullable', 'string'],
             'prependSubject' => ['nullable', 'string'],
         ];
+    }
+
+    /**
+     * Returns the recipients’ email addresses, from a comma-separated list or an array, with environment variables parsed.
+     *
+     * @return string[]
+     */
+    public function getToEmails(): array
+    {
+        return self::splitEmails(is_string($this->toEmail) ? Env::parse($this->toEmail) : $this->toEmail);
+    }
+
+    /**
+     * @return string[]
+     */
+    private static function splitEmails(mixed $emails): array
+    {
+        if (is_string($emails)) {
+            $emails = explode(',', $emails);
+        }
+
+        return array_values(array_filter(array_map(fn ($email) => trim((string) $email), (array) $emails)));
     }
 
     public function attributeLabels(): array

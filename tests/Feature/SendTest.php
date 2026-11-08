@@ -1,6 +1,13 @@
 <?php
 
+use CraftCms\ContactForm\Events\MessageSending;
+use CraftCms\ContactForm\Plugin;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\SentMessage;
+use Symfony\Component\Mailer\Transport\AbstractTransport;
 use Symfony\Component\Mime\Email;
 
 /**
@@ -46,4 +53,72 @@ it('returns validation errors for an invalid submission', function () {
         ->assertSessionHasErrors(['fromEmail', 'message']);
 
     expect(sentEmails())->toBeEmpty();
+});
+
+it('sends one notification to every configured recipient', function (string|array $toEmail) {
+    Plugin::getInstance()->getSettings()->toEmail = $toEmail;
+
+    $this->post('/actions/contact-form/send', [
+        'fromEmail' => 'jane@example.com',
+        'message' => 'Hello',
+    ])->assertSessionHas('success');
+
+    $emails = sentEmails();
+    expect($emails)->toHaveCount(1)
+        ->and(array_map(fn ($address) => $address->getAddress(), $emails[0]->getTo()))
+        ->toBe(['inbox@example.com', 'sales@example.com']);
+})->with([
+    'comma-separated string' => 'inbox@example.com, sales@example.com',
+    'array' => [['inbox@example.com', 'sales@example.com']],
+]);
+
+it('returns the failure response when the notification is not handed off', function (Closure $sabotage) {
+    $sabotage();
+
+    $this->from('/contact')
+        ->post('/actions/contact-form/send', [
+            'fromName' => 'Jane Doe',
+            'fromEmail' => 'jane@example.com',
+            'message' => 'Hello',
+        ])
+        ->assertRedirect('/contact')
+        ->assertSessionHas('error', 'There was a problem with your submission, please check the form and try again!');
+})->with([
+    'marked as spam' => [fn () => Event::listen(fn (MessageSending $event) => $event->isSpam = true)],
+    'suppressed by a listener' => [fn () => Event::listen(fn (MessageSending $event) => false)],
+    'transport failure' => [function () {
+        Mail::extend('failing', fn () => new class extends AbstractTransport
+        {
+            protected function doSend(SentMessage $message): void
+            {
+                throw new TransportException('Connection refused');
+            }
+
+            public function __toString(): string
+            {
+                return 'failing://';
+            }
+        });
+        config()->set('mail.mailers.failing', ['transport' => 'failing']);
+        config()->set('mail.default', 'failing');
+        Mail::forgetMailers();
+    }],
+]);
+
+it('renders submitted fields into the posted redirect URL', function () {
+    $this->post('/actions/contact-form/send', [
+        'fromName' => 'Jane',
+        'fromEmail' => 'jane@example.com',
+        'message' => 'Hello',
+        'redirect' => Crypt::encrypt('contact/thanks?from={fromName}'),
+    ])->assertRedirectContains('contact/thanks?from=Jane');
+});
+
+it('keeps the success message in JSON responses', function () {
+    $this->postJson('/actions/contact-form/send', [
+        'fromEmail' => 'jane@example.com',
+        'message' => 'Is this thing on?',
+    ])
+        ->assertOk()
+        ->assertJsonPath('message', 'Thanks, we got it!');
 });

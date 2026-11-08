@@ -143,20 +143,20 @@ A basic contact form template looks something like this:
         id: 'from-name',
         autocomplete: 'name',
     }) }}
-    {{ errorList('fromName') }}
+    {{ _self.errorList('fromName') }}
 
     <h3><label for="from-email">Your Email</label></h3>
     {{ input('email', 'fromEmail', old('fromEmail'), {
         id: 'from-email',
         autocomplete: 'email',
     }) }}
-    {{ errorList('fromEmail') }}
+    {{ _self.errorList('fromEmail') }}
 
     <h3><label for="subject">Subject</label></h3>
     {{ input('text', 'subject', old('subject'), {
         id: 'subject',
     }) }}
-    {{ errorList('subject') }}
+    {{ _self.errorList('subject') }}
 
     <h3><label for="message">Message</label></h3>
     {{ tag('textarea', {
@@ -166,7 +166,7 @@ A basic contact form template looks something like this:
         rows: 10,
         cols: 40,
     }) }}
-    {{ errorList(errors, 'message') }}
+    {{ _self.errorList('message') }}
 
     <button type="submit">Send</button>
 </form>
@@ -209,7 +209,7 @@ For accessibility, we recommend binding the errors to specific inputs, rather th
     cols: 40,
     'aria-describedby': errors.has('message') ? 'cf-errorlist-message' : null,
 }) }}
-{{ errorList(errors, 'message') }}
+{{ _self.errorList('message') }}
 ```
 
 The macro would also require an update:
@@ -371,25 +371,23 @@ If you want to add multiple recipients, you can provide a comma separated list o
 <input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
 ```
 
-Then from your `config/contact-form.php` config file, you’ll need to add a bit of logic:
+Then replace the recipients from a [`MessageSending`](#sending-events) listener:
 
 ```php
-<?php
+use CraftCms\ContactForm\Events\MessageSending;
+use Illuminate\Support\Facades\Event;
 
-$config = [];
-$request = Craft::$app->request;
+Event::listen(function (MessageSending $event) {
+    $toEmail = request()->getSigned('toEmail');
 
-if (
-    !$request->getIsConsoleRequest() &&
-    ($toEmail = $request->getValidatedBodyParam('toEmail')) !== null
-) {
-    $config['toEmail'] = $toEmail;
-}
-
-return $config;
+    if ($toEmail !== null) {
+        $event->message->to = [];
+        $event->message->to(array_map(trim(...), explode(',', $toEmail)));
+    }
+});
 ```
 
-In this example if `toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “To Email” defined in the plugin settings, so you must have that defined as well.
+If `toEmail` isn’t submitted, the notification goes to the “To Email” defined in the plugin settings, so you must have that defined as well. A tampered `toEmail` value results in a 400 response.
 
 ### File attachments
 
