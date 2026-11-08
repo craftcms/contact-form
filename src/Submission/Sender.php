@@ -12,7 +12,7 @@ class Sender
 
     public function compile(?string $name = null): string
     {
-        return join(' ', array_filter([
+        return implode(' ', array_filter([
             $this->plugin->getSettings()->prependSender,
             $name,
         ]));

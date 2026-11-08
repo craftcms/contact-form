@@ -12,8 +12,8 @@ use CraftCms\ContactForm\Settings;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
-
 use Override;
+
 use function CraftCms\Cms\t;
 
 class SubmissionRuleset extends Ruleset
@@ -30,11 +30,11 @@ class SubmissionRuleset extends Ruleset
             // Some form of a `message` is required, but its type is flexible...
             'message' => ['required'],
             // ...and `body` is always an allowed sub-field:
-            'message.body' => Rule::when(fn($data) => is_array($data['message']), ['string']),
+            'message.body' => Rule::when(fn ($data) => is_array($data['message']), ['string']),
             'attachment' => [
                 'nullable',
                 Rule::prohibitedIf(fn () => ! $settings->allowAttachments),
-                function (string $attribute, mixed $value, Closure $fail) use ($settings) {
+                function (string $attribute, mixed $value, Closure $fail) {
                     // Normalize single files to an array:
                     if ($value instanceof UploadedFile) {
                         $value = [$value];

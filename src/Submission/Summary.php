@@ -4,6 +4,7 @@ namespace CraftCms\ContactForm\Submission;
 
 use CraftCms\Cms\Support\Arr;
 use CraftCms\Cms\Support\Str;
+
 use function CraftCms\Cms\t;
 
 class Summary
@@ -35,7 +36,7 @@ class Summary
     {
         // Assume “lists” (non-associative arrays) can be flattened into a single line:
         if (array_is_list($array)) {
-            return join(', ', $array);
+            return implode(', ', $array);
         }
 
         // If we’ve gotten this far, the next value will be “complex”, so the returned value should begin with a new line:
@@ -56,6 +57,6 @@ class Summary
         }
 
         // Concatenate, ensuring the first item starts on a new line:
-        return Str::start(join("\n", $items), "\n");
+        return Str::start(implode("\n", $items), "\n");
     }
 }

@@ -12,10 +12,10 @@ use CraftCms\Cms\Ui\Enums\ControlMode;
 use CraftCms\Cms\Ui\Nodes\Field;
 use CraftCms\Cms\Ui\Ui;
 use CraftCms\Cms\Ui\UiContext;
-
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+
 use function CraftCms\Cms\t;
 
 class Plugin extends BasePlugin
@@ -46,7 +46,7 @@ class Plugin extends BasePlugin
                 'heading' => 'When the contact form is submitted',
                 // This template is comparable to how the legacy mailer compiled subjects:
                 'subject' => '{{ [settings.prependSubject, subject ?? null]|filter|join(" - ") }}',
-                'body' => <<<BODY
+                'body' => <<<'BODY'
 A contact form was just submitted on {{ systemName }}.
 
 - **{{ 'From'|t }}:** {{ fromName }}

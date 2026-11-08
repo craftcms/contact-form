@@ -14,10 +14,10 @@ use CraftCms\Cms\Plugin\PluginSettings;
 use CraftCms\Cms\Support\Arr;
 use CraftCms\Cms\Support\Env;
 use CraftCms\Cms\Support\Facades\Sites;
-
 use CraftCms\Cms\Twig\Attributes\AllowedInSandbox;
 use CraftCms\Cms\Validation\Rules\EnvValueRule;
 use Illuminate\Support\Facades\Validator;
+
 use function CraftCms\Cms\t;
 
 #[AllowedInSandbox]
@@ -36,7 +36,7 @@ class Settings extends PluginSettings
 
     /**
      * @var string[]|null List of allowed `message` sub-keys that can be POSTed with the form.
-     * As of 4.0.0, you can also provide a Laravel validation configuration array,
+     *                    As of 4.0.0, you can also provide a Laravel validation configuration array,
      *
      * The default value (`null`) does not validate `message.*` fields!
      * If you wish to forbid all nested fields, set to an empty array (`[]`).
@@ -47,6 +47,7 @@ class Settings extends PluginSettings
 
     /**
      * @var int|null How many requets per minute (per IP address) the application will allow.
+     *
      * @since 5.0.0
      */
     public ?int $rateLimit = null;

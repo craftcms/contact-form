@@ -2,14 +2,15 @@
 
 namespace CraftCms\ContactForm\Http\Controllers;
 
+use CraftCms\Cms\Http\Mixins\RequestMixin;
 use CraftCms\Cms\Http\RespondsWithFlash;
 use CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable;
-use CraftCms\ContactForm\Submission\Sender;
-use CraftCms\ContactForm\Submission\Summary;
 use CraftCms\ContactForm\Events\MessageSending;
 use CraftCms\ContactForm\Events\MessageSent;
 use CraftCms\ContactForm\Plugin;
 use CraftCms\ContactForm\Settings;
+use CraftCms\ContactForm\Submission\Sender;
+use CraftCms\ContactForm\Submission\Summary;
 use CraftCms\ContactForm\Validation\SubmissionRuleset;
 use Illuminate\Mail\Attachment;
 use Illuminate\Support\Facades\Log;
@@ -49,7 +50,7 @@ final class SendController
 
         // The anonymous user does not have control over the recipient:
         $mailable->to($settings->getToEmails());
-        /** @todo Allow control over recipient via signed params, using {@see \CraftCms\Cms\Http\Mixins\RequestMixin::getSigned()}. */
+        /** @todo Allow control over recipient via signed params, using {@see RequestMixin::getSigned()}. */
 
         // A “from” address is required, but only set as the `Reply-To` address, not directly `From` (to avoid upsetting mail providers):
         $mailable->replyTo(
