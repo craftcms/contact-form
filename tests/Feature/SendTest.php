@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CraftCms\ContactForm\Events\MessageSending;
 use CraftCms\ContactForm\Events\MessageSent;
+use CraftCms\ContactForm\Settings;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
@@ -62,7 +63,7 @@ it('returns validation errors for an invalid submission', function () {
 });
 
 it('sends one notification to every configured recipient', function (string|array $toEmail) {
-    config()->set('craft.contact-form.toEmail', $toEmail);
+    app(Settings::class)->toEmail = $toEmail;
 
     $this->post('/actions/contact-form/send', [
         'fromEmail' => 'jane@example.com',
