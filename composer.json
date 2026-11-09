@@ -27,7 +27,7 @@
   "prefer-stable": true,
   "require": {
     "php": "^8.5",
-    "craftcms/cms": "^6.0.0"
+    "craftcms/cms": "^6.0.0-beta.1"
   },
   "require-dev": {
     "phpstan/phpstan": "^2.1",
