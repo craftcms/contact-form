@@ -4,7 +4,7 @@ This plugin allows you to add an email contact form to your website.
 
 ## Requirements
 
-This plugin requires Craft CMS 4.0.0+ or 5.0.0+.
+This plugin requires Craft CMS 4.0.0+ or 5.0.0+ or 6.0.0-beta.1+ with the `craftcms/yii2-adapter` package.
 
 ## Installation
 
@@ -169,7 +169,7 @@ return [
 
 ### Overriding plugin settings
 
-If you create a [config file](https://craftcms.com/docs/4.x/config/) in your `config/` folder called `contact-form.php`, you can override
+If you create a [config file](https://craftcms.com/docs/4.x/config/) in your `config/` folder (or `config/craft/` if you’re using Craft CMS v6) called `contact-form.php`, you can override
 the plugin’s settings in the Control Panel.  Since that config file is fully [multi-environment](https://craftcms.com/docs/4.x/config/#multi-environment-configs) aware, this is
 a handy way to have different settings across multiple environments.
 
@@ -220,6 +220,23 @@ return $config;
 ```
 
 In this example if `toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “To Email” defined in the plugin settings, so you must have that defined as well.
+
+On Craft CMS 6, `config/craft/contact-form.php` is loaded before Craft is bootstrapped, so it can’t reference `Craft::$app`. Set the recipients from a module’s [`beforeSend`](#the-beforesend-event) event handler instead. A tampered `toEmail` value results in a 400 response:
+
+```php
+use craft\contactform\events\SendEvent;
+use craft\contactform\Mailer;
+use craft\helpers\StringHelper;
+use yii\base\Event;
+
+Event::on(Mailer::class, Mailer::EVENT_BEFORE_SEND, function(SendEvent $e) {
+    $toEmail = Craft::$app->getRequest()->getValidatedBodyParam('toEmail');
+
+    if ($toEmail !== null) {
+        $e->toEmails = StringHelper::split($toEmail);
+    }
+});
+```
 
 ### File attachments
 

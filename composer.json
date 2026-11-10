@@ -27,12 +27,15 @@
   "prefer-stable": true,
   "require": {
     "php": "^8.0.2",
-    "craftcms/cms": "^4.0.0-beta.1|^5.0.0-beta.1"
+    "craftcms/cms": "^4.0.0-beta.1|^5.0.0-beta.1|^6.0.0-beta.1"
   },
   "require-dev": {
     "craftcms/ecs": "dev-main",
     "craftcms/phpstan": "dev-main",
     "craftcms/rector": "dev-main"
+  },
+  "suggest": {
+    "craftcms/yii2-adapter": "Required to use Contact Form with Craft CMS 6."
   },
   "autoload": {
     "psr-4": {
