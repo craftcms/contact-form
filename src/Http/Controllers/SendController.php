@@ -39,6 +39,8 @@ final class SendController
         $mailable = new SystemMessageMailable(
             key: 'contactform_submission',
             variables: [
+                // Always set, so a blank name doesn’t fall back to the system email’s sender name:
+                'fromName' => null,
                 ...$data->all(),
                 'settings' => $settings,
                 'summary' => $summary->compile($data->input('message')),
@@ -77,6 +79,7 @@ final class SendController
         $failure = match (true) {
             ! $sendingEvent->isValid => 'A notification was stopped by an event listener.',
             $sendingEvent->isSpam => 'A submission was marked as spam.',
+            $mailable->to === [] && $mailable->cc === [] && $mailable->bcc === [] => 'The notification has no recipients. Check the “To Email” setting.',
             ! $this->handOff($mailable) => 'There was an error when handing off a notification to the mailer.',
             default => null,
         };
@@ -97,8 +100,11 @@ final class SendController
             $settings->successFlashMessage,
             // Nested, so a submitted `message` field can’t replace the flash message in JSON responses:
             ['submission' => $submitted],
-            // Redirect templates can reference submitted fields, like `contact/thanks?from={fromName}`:
-            $this->getPostedRedirectUrl((object) $submitted),
+            // Redirect templates can reference submitted fields, like `contact/thanks?from={fromName}`, so they’re URL-encoded:
+            $this->getPostedRedirectUrl((object) array_map(
+                fn (mixed $value) => is_string($value) ? rawurlencode($value) : $value,
+                $submitted,
+            )),
         );
     }
 

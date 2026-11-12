@@ -6,10 +6,11 @@ Contact Form has been completely rebuilt for Craft 6.x! We are using this releas
 
 - Contact Form now requires Craft CMS 6.0 or later and PHP 8.5 or later, and runs natively on Craft 6 without the `craftcms/yii2-adapter` package. See [UPGRADE.md](UPGRADE.md).
 - Plugin settings can now be overridden from `config/craft/contact-form.php`. Run `php artisan vendor:publish --tag=contact-form` to create it.
-- Added the `rateLimit` setting, which limits how many submissions each IP address can make per minute.
+- Added the `rateLimit` setting, which limits how many submissions each IP address can make per minute. Rate-limited submissions get an error flash (or a `429` response for Ajax requests).
 - Notifications are now sent to all of the configured recipients at once, rather than as one message per recipient.
 - You now have full control over the contents of email notifications, via **Utilities** &rarr; **System Messages**.
 - Additional fields (like `message[referralSource]`) can now be validated with rules defined in `config/craft/contact-form.php`.
+- `allowedMessageFields` now rejects unlisted `message` sub-fields with a validation error, for both lists of names and maps of rules. `message[body]` is always allowed.
 - Fields can now be nested (i.e. `message[referral][primary][name]`) and are output recursively in notifications.
 - Suppressed notifications, spam submissions, and failures with the mail driver have been consolidated into a single error state.
 

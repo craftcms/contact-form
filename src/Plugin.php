@@ -6,6 +6,7 @@ namespace CraftCms\ContactForm;
 
 use CraftCms\Cms\Cp\SelectOptions;
 use CraftCms\Cms\Plugin\Plugin as BasePlugin;
+use CraftCms\Cms\Support\Flash;
 use CraftCms\Cms\SystemMessage\Models\SystemMessage;
 use CraftCms\Cms\Ui\Controls\Control;
 use CraftCms\Cms\Ui\Controls\Lightswitch;
@@ -41,7 +42,20 @@ class Plugin extends BasePlugin
                 return Limit::none();
             }
 
-            return Limit::perMinute($limit)->by($request->getClientIp());
+            return Limit::perMinute($limit)
+                ->by($request->getClientIp())
+                ->response(function (Request $request, array $headers) {
+                    $message = t('You’ve sent too many messages. Please try again in a minute.', category: 'contact-form');
+
+                    if ($request->expectsJson()) {
+                        return response()->json(['message' => $message], 429, $headers);
+                    }
+
+                    // Back to the form, like a validation failure:
+                    Flash::error($message);
+
+                    return back()->withInput($request->except('attachment'))->withHeaders($headers);
+                });
         });
     }
 
@@ -56,11 +70,17 @@ class Plugin extends BasePlugin
                 'body' => <<<'BODY'
 A contact form was just submitted on {{ systemName }}.
 
-- **{{ 'From'|t }}:** {{ fromName }}
-- **{{ 'Email'|t }}:** {{ fromEmail }}
+{% if fromName %}- **{{ 'From'|t }}:** {{ fromName }}
+{% endif %}- **{{ 'Email'|t }}:** {{ fromEmail }}
 
 {{ summary }}
 BODY,
+                // `fromName` and `fromEmail` are listed by core, as the sender:
+                'variables' => [
+                    'subject' => t('Subject', category: 'contact-form'),
+                    'message' => t('Message', category: 'contact-form'),
+                    'summary' => t('Submission summary', category: 'contact-form'),
+                ],
             ]),
         ];
     }

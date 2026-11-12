@@ -15,6 +15,6 @@ return [
 
     // The `message[...]` sub-fields to allow, as a list of names (`['Phone', 'Services']`)
     // or a map of Laravel validation rules (`['Phone' => ['nullable', 'string']]`).
-    // `null` allows any sub-fields; `[]` allows none besides `message[body]`.
+    // Sub-fields that aren’t listed are rejected. `null` allows any sub-fields; `[]` allows none besides `message[body]`.
     'allowedMessageFields' => null,
 ];

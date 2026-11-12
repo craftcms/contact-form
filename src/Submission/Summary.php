@@ -16,19 +16,20 @@ class Summary
      */
     public function compile(string|array $message): string
     {
-        // There may be nothing to do; plain-text messages can just be returned, verbatim:
+        // A plain-text message is just a body:
         if (is_string($message)) {
-            return $message;
+            $message = ['body' => $message];
         }
 
         // Was a nested `body` field submitted, explicitly? We don’t want that in the bulleted list (it will get appended, later):
         $body = Arr::pull($message, 'body');
 
-        $summary = $this->packNestedLists($message);
+        // The template already separates the summary from what comes before it:
+        $summary = ltrim($this->packNestedLists($message), "\n");
 
         if ($body) {
             $body = preg_replace('/\R/u', "\n", $body);
-            $summary .= "\n\n".$body;
+            $summary .= ($summary === '' ? '' : "\n\n").$body;
         }
 
         return $summary;

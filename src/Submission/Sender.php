@@ -14,6 +14,11 @@ class Sender
 
     public function compile(?string $name = null): string
     {
+        // Without a name, “On behalf of” alone isn’t helpful:
+        if (blank($name)) {
+            return '';
+        }
+
         return implode(' ', array_filter([
             $this->settings->prependSender,
             $name,

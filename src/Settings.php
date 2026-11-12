@@ -66,8 +66,8 @@ class Settings extends PluginSettings
 
     public function validationData(): array
     {
-        // Omit validation rules from settings that end up in project config:
-        return Arr::except(parent::validationData(), 'allowedMessageFields');
+        // Omit config-file-only settings (like validation rules) from what ends up in project config:
+        return Arr::except(parent::validationData(), ['allowedMessageFields', 'rateLimit']);
     }
 
     public function getRules(): array
@@ -112,7 +112,7 @@ class Settings extends PluginSettings
     public function attributeLabels(): array
     {
         return [
-            'toEmail' => t('To: address', category: 'contact-form'),
+            'toEmail' => t('To Email', category: 'contact-form'),
         ];
     }
 }
