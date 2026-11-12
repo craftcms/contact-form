@@ -99,6 +99,13 @@ it('returns the failure response when the notification is not handed off', funct
         ->assertSessionHas('error', 'There was a problem with your submission, please check the form and try again!');
 })->with([
     'stopped by a listener' => [fn () => Event::listen(fn (MessageSending $event) => $event->isValid = false)],
+    // The default body outputs `summary`, and undefined variables fail to render in debug mode:
+    'broken notification template' => [function () {
+        config()->set('app.debug', true);
+        Event::listen(function (MessageSending $event) {
+            unset($event->message->variables['summary']);
+        });
+    }],
     'transport failure' => [function () {
         Mail::extend('failing', fn () => new class extends AbstractTransport
         {

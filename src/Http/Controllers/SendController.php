@@ -17,7 +17,7 @@ use Illuminate\Mail\Attachment;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Throwable;
 
 use function CraftCms\Cms\t;
 
@@ -79,7 +79,7 @@ final class SendController
         $failure = match (true) {
             ! $sendingEvent->isValid => 'A notification was stopped by an event listener.',
             $mailable->to === [] && $mailable->cc === [] && $mailable->bcc === [] => 'The notification has no recipients. Check the “To Email” setting.',
-            ! $sendingEvent->isSpam && ! $this->handOff($mailable) => 'There was an error when handing off a notification to the mailer.',
+            ! $sendingEvent->isSpam && ! $this->handOff($mailable) => 'There was an error when rendering a notification or handing it off to the mailer.',
             default => null,
         };
 
@@ -112,13 +112,14 @@ final class SendController
     }
 
     /**
-     * Hands the notification off to the mailer, reporting transport failures instead of throwing them.
+     * Hands the notification off to the mailer, reporting template and transport failures instead of throwing them.
      */
     private function handOff(SystemMessageMailable $mailable): bool
     {
         try {
             return Mail::send($mailable) !== null;
-        } catch (TransportExceptionInterface $e) {
+        } catch (Throwable $e) {
+            // A broken notification template (like one using a variable that isn’t available) shouldn’t give the visitor a 500:
             report($e);
 
             return false;
