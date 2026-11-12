@@ -93,7 +93,7 @@ final class SendController
         }
 
         if ($sendingEvent->isSpam) {
-            Log::error("Contact Form: A submission was marked as spam.", ['from' => $data->input('fromEmail')]);
+            Log::error('Contact Form: A submission was marked as spam.', ['from' => $data->input('fromEmail')]);
         } else {
             // Ok, it definitely sent!
             event(new MessageSent($mailable));
