@@ -1,6 +1,6 @@
 # Release Notes for Contact Form
 
-## Unreleased
+## 4.0.0 - 2026-11-12
 
 Contact Form has been completely rebuilt for Craft 6.x! We are using this release to show off some cool new Laravel features, like validation, routing, events, and mailers.
 
