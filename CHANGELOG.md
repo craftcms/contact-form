@@ -30,6 +30,11 @@ All classes in the `craft\contactform\*` namespace have been removed. Here are t
 - `craft\contactform\Mailer::EVENT_AFTER_SEND` (and `craft\contactform\events\SendEvent`) must be replaced with a listener for `CraftCms\ContactForm\Events\MessageSent`.
 - Validation rules should be added via configuration (in `config/craft/contact-form.php`), or in a listener (for the `CraftCms\Cms\Validation\Events\ValidationRulesResolving` event).
 
+## 3.2.0 - 2026-11-10
+
+- Added Craft 6 compatibility, when the `craftcms/yii2-adapter` package is installed.
+- Fixed a PHP 8.4+ deprecation warning.
+
 ## 3.1.0 - 2024-03-11
 
 - Added Craft 5 compatibility.
