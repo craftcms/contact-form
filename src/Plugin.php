@@ -58,6 +58,7 @@ A contact form was just submitted on {{ systemName }}.
 
 - **{{ 'From'|t }}:** {{ fromName }}
 - **{{ 'Email'|t }}:** {{ fromEmail }}
+
 {{ summary }}
 BODY,
             ]),
