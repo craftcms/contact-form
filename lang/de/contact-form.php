@@ -28,4 +28,15 @@ return [
     'Success Flash Message' => 'Erfolgsnachricht',
     'The flash message displayed after successfully sending a message.' => 'Die Statusnachricht welche angezeigt wird, wenn eine Nachricht erfolgreich versendet wurde.',
     'Your message has been sent.' => 'Ihre Nachricht wurde versendet.',
+
+    // added for 4.0
+    'An attachment could not be uploaded.' => 'Eine Anlage konnte nicht hochgeladen werden.',
+    'Attachment' => 'Anlage',
+    '{ext} files (like {filename}) are not allowed.' => '{ext}-Dateien (wie {filename}) sind nicht erlaubt.',
+    'Files without an extension (like {filename}) are not allowed.' => 'Dateien ohne Dateiendung (wie {filename}) sind nicht erlaubt.',
+    '{fields} can’t be submitted with this form.' => '{fields} kann mit diesem Formular nicht gesendet werden.',
+    'You’ve sent too many messages. Please try again in a minute.' => 'Sie haben zu viele Nachrichten gesendet. Bitte versuchen Sie es in einer Minute erneut.',
+    'New message from {siteName}' => 'Neue Nachricht von {siteName}',
+    'Submission summary' => 'Zusammenfassung der Einsendung',
+    'This is being overridden by the {setting} config setting in your {file} config file.' => 'Dies wird durch die Einstellung {setting} in Ihrer Konfigurationsdatei {file} überschrieben.',
 ];

@@ -28,4 +28,15 @@ return [
     'Success Flash Message' => 'Statusbericht geslaagde verzending',
     'The flash message displayed after successfully sending a message.' => 'Het statusbericht dat wordt getoond na het succesvol versturen van een bericht.',
     'Your message has been sent.' => 'Jouw bericht is verstuurd.',
+
+    // added for 4.0
+    'An attachment could not be uploaded.' => 'Een bijlage kon niet worden geüpload.',
+    'Attachment' => 'Bijlage',
+    '{ext} files (like {filename}) are not allowed.' => '{ext}-bestanden (zoals {filename}) zijn niet toegestaan.',
+    'Files without an extension (like {filename}) are not allowed.' => 'Bestanden zonder extensie (zoals {filename}) zijn niet toegestaan.',
+    '{fields} can’t be submitted with this form.' => '{fields} kan niet met dit formulier worden verstuurd.',
+    'You’ve sent too many messages. Please try again in a minute.' => 'Je hebt te veel berichten verstuurd. Probeer het over een minuut opnieuw.',
+    'New message from {siteName}' => 'Nieuw bericht van {siteName}',
+    'Submission summary' => 'Samenvatting van de inzending',
+    'This is being overridden by the {setting} config setting in your {file} config file.' => 'Dit wordt overschreven door de instelling {setting} in je configuratiebestand {file}.',
 ];

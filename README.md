@@ -1,6 +1,6 @@
 # Contact Form for Craft CMS
 
-Allow your visitors to submit basic information via your website’s front-end, and recieve custom email notifications.
+Allow your visitors to submit basic information via your website’s front-end, and receive custom email notifications.
 
 > [!DANGER]
 > This is an unreleased version of Contact Form, compatible only with the Craft 6.x alpha.
@@ -44,7 +44,7 @@ php artisan craft:plugin:install contact-form
 Contact Form’s features are controlled from a few different places:
 
 1. **Control Panel** — Visit **Settings** &rarr; **Contact Form** for a guided configuration experience.
-2. **System Messages** — The [notification template](#notifications) can be modified by visiting **Utilities** &rarr; **System Messages**.
+2. **System Messages** — The [notification template](#notification-template) can be modified by visiting **Utilities** &rarr; **System Messages** (Craft Pro only).
 3. **Plugin Config File** — Run `php artisan vendor:publish --tag=contact-form` to create `config/craft/contact-form.php`, for [advanced control](#config-reference), including [custom validation rules](#validation-on-extra-fields).
 
 ### Config Reference
@@ -78,7 +78,7 @@ The default subject template includes this setting’s value, but it is safe to 
 
 ## Usage
 
-When installed, the plugin registers an “action route” that can recieve regular HTML form submissions and [Ajax](#ajax-form-submissions) requests.
+When installed, the plugin registers an “action route” that can receive regular HTML form submissions and [Ajax](#ajax-form-submissions) requests.
 You must submit data to that endpoint (the `/actions/contact-form/send` path) or with the action’s name (`contact-form/send`) in a body parameter named `action`.
 
 ### Form Template
@@ -197,6 +197,8 @@ In your `contact/thanks.twig` template, you can access that `from` parameter usi
 <p>Thanks for sending that in, {{ Request.query('from') }}!</p>
 ```
 
+Submitted values are URL-encoded when they’re inserted into the redirect URL.
+
 If you don’t include a `redirect` input, the current page will get reloaded.
 
 ### Additional fields
@@ -236,15 +238,15 @@ You can send additional data in your form by splitting the `message` field into 
 To preserve the state of checkboxes, you can test for the presence of the input’s value:
 
 ```twig
-{{ input('text', 'message[Serivces][]', 'Design', {
-    checked: 'Design' in old('message.Services'),
+{{ input('checkbox', 'message[Services][]', 'Design', {
+    checked: 'Design' in (old('message.Services') ?? []),
 }) }}
 ```
 
 With the [default notification template](#notification-template), the above form might result in the following message:
 
 ```
-- **Name:** Cathy Chino
+- **From:** Cathy Chino
 - **Email:** example@email.com
 - **Phone:** (555) 123-4567
 - **Services:** Design, Development
@@ -276,9 +278,9 @@ return [
 ];
 ```
 
-A `body` field will always be permitted when validating nested input.
+A `body` field will always be permitted when validating nested input. Submitting any other sub-field fails validation. Set `allowedMessageFields` to an empty array (`[]`) to allow only `message[body]`.
 
-Alternatively, provide a key-value map following [Laravel’s validation rule format](https://laravel.com/docs/13.x/validation) for more control over nested field validation:
+Alternatively, provide a key-value map following [Laravel’s validation rule format](https://laravel.com/docs/13.x/validation) for more control over nested field validation. Only the keys in the map (and `body`) are allowed:
 
 ```php
 <?php
@@ -288,8 +290,10 @@ use Illuminate\Validation\Rule;
 return [
     'allowedMessageFields' => [
         'Phone' => ['nullable', 'string'],
+        // Checkboxes (`message[Services][]`) submit a list, so it must be an array of known values:
         'Services' => [
             'nullable',
+            'array',
             Rule::in(['Design', 'Development', 'Strategy', 'Marketing', 'Other']),
         ],
     ],
@@ -301,13 +305,16 @@ Validation messages are currently _not_ configurable, so rules should be as simp
 ### Notification Template
 
 A recipient designated via the plugin’s settings is sent a notification when a submission is received.
-You can customize the subject and body of this message via **Utilities** &rarr; **System Messages**; both fields are rendered as Twig templates, with access to few variables:
+You can customize the subject and body of this message via **Utilities** &rarr; **System Messages**; both fields are rendered as Twig templates, with access to a few variables:
 
 - `summary` — An automatically-generated Markdown representation of the incoming data, including [nested `message` fields](#additional-fields).
 - `fromEmail`, `fromName`, `subject`, `message`, `attachment`, `...` — Validated input, as provided by the user. `message` may be a string, or an array, depending on what was submitted; use `{% if message is array %}` to check.
 - `settings` — The plugin’s complete settings model (an instance of `CraftCms\ContactForm\Settings`).
 
-The default template outputs the `fromName`, `fromEmail`, as well as the `summary`.
+> [!NOTE]
+> The **System Messages** utility is only available in Craft Pro. On other editions, notifications always use the default template.
+
+The default template outputs the `fromName` (when one was submitted), `fromEmail`, as well as the `summary`.
 If you need more control over the format of this message, you can replace `summary` with whatever fields you expect to be present.
 
 > [!IMPORTANT]
@@ -402,8 +409,8 @@ $form.addEventListener('submit', function(e) {
             // Success and failure responses are structured in the same way!
             console.log(data);
 
-            if (data.errors)
             // -> { message: "Your message has been sent.", submission: { ... } }
+            // -> { message: "...", errors: { fromEmail: ["..."] } }
             alert(data.message);
         })
         .catch(function(err) {
@@ -469,16 +476,18 @@ Event::listen(function (ValidationRulesResolving $event) {
     }
 
     // Require a name, overwriting the default (['nullable', 'string']):
-    $event->rules['name'] = ['string'];
+    $event->rules['fromName'] = ['required', 'string'];
 
     // Add a new top-level permitted field:
     $event->rules['referredBy'] = ['nullable', 'string'];
 
-    // Limit the message body to 1000 characters:
+    // Limit the message body to 1000 characters (when it’s submitted as `message[body]`):
     $event->addRule('message.body', 'max:1000');
 
-    // Limit each attachment to 500 kilobytes:
-    $event->addRule('attachment.*', 'size:500');
+    // Limit each attachment to 500 kilobytes, for `attachment[]` inputs…
+    $event->addRule('attachment.*', 'max:500');
+    // …or a single `attachment` input:
+    $event->addRule('attachment', 'max:500');
 });
 ```
 

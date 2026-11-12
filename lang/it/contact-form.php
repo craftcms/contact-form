@@ -28,4 +28,15 @@ return [
     'Success Flash Message' => 'Messaggio di successo',
     'The flash message displayed after successfully sending a message.' => 'Il messaggio flash visualizzato dopo aver inviato con successo un messaggio.',
     'Your message has been sent.' => 'Il tuo messaggio è stato inviato.',
+
+    // added for 4.0
+    'An attachment could not be uploaded.' => 'Non è stato possibile caricare un allegato.',
+    'Attachment' => 'Allegato',
+    '{ext} files (like {filename}) are not allowed.' => 'I file {ext} (come {filename}) non sono consentiti.',
+    'Files without an extension (like {filename}) are not allowed.' => 'I file senza estensione (come {filename}) non sono consentiti.',
+    '{fields} can’t be submitted with this form.' => '{fields} non può essere inviato con questo modulo.',
+    'You’ve sent too many messages. Please try again in a minute.' => 'Hai inviato troppi messaggi. Riprova tra un minuto.',
+    'New message from {siteName}' => 'Nuovo messaggio da {siteName}',
+    'Submission summary' => 'Riepilogo dell’invio',
+    'This is being overridden by the {setting} config setting in your {file} config file.' => 'Questa impostazione è sovrascritta dall’impostazione {setting} nel file di configurazione {file}.',
 ];

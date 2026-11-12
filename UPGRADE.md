@@ -53,13 +53,14 @@ See the [form template](README.md#form-template) in the README for a complete ex
 
 ### Notifications
 
-- The notification’s subject and body are now edited in **Utilities** → **System Messages**, under “When the contact form is submitted”.
+- The notification’s subject and body are now edited in **Utilities** → **System Messages**, under “When the contact form is submitted”. That utility requires Craft Pro; other editions use the default notification.
 - One notification is sent to all of the **To Email** recipients, rather than one notification per recipient.
 - The submitter’s name and email are set as the `Reply-To` address. The `From` address is your system email address.
 
 ### Ajax responses
 
 - Validation errors return a `422` response with `message` and `errors` keys.
+- Submissions over the `rateLimit` return a `429` response with a `message` key.
 - Other failures return a `400` response.
 - Successful responses include the submitted fields under a `submission` key, alongside `message`.
 
@@ -122,7 +123,8 @@ The plugin’s settings can be injected, or resolved with `app(\CraftCms\Contact
 
 - The config file moved from `config/contact-form.php` to `config/craft/contact-form.php`.
 - `allowedMessageFields` can also be a map of Laravel validation rules for each `message` sub-field.
-- Added the `rateLimit` setting, which limits submissions per minute for each IP address.
+- Added the `rateLimit` setting, which limits submissions per minute for each IP address. It can only be set in the config file.
+- `allowedMessageFields` now rejects any `message` sub-field it doesn’t list (except `body`), whether it’s a list of names or a map of rules.
 - `prependSubject` is deprecated. Edit the subject in **Utilities** → **System Messages** instead.
 - The config file is loaded before Craft is bootstrapped, so it can’t reference `Craft::$app`. To send to recipients chosen in the template, use a `MessageSending` listener. See [Dynamically adding email recipients](README.md#dynamically-adding-email-recipients).
 

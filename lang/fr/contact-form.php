@@ -28,4 +28,15 @@ return [
     'Success Flash Message' => 'Message de succès',
     'The flash message displayed after successfully sending a message.' => 'Le message affiché après avoir envoyé un message avec succès.',
     'Your message has been sent.' => 'Votre message a été envoyé.',
+
+    // added for 4.0
+    'An attachment could not be uploaded.' => 'Une pièce jointe n’a pas pu être téléversée.',
+    'Attachment' => 'Pièce jointe',
+    '{ext} files (like {filename}) are not allowed.' => 'Les fichiers {ext} (comme {filename}) ne sont pas autorisés.',
+    'Files without an extension (like {filename}) are not allowed.' => 'Les fichiers sans extension (comme {filename}) ne sont pas autorisés.',
+    '{fields} can’t be submitted with this form.' => '{fields} ne peut pas être envoyé avec ce formulaire.',
+    'You’ve sent too many messages. Please try again in a minute.' => 'Vous avez envoyé trop de messages. Veuillez réessayer dans une minute.',
+    'New message from {siteName}' => 'Nouveau message de {siteName}',
+    'Submission summary' => 'Résumé de l’envoi',
+    'This is being overridden by the {setting} config setting in your {file} config file.' => 'Ce paramètre est remplacé par le paramètre {setting} de votre fichier de configuration {file}.',
 ];

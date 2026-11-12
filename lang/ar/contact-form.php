@@ -14,10 +14,6 @@ return [
     'Email' => 'البريد',
     'Name' => 'الاسم',
 
-    // error messages
-    // 'There was a problem with your submission, please check the form and try again!'
-    // => '',
-
     // plugin settings
     'The email address(es) that the contact form will send to. Separate multiple email addresses with commas.' => 'عنوان (عناوين) البريد الإلكتروني التي سيرسل اليها نموذج الاتصال. يجب فصل عناوين البريد الإلكتروني المتعددة باستخدام الفواصل.',
     'Sender Text' => 'نص المرسل',
@@ -29,4 +25,16 @@ return [
     'Success Flash Message' => 'رسالة النجاح',
     'The flash message displayed after successfully sending a message.' => 'رسالة الإخطار التي يتم عرضها بعد إرسال رسالة بنجاح.',
     'Your message has been sent.' => 'تم ارسال رسالتك.',
+
+    // added for 4.0
+    'There was a problem with your submission, please check the form and try again!' => 'حدثت مشكلة في إرسالك، يرجى مراجعة النموذج والمحاولة مرة أخرى!',
+    'An attachment could not be uploaded.' => 'تعذّر رفع أحد المرفقات.',
+    'Attachment' => 'مرفق',
+    '{ext} files (like {filename}) are not allowed.' => 'ملفات {ext} (مثل {filename}) غير مسموح بها.',
+    'Files without an extension (like {filename}) are not allowed.' => 'الملفات التي ليس لها امتداد (مثل {filename}) غير مسموح بها.',
+    '{fields} can’t be submitted with this form.' => 'لا يمكن إرسال {fields} بهذا النموذج.',
+    'You’ve sent too many messages. Please try again in a minute.' => 'لقد أرسلت عددًا كبيرًا من الرسائل. يرجى المحاولة مرة أخرى بعد دقيقة.',
+    'New message from {siteName}' => 'رسالة جديدة من {siteName}',
+    'Submission summary' => 'ملخص الإرسال',
+    'This is being overridden by the {setting} config setting in your {file} config file.' => 'يتم تجاوز هذا الإعداد بواسطة إعداد {setting} في ملف الإعدادات {file}.',
 ];
