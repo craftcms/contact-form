@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm\Submission;
 
 use CraftCms\Cms\Support\Arr;
 use CraftCms\Cms\Support\Str;
+
 use function CraftCms\Cms\t;
 
 class Summary
@@ -13,19 +16,20 @@ class Summary
      */
     public function compile(string|array $message): string
     {
-        // There may be nothing to do; plain-text messages can just be returned, verbatim:
+        // A plain-text message is just a body:
         if (is_string($message)) {
-            return $message;
+            $message = ['body' => $message];
         }
 
         // Was a nested `body` field submitted, explicitly? We don’t want that in the bulleted list (it will get appended, later):
         $body = Arr::pull($message, 'body');
 
-        $summary = $this->packNestedLists($message);
+        // The template already separates the summary from what comes before it:
+        $summary = ltrim($this->packNestedLists($message), "\n");
 
         if ($body) {
             $body = preg_replace('/\R/u', "\n", $body);
-            $summary .= "\n\n".$body;
+            $summary .= ($summary === '' ? '' : "\n\n").$body;
         }
 
         return $summary;
@@ -35,7 +39,7 @@ class Summary
     {
         // Assume “lists” (non-associative arrays) can be flattened into a single line:
         if (array_is_list($array)) {
-            return join(', ', $array);
+            return implode(', ', $array);
         }
 
         // If we’ve gotten this far, the next value will be “complex”, so the returned value should begin with a new line:
@@ -56,6 +60,6 @@ class Summary
         }
 
         // Concatenate, ensuring the first item starts on a new line:
-        return Str::start(join("\n", $items), "\n");
+        return Str::start(implode("\n", $items), "\n");
     }
 }

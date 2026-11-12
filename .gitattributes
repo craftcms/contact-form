@@ -13,8 +13,9 @@
 /SECURITY.md export-ignore
 /codeception.yml export-ignore
 /composer.lock export-ignore
-/ecs.php export-ignore
+/pint.json export-ignore
 /phpstan.neon export-ignore
+/phpunit.xml export-ignore
 /.prettierrc.json export-ignore
 /.prettierignore export-ignore
 /gruntfile.js export-ignore

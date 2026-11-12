@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm\Validation;
 
 use Closure;
@@ -7,21 +9,19 @@ use CraftCms\Cms\Cms;
 use CraftCms\Cms\Support\Arr;
 use CraftCms\Cms\Support\Flash;
 use CraftCms\Cms\Validation\Ruleset;
-use CraftCms\ContactForm\Plugin;
 use CraftCms\ContactForm\Settings;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
-
 use Override;
+
 use function CraftCms\Cms\t;
 
 class SubmissionRuleset extends Ruleset
 {
     public function rules(): array
     {
-        /** @var Settings $settings */
-        $settings = Plugin::getInstance()->getSettings();
+        $settings = app(Settings::class);
 
         $rules = [
             'fromEmail' => ['required', 'email'],
@@ -29,52 +29,86 @@ class SubmissionRuleset extends Ruleset
             'subject' => ['nullable', 'string'],
             // Some form of a `message` is required, but its type is flexible...
             'message' => ['required'],
-            // ...and `body` is always an allowed sub-field:
-            'message.body' => Rule::when(fn($data) => is_array($data['message']), ['string']),
+            // ...and `body` is always an allowed sub-field. (Rules stay arrays, so listeners can append to them.)
+            'message.body' => ['nullable', 'string'],
             'attachment' => [
                 'nullable',
                 Rule::prohibitedIf(fn () => ! $settings->allowAttachments),
-                function (string $attribute, mixed $value, Closure $fail) use ($settings) {
+                function (string $attribute, mixed $value, Closure $fail) {
                     // Normalize single files to an array:
-                    if ($value instanceof UploadedFile) {
-                        $value = [$value];
-                    }
-
-                    foreach ($value as $file) {
-                        // Was the file uploaded properly?
-                        if (! $file->isValid()) {
+                    foreach (Arr::wrap($value) as $file) {
+                        // Was the file uploaded properly? (Text posted under the file’s name doesn’t count.)
+                        if (! $file instanceof UploadedFile || ! $file->isValid()) {
                             $fail(t('An attachment could not be uploaded.', category: 'contact-form'));
+
+                            continue;
                         }
 
                         // Does it have a permitted extension?
-                        $extension = pathinfo((string) $file->getClientOriginalName(), PATHINFO_EXTENSION);
+                        $filename = (string) $file->getClientOriginalName();
+                        $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-                        if (! in_array(strtolower($extension), Cms::config()->allowedFileExtensions, true)) {
-                            $fail(t('{ext} files (like {filename}) are not allowed.', ['ext' => strtoupper($extension), 'filename' => $file->getClientOriginalName()], 'contact-form'));
+                        if ($extension === '') {
+                            $fail(t('Files without an extension (like {filename}) are not allowed.', ['filename' => $filename], 'contact-form'));
+                        } elseif (! in_array(strtolower($extension), Cms::config()->allowedFileExtensions, true)) {
+                            $fail(t('{ext} files (like {filename}) are not allowed.', ['ext' => strtoupper($extension), 'filename' => $filename], 'contact-form'));
                         }
                     }
                 },
             ],
         ];
 
-        // Has the project defined any additional fields?
+        // Has the project limited which sub-fields can be sent?
         if ($settings->allowedMessageFields !== null) {
-            if (Arr::isAssoc($settings->allowedMessageFields)) {
-                // Key-value pairs can be used for advanced control over nested fields:
-                foreach ($settings->allowedMessageFields as $field => $fieldRules) {
-                    $fieldKey = sprintf('message.%s', $field);
+            $isMap = Arr::isAssoc($settings->allowedMessageFields);
+            $allowedFields = $isMap ? array_keys($settings->allowedMessageFields) : $settings->allowedMessageFields;
 
-                    // These rules are added to specific nested keys using dot notation (not appended to the root `message` attribute):
-                    $rules[$fieldKey] = Rule::when(fn ($data) => is_array($data['message']), $fieldRules);
+            // Reject any other sub-fields (`body` is always allowed):
+            $rules['message'][] = function (string $attribute, mixed $value, Closure $fail) use ($allowedFields) {
+                if (! is_array($value)) {
+                    return;
                 }
-            } else {
-                // A “list” of fields just marks nested fields as permitted, so we can use a plain array rule:
-                $rules['message'][] = Rule::when(fn ($data) => is_array($data['message']), Rule::array($settings->allowedMessageFields));
-                // (Note that we’re *appending* this to the base `required` rule, defined above!)
+
+                $unknown = array_diff(array_keys($value), [...$allowedFields, 'body']);
+
+                if ($unknown !== []) {
+                    $fail(t('{fields} can’t be submitted with this form.', ['fields' => implode(', ', $unknown)], 'contact-form'));
+                }
+            };
+
+            // Key-value pairs can be used for advanced control over nested fields:
+            if ($isMap) {
+                foreach ($settings->allowedMessageFields as $field => $fieldRules) {
+                    // Only nested `message` values get these rules (they’re skipped when `message` is a string):
+                    $rules["message.$field"] = [Rule::when(fn ($data) => is_array($data['message'] ?? null), $fieldRules)];
+                }
             }
         }
 
         return $rules;
+    }
+
+    #[Override]
+    public function attributes(): array
+    {
+        $attributes = [
+            'fromName' => t('Name', category: 'contact-form'),
+            'fromEmail' => t('Email', category: 'contact-form'),
+            'subject' => t('Subject', category: 'contact-form'),
+            'message' => t('Message', category: 'contact-form'),
+            'message.body' => t('Message', category: 'contact-form'),
+            'attachment' => t('Attachment', category: 'contact-form'),
+            'attachment.*' => t('Attachment', category: 'contact-form'),
+        ];
+
+        // Label sub-fields the way notifications do:
+        $fields = app(Settings::class)->allowedMessageFields ?? [];
+
+        foreach (Arr::isAssoc($fields) ? array_keys($fields) : $fields as $field) {
+            $attributes["message.$field"] = t($field, category: 'site');
+        }
+
+        return $attributes;
     }
 
     #[Override]

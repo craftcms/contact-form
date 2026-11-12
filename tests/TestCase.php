@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm\Tests;
 
 use CraftCms\Cms\Plugin\Testing\PluginTestCase;
@@ -20,6 +22,8 @@ abstract class TestCase extends PluginTestCase
 
     protected function defineEnvironment($app): void
     {
+        parent::defineEnvironment($app);
+
         $app['config']->set('craft.contact-form', $this->contactFormConfig);
     }
 }

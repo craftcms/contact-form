@@ -1,18 +1,20 @@
 # Contact Form for Craft CMS
 
-Allow your visitors to submit basic information via your website’s front-end, and recieve custom email notifications.
+Allow your visitors to submit basic information via your website’s front-end, and receive custom email notifications.
 
 > [!DANGER]
 > This is an unreleased version of Contact Form, compatible only with the Craft 6.x alpha.
 > It may change in significant ways during this phase of the Laravel transition! 
 
 > [!IMPORTANT]
-> A few things have changed in version 3.x that affect how you deal with form data.
-> See the [Upgrading](#upgrading) section for more information!
+> A few things have changed in version 4.x that affect how you deal with form data.
+> See [UPGRADE.md](UPGRADE.md) for more information!
 
 ## Requirements
 
-This plugin requires Craft CMS 6.0.0-alpha.1 or later.
+This plugin requires Craft CMS 6.0 or later and PHP 8.5 or later. It doesn’t need the `craftcms/yii2-adapter` package.
+
+For Craft CMS 4 and 5, use Contact Form 3.x. If you’re upgrading from 3.x, see [UPGRADE.md](UPGRADE.md).
 
 ## Installation
 
@@ -20,7 +22,7 @@ You can install this plugin from the Plugin Store or with Composer.
 
 #### From the Plugin Store
 
-Go to the **Plugin Store** in your project’s [control panel](https://craftcms.com/docs/5.x/system/control-panel.html), search for _Contact Form_, then click on the **Install** button.
+Go to the **Plugin Store** in your project’s [control panel](https://craftcms.com/docs/6.x/system/control-panel.html), search for _Contact Form_, then click on the **Install** button.
 
 #### With Composer
 
@@ -31,63 +33,19 @@ Open your terminal and run the following commands:
 cd /path/to/my-project
 
 # Require the plugin package:
-ddev composer require craftcms/contact-form
+composer require craftcms/contact-form
 
 # Install the plugin:
-ddev artisan craft:plugin:install contact-form
+php artisan craft:plugin:install contact-form
 ```
-
-## Upgrading
-
-With the transition to Laravel, we’re taking advantage of a number of new features, and adopting some patterns that affect your templates.
-That said, [configuration](#configuration) and submission requests are entirely compatible.
-
-During the Craft 6.x migration, the [adapter](https://craftcms.com/docs/6.x/) was added to your project, which exposes legacy APIs to plugins and templates.
-While Contact Form doesn’t require the adapter itself, you can keep it around to reduce the work required to get your forms working again.
-
-Here is the minimum set of required changes:
-
-1. The `submission` variable is no longer available in templates, when validation fails. Instead, the submitted fields are flashed back to the session, and can be retrieved using the `old()` helper function:
-    ```twig
-    # Replace...
-    <input type="text" name="fromEmail" value="{{ submission.fromEmail ?? '' }}">
-    # ...with:
-    <input type="text" name="fromEmail" value="{{ old('fromEmail') }}">
-    ```
-1. Global success and error messages (like the one you configure in the plugin’s settings) are also retrieved differently. Look for instances of `craft.app.session` (in particular, `craft.app.session.getFlash('success')` and `.getFlash('error')`) and replace them with the new `session()` helper function: `session('success')` and `session('error')`. See the section on [flash messages](#displaying-flash-messages) for a complete example.
-1. Field-specific error messages are accessed via a new global `errors` variable. This is a new behavior throughout Craft (not specific to Contact Form), so other plugins may require similar updates.
-    ```twig
-    {# Replace this... #}
-    {% if submission.hasErrors('body') %}
-        {{ ul(submission.getErrors('body')) }}
-    {% endif %}
-
-    {# ...with this: #}
-    {% if errors.has('body') %}
-        {{ ul(errors.get('body')) }}
-    {% endif %}
-    ```
-    You can abstract this error discovery and output into a Twig macro, as described in the [templating](#displaying-flash-messages) guide, below.
-
-If your project customizes Contact Form behavior via [events](https://craftcms.com/docs/6.x/extend/events.html), you’ll need to adjust the bindings:
-
-| Old Event                                                   | New Event                                                   |
-|-------------------------------------------------------------|-------------------------------------------------------------|
-| `craft\contactform\models\Submission::EVENT_AFTER_VALIDATE` | See [custom validation rules](#validation-on-extra-fields). |
-| `craft\contactform\Mailer::EVENT_BEFORE_SEND`               | Use `CraftCms\ContactForm\Events\MessageSending`            |
-| `craft\contactform\Mailer::EVENT_AFTER_SEND`                | Use `CraftCms\ContactForm\Events\MessageSent`               |
-
-> [!IMPORTANT]
-> The model validation lifecycle has received significant changes in Craft 6.x.
-> If you had previously registered validation rules via `craft\contactform\models\Submission::EVENT_DEFINE_RULES`, you can either set them via configuration, or use the `CraftCms\Cms\Validation\Events\ValidationRulesResolving` event.
 
 ## Configuration
 
 Contact Form’s features are controlled from a few different places:
 
 1. **Control Panel** — Visit **Settings** &rarr; **Contact Form** for a guided configuration experience.
-2. **System Messages** — The [notification template](#notifications) can be modified by visiting **Utilities** &rarr; **System Messages**.
-3. **Plugin Config File** — Create `config/craft/contact-form.php` for [advanced control](#config-reference), including [custom validation rules](#validation-on-extra-fields).
+2. **System Messages** — The [notification template](#notification-template) can be modified by visiting **Utilities** &rarr; **System Messages** (Craft Pro only).
+3. **Plugin Config File** — Run `php artisan vendor:publish --tag=contact-form` to create `config/craft/contact-form.php`, for [advanced control](#config-reference), including [custom validation rules](#validation-on-extra-fields).
 
 ### Config Reference
 
@@ -105,6 +63,7 @@ return [
     'allowAttachments' => false,
     'successFlashMessage' => 'Message sent!',
     // Configurable via this file only:
+    'rateLimit' => 10, // Submissions per minute, per IP address
     'allowedMessageFields' => [
         // See “Validation on extra fields,” below!
     ],
@@ -112,14 +71,14 @@ return [
 ```
 
 > [!WARNING]
-> Unrecognized keys can cause errors.
+> Unrecognized keys can cause errors. Settings in this file can’t be changed from the control panel.
 
 `prependSubject` has been deprecated, in favor of customizing the subject template via **System Messages**.
 The default subject template includes this setting’s value, but it is safe to replace it with explicit, localized values.
 
 ## Usage
 
-When installed, the plugin registers an “action route” that can recieve regular HTML form submissions and [Ajax](#ajax-form-submissions) requests.
+When installed, the plugin registers an “action route” that can receive regular HTML form submissions and [Ajax](#ajax-form-submissions) requests.
 You must submit data to that endpoint (the `/actions/contact-form/send` path) or with the action’s name (`contact-form/send`) in a body parameter named `action`.
 
 ### Form Template
@@ -143,20 +102,20 @@ A basic contact form template looks something like this:
         id: 'from-name',
         autocomplete: 'name',
     }) }}
-    {{ errorList('fromName') }}
+    {{ _self.errorList('fromName') }}
 
     <h3><label for="from-email">Your Email</label></h3>
     {{ input('email', 'fromEmail', old('fromEmail'), {
         id: 'from-email',
         autocomplete: 'email',
     }) }}
-    {{ errorList('fromEmail') }}
+    {{ _self.errorList('fromEmail') }}
 
     <h3><label for="subject">Subject</label></h3>
     {{ input('text', 'subject', old('subject'), {
         id: 'subject',
     }) }}
-    {{ errorList('subject') }}
+    {{ _self.errorList('subject') }}
 
     <h3><label for="message">Message</label></h3>
     {{ tag('textarea', {
@@ -166,7 +125,7 @@ A basic contact form template looks something like this:
         rows: 10,
         cols: 40,
     }) }}
-    {{ errorList(errors, 'message') }}
+    {{ _self.errorList('message') }}
 
     <button type="submit">Send</button>
 </form>
@@ -209,7 +168,7 @@ For accessibility, we recommend binding the errors to specific inputs, rather th
     cols: 40,
     'aria-describedby': errors.has('message') ? 'cf-errorlist-message' : null,
 }) }}
-{{ errorList(errors, 'message') }}
+{{ _self.errorList('message') }}
 ```
 
 The macro would also require an update:
@@ -237,6 +196,8 @@ In your `contact/thanks.twig` template, you can access that `from` parameter usi
 ```twig
 <p>Thanks for sending that in, {{ Request.query('from') }}!</p>
 ```
+
+Submitted values are URL-encoded when they’re inserted into the redirect URL.
 
 If you don’t include a `redirect` input, the current page will get reloaded.
 
@@ -277,15 +238,15 @@ You can send additional data in your form by splitting the `message` field into 
 To preserve the state of checkboxes, you can test for the presence of the input’s value:
 
 ```twig
-{{ input('text', 'message[Serivces][]', 'Design', {
-    checked: 'Design' in old('message.Services'),
+{{ input('checkbox', 'message[Services][]', 'Design', {
+    checked: 'Design' in (old('message.Services') ?? []),
 }) }}
 ```
 
 With the [default notification template](#notification-template), the above form might result in the following message:
 
 ```
-- **Name:** Cathy Chino
+- **From:** Cathy Chino
 - **Email:** example@email.com
 - **Phone:** (555) 123-4567
 - **Services:** Design, Development
@@ -317,9 +278,9 @@ return [
 ];
 ```
 
-A `body` field will always be permitted when validating nested input.
+A `body` field will always be permitted when validating nested input. Submitting any other sub-field fails validation. Set `allowedMessageFields` to an empty array (`[]`) to allow only `message[body]`.
 
-Alternatively, provide a key-value map following [Laravel’s validation rule format](https://laravel.com/docs/13.x/validation) for more control over nested field validation:
+Alternatively, provide a key-value map following [Laravel’s validation rule format](https://laravel.com/docs/13.x/validation) for more control over nested field validation. Only the keys in the map (and `body`) are allowed:
 
 ```php
 <?php
@@ -329,8 +290,10 @@ use Illuminate\Validation\Rule;
 return [
     'allowedMessageFields' => [
         'Phone' => ['nullable', 'string'],
+        // Checkboxes (`message[Services][]`) submit a list, so it must be an array of known values:
         'Services' => [
             'nullable',
+            'array',
             Rule::in(['Design', 'Development', 'Strategy', 'Marketing', 'Other']),
         ],
     ],
@@ -342,13 +305,16 @@ Validation messages are currently _not_ configurable, so rules should be as simp
 ### Notification Template
 
 A recipient designated via the plugin’s settings is sent a notification when a submission is received.
-You can customize the subject and body of this message via **Utilities** &rarr; **System Messages**; both fields are rendered as Twig templates, with access to few variables:
+You can customize the subject and body of this message via **Utilities** &rarr; **System Messages**; both fields are rendered as Twig templates, with access to a few variables:
 
 - `summary` — An automatically-generated Markdown representation of the incoming data, including [nested `message` fields](#additional-fields).
 - `fromEmail`, `fromName`, `subject`, `message`, `attachment`, `...` — Validated input, as provided by the user. `message` may be a string, or an array, depending on what was submitted; use `{% if message is array %}` to check.
 - `settings` — The plugin’s complete settings model (an instance of `CraftCms\ContactForm\Settings`).
 
-The default template outputs the `fromName`, `fromEmail`, as well as the `summary`.
+> [!NOTE]
+> The **System Messages** utility is only available in Craft Pro. On other editions, notifications always use the default template.
+
+The default template outputs the `fromName` (when one was submitted), `fromEmail`, as well as the `summary`.
 If you need more control over the format of this message, you can replace `summary` with whatever fields you expect to be present.
 
 > [!IMPORTANT]
@@ -371,25 +337,23 @@ If you want to add multiple recipients, you can provide a comma separated list o
 <input type="hidden" name="toEmail" value="{{ 'me@example.com,me2@example.com'|hash }}">
 ```
 
-Then from your `config/contact-form.php` config file, you’ll need to add a bit of logic:
+Then replace the recipients from a [`MessageSending`](#sending-events) listener:
 
 ```php
-<?php
+use CraftCms\ContactForm\Events\MessageSending;
+use Illuminate\Support\Facades\Event;
 
-$config = [];
-$request = Craft::$app->request;
+Event::listen(function (MessageSending $event) {
+    $toEmail = request()->getSigned('toEmail');
 
-if (
-    !$request->getIsConsoleRequest() &&
-    ($toEmail = $request->getValidatedBodyParam('toEmail')) !== null
-) {
-    $config['toEmail'] = $toEmail;
-}
-
-return $config;
+    if ($toEmail !== null) {
+        $event->message->to = [];
+        $event->message->to(array_map(trim(...), explode(',', $toEmail)));
+    }
+});
 ```
 
-In this example if `toEmail` does not exist or fails validation (it was tampered with), the plugin will fallback to the “To Email” defined in the plugin settings, so you must have that defined as well.
+If `toEmail` isn’t submitted, the notification goes to the “To Email” defined in the plugin settings, so you must have that defined as well. A tampered `toEmail` value results in a 400 response.
 
 ### File attachments
 
@@ -445,8 +409,8 @@ $form.addEventListener('submit', function(e) {
             // Success and failure responses are structured in the same way!
             console.log(data);
 
-            if (data.errors)
             // -> { message: "Your message has been sent.", submission: { ... } }
+            // -> { message: "...", errors: { fromEmail: ["..."] } }
             alert(data.message);
         })
         .catch(function(err) {
@@ -477,7 +441,7 @@ Event::listen(function (MessageSending $event) {
 });
 ```
 
-You can suppress the email and return an error by setting `$event->isSpam = true` or returning `false` in the handler.
+You can stop the email by setting `$event->isValid = false` or `$event->isSpam = true` in the listener. With `isValid = false`, the visitor gets the generic error message. With `isSpam = true`, the submission is logged instead of sent, and the visitor sees the success message, so a bot can’t tell it was caught.
 The “message” (an instance of `CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable`) contains all the validated submission data (`$event->message->variables`), as well as the notification’s `To` and `From` headers (among others).
 
 > [!WARNING]
@@ -512,16 +476,18 @@ Event::listen(function (ValidationRulesResolving $event) {
     }
 
     // Require a name, overwriting the default (['nullable', 'string']):
-    $event->rules['name'] = ['string'];
+    $event->rules['fromName'] = ['required', 'string'];
 
     // Add a new top-level permitted field:
     $event->rules['referredBy'] = ['nullable', 'string'];
 
-    // Limit the message body to 1000 characters:
+    // Limit the message body to 1000 characters (when it’s submitted as `message[body]`):
     $event->addRule('message.body', 'max:1000');
 
-    // Limit each attachment to 500 kilobytes:
-    $event->addRule('attachment.*', 'size:500');
+    // Limit each attachment to 500 kilobytes, for `attachment[]` inputs…
+    $event->addRule('attachment.*', 'max:500');
+    // …or a single `attachment` input:
+    $event->addRule('attachment', 'max:500');
 });
 ```
 

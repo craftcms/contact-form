@@ -4,9 +4,10 @@
   "type": "craft-plugin",
   "keywords": [
     "cms",
-    "craftcms",
     "contact",
-    "form"
+    "craftcms",
+    "form",
+    "laravel"
   ],
   "license": "MIT",
   "authors": [
@@ -19,21 +20,22 @@
     "email": "support@craftcms.com",
     "issues": "https://github.com/craftcms/contact-form/issues?state=open",
     "source": "https://github.com/craftcms/contact-form",
-    "docs": "https://github.com/craftcms/contact-form",
-    "rss": "https://github.com/craftcms/contact-form/commits/3.x.atom"
+    "docs": "https://github.com/craftcms/contact-form/blob/4.x/README.md",
+    "rss": "https://github.com/craftcms/contact-form/commits/4.x.atom"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "craftcms/cms": "^6.0.0"
+    "php": "^8.5",
+    "craftcms/cms": "^6.0.0-beta.1"
   },
   "require-dev": {
-    "craftcms/ecs": "dev-main",
-    "craftcms/phpstan": "dev-main",
-    "craftcms/rector": "dev-main",
+    "phpstan/phpstan": "^2.1",
+    "larastan/larastan": "^3.13",
     "orchestra/testbench": "^11.0",
     "pestphp/pest": "^5.0",
-    "pestphp/pest-plugin-laravel": "^5.0"
+    "pestphp/pest-plugin-laravel": "^5.0",
+    "laravel/pint": "^1.22"
   },
   "autoload": {
     "psr-4": {
@@ -52,13 +54,16 @@
     "documentationUrl": "https://github.com/craftcms/contact-form/blob/4.x/README.md"
   },
   "scripts": {
-    "check-cs": "ecs check --ansi",
-    "fix-cs": "ecs check --ansi --fix",
-    "phpstan": "phpstan --memory-limit=1G"
+    "check-cs": "pint --test",
+    "fix-cs": "pint",
+    "phpstan": "phpstan --memory-limit=1G",
+    "test": "pest"
   },
   "config": {
+    "platform": {
+      "php": "8.5"
+    },
     "allow-plugins": {
-      "yiisoft/yii2-composer": true,
       "craftcms/plugin-installer": true,
       "pestphp/pest-plugin": true
     }

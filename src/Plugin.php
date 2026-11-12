@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm;
 
 use CraftCms\Cms\Cp\SelectOptions;
 use CraftCms\Cms\Plugin\Plugin as BasePlugin;
+use CraftCms\Cms\Support\Flash;
 use CraftCms\Cms\SystemMessage\Models\SystemMessage;
 use CraftCms\Cms\Ui\Controls\Control;
 use CraftCms\Cms\Ui\Controls\Lightswitch;
@@ -12,12 +15,15 @@ use CraftCms\Cms\Ui\Enums\ControlMode;
 use CraftCms\Cms\Ui\Nodes\Field;
 use CraftCms\Cms\Ui\Ui;
 use CraftCms\Cms\Ui\UiContext;
-
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+
 use function CraftCms\Cms\t;
 
+/**
+ * @method Settings getSettings()
+ */
 class Plugin extends BasePlugin
 {
     public string $schemaVersion = '1.0.0';
@@ -26,15 +32,30 @@ class Plugin extends BasePlugin
 
     public function boot(): void
     {
+        $this->app->singleton(Settings::class, fn () => $this->getSettings());
+
         RateLimiter::for('contact-form', function (Request $request) {
-            $limit = $this->getSettings()->rateLimit;
+            $limit = app(Settings::class)->rateLimit;
 
             // `null` has special significance, but isn't handled by other limit methods:
             if ($limit === null) {
                 return Limit::none();
             }
 
-            return Limit::perMinute($limit)->by($request->getClientIp());
+            return Limit::perMinute($limit)
+                ->by($request->getClientIp())
+                ->response(function (Request $request, array $headers) {
+                    $message = t('You’ve sent too many messages. Please try again in a minute.', category: 'contact-form');
+
+                    if ($request->expectsJson()) {
+                        return response()->json(['message' => $message], 429, $headers);
+                    }
+
+                    // Back to the form, like a validation failure:
+                    Flash::error($message);
+
+                    return back()->withInput($request->except('attachment'))->withHeaders($headers);
+                });
         });
     }
 
@@ -46,13 +67,20 @@ class Plugin extends BasePlugin
                 'heading' => 'When the contact form is submitted',
                 // This template is comparable to how the legacy mailer compiled subjects:
                 'subject' => '{{ [settings.prependSubject, subject ?? null]|filter|join(" - ") }}',
-                'body' => <<<BODY
+                'body' => <<<'BODY'
 A contact form was just submitted on {{ systemName }}.
 
-- **{{ 'From'|t }}:** {{ fromName }}
-- **{{ 'Email'|t }}:** {{ fromEmail }}
+{% if fromName %}- **{{ 'From'|t }}:** {{ fromName }}
+{% endif %}- **{{ 'Email'|t }}:** {{ fromEmail }}
+
 {{ summary }}
 BODY,
+                // `fromName` and `fromEmail` are listed by core, as the sender:
+                'variables' => [
+                    'subject' => t('Subject', category: 'contact-form'),
+                    'message' => t('Message', category: 'contact-form'),
+                    'summary' => t('Submission summary', category: 'contact-form'),
+                ],
             ]),
         ];
     }

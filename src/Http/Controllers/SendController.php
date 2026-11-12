@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CraftCms\ContactForm\Http\Controllers;
 
+use CraftCms\Cms\Http\Mixins\RequestMixin;
 use CraftCms\Cms\Http\RespondsWithFlash;
-use CraftCms\Cms\Support\Env;
 use CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable;
-use CraftCms\ContactForm\Submission\Sender;
-use CraftCms\ContactForm\Submission\Summary;
 use CraftCms\ContactForm\Events\MessageSending;
 use CraftCms\ContactForm\Events\MessageSent;
-use CraftCms\ContactForm\Plugin;
 use CraftCms\ContactForm\Settings;
+use CraftCms\ContactForm\Submission\Sender;
+use CraftCms\ContactForm\Submission\Summary;
 use CraftCms\ContactForm\Validation\SubmissionRuleset;
 use Illuminate\Mail\Attachment;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 use function CraftCms\Cms\t;
 
@@ -26,12 +28,8 @@ final class SendController
     /**
      * Sends a contact form submission.
      */
-    public function __invoke(SubmissionRuleset $submission): ?Response
+    public function __invoke(SubmissionRuleset $submission, Settings $settings, Sender $sender, Summary $summary): Response
     {
-        $plugin = Plugin::getInstance();
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
-
         // Pre-validate so our fail hooks run…
         $submission->validate();
 
@@ -41,20 +39,22 @@ final class SendController
         $mailable = new SystemMessageMailable(
             key: 'contactform_submission',
             variables: [
+                // Always set, so a blank name doesn’t fall back to the system email’s sender name:
+                'fromName' => null,
                 ...$data->all(),
                 'settings' => $settings,
-                'summary' => app(Summary::class)->compile($data->input('message')),
+                'summary' => $summary->compile($data->input('message')),
             ],
         );
 
         // The anonymous user does not have control over the recipient:
-        $mailable->to(Env::parse($settings->toEmail));
-        /** @todo Allow control over recipient via signed params, using {@see \CraftCms\Cms\Http\Mixins\RequestMixin::getSigned()}. */
+        $mailable->to($settings->getToEmails());
+        /** @todo Allow control over recipient via signed params, using {@see RequestMixin::getSigned()}. */
 
         // A “from” address is required, but only set as the `Reply-To` address, not directly `From` (to avoid upsetting mail providers):
         $mailable->replyTo(
-            $data->string('fromEmail'),
-            app(Sender::class)->compile($data->string('fromName') ?? null),
+            $data->input('fromEmail'),
+            $sender->compile($data->input('fromName')),
         );
 
         // Attach any (valid) files that were uploaded:
@@ -70,45 +70,59 @@ final class SendController
             $mailable->attachMany($attachments);
         }
 
-        $result = event($sendingEvent = new MessageSending($mailable), halt: true);
+        // Don’t attempt to flash the uploads (they can’t be serialized to the session):
+        $submitted = $data->except('attachment');
 
-        // All failure states are treated the same, to avoid disclosing the mode:
-        // - Handler suppressing the event (explicitly returning `false`)
-        // - Handler marking the submission as spam
-        // - Mailer failures
-        if (
-            $result === false
-            || $sendingEvent->isSpam
-            || ! $sent = Mail::send($mailable)
-        ) {
-            $errorContext = [
-                'from' => $data->string('fromEmail'),
-            ];
+        event($sendingEvent = new MessageSending($mailable));
 
-            // Log specific errors
-            if ($result === false) {
-                Log::error('Contact Form: A notification was suppressed by an event handler.', $errorContext);
-            }
+        // All failure states are treated the same, to avoid disclosing the mode. The mailer is only reached when a listener didn’t stop the notification:
+        $failure = match (true) {
+            ! $sendingEvent->isValid => 'A notification was stopped by an event listener.',
+            $mailable->to === [] && $mailable->cc === [] && $mailable->bcc === [] => 'The notification has no recipients. Check the “To Email” setting.',
+            ! $sendingEvent->isSpam && ! $this->handOff($mailable) => 'There was an error when rendering a notification or handing it off to the mailer.',
+            default => null,
+        };
 
-            if ($sendingEvent->isSpam) {
-                Log::error('Contact Form: A submission was marked as spam.', $errorContext);
-            }
-
-            if (! $sent) {
-                Log::error('Contact Form: There was an error when handing off a notification to the mailer.', $errorContext);
-            }
+        if ($failure !== null) {
+            Log::error("Contact Form: $failure", ['from' => $data->input('fromEmail')]);
 
             // Return generic failure notice:
-            return $this->asFailure(t('There was a problem with your submission, please check the form and try again!', category: 'contact-form'), $data->except('attachment'));
+            return $this->asFailure(t('There was a problem with your submission, please check the form and try again!', category: 'contact-form'), [
+                'submission' => $submitted,
+            ]);
         }
 
-        // Ok, it definitely sent!
-        event(new MessageSent($mailable));
+        if ($sendingEvent->isSpam) {
+            Log::error('Contact Form: A submission was marked as spam.', ['from' => $data->input('fromEmail')]);
+        } else {
+            // Ok, it definitely sent!
+            event(new MessageSent($mailable));
+        }
 
         return $this->asSuccess(
             $settings->successFlashMessage,
-            // Don’t attempt to flash the uploads (they can’t be serialized to the session):
-            $data->except('attachment'),
+            // Nested, so a submitted `message` field can’t replace the flash message in JSON responses:
+            ['submission' => $submitted],
+            // Redirect templates can reference submitted fields, like `contact/thanks?from={fromName}`, so they’re URL-encoded:
+            $this->getPostedRedirectUrl((object) array_map(
+                fn (mixed $value) => is_string($value) ? rawurlencode($value) : $value,
+                $submitted,
+            )),
         );
+    }
+
+    /**
+     * Hands the notification off to the mailer, reporting template and transport failures instead of throwing them.
+     */
+    private function handOff(SystemMessageMailable $mailable): bool
+    {
+        try {
+            return Mail::send($mailable) !== null;
+        } catch (Throwable $e) {
+            // A broken notification template (like one using a variable that isn’t available) shouldn’t give the visitor a 500:
+            report($e);
+
+            return false;
+        }
     }
 }
