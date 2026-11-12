@@ -78,9 +78,8 @@ final class SendController
         // All failure states are treated the same, to avoid disclosing the mode. The mailer is only reached when a listener didn’t stop the notification:
         $failure = match (true) {
             ! $sendingEvent->isValid => 'A notification was stopped by an event listener.',
-            $sendingEvent->isSpam => 'A submission was marked as spam.',
             $mailable->to === [] && $mailable->cc === [] && $mailable->bcc === [] => 'The notification has no recipients. Check the “To Email” setting.',
-            ! $this->handOff($mailable) => 'There was an error when handing off a notification to the mailer.',
+            ! $sendingEvent->isSpam && ! $this->handOff($mailable) => 'There was an error when handing off a notification to the mailer.',
             default => null,
         };
 
@@ -93,8 +92,12 @@ final class SendController
             ]);
         }
 
-        // Ok, it definitely sent!
-        event(new MessageSent($mailable));
+        if ($sendingEvent->isSpam) {
+            Log::error("Contact Form: A submission was marked as spam.", ['from' => $data->input('fromEmail')]);
+        } else {
+            // Ok, it definitely sent!
+            event(new MessageSent($mailable));
+        }
 
         return $this->asSuccess(
             $settings->successFlashMessage,
