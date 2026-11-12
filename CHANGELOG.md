@@ -12,7 +12,7 @@ Contact Form has been completely rebuilt for Craft 6.x! We are using this releas
 - Additional fields (like `message[referralSource]`) can now be validated with rules defined in `config/craft/contact-form.php`.
 - `allowedMessageFields` now rejects unlisted `message` sub-fields with a validation error, for both lists of names and maps of rules. `message[body]` is always allowed.
 - Fields can now be nested (i.e. `message[referral][primary][name]`) and are output recursively in notifications.
-- Suppressed notifications, spam submissions, and failures with the mail driver have been consolidated into a single error state.
+- Suppressed notifications and failures with the mail driver have been consolidated into a single error state. Spam submissions still appear to succeed, and are logged instead of sent.
 
 ### Deprecated
 

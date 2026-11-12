@@ -441,7 +441,7 @@ Event::listen(function (MessageSending $event) {
 });
 ```
 
-You can stop the email and return an error by setting `$event->isSpam = true` or `$event->isValid = false` in the listener.
+You can stop the email by setting `$event->isValid = false` or `$event->isSpam = true` in the listener. With `isValid = false`, the visitor gets the generic error message. With `isSpam = true`, the submission is logged instead of sent, and the visitor sees the success message, so a bot can’t tell it was caught.
 The “message” (an instance of `CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable`) contains all the validated submission data (`$event->message->variables`), as well as the notification’s `To` and `From` headers (among others).
 
 > [!WARNING]

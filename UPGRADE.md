@@ -102,7 +102,7 @@ Event::listen(function (MessageSending $event): void {
 ```
 
 - `MessageSending::$message` and `MessageSent::$message` are `CraftCms\Cms\SystemMessage\Mailables\SystemMessageMailable` instances. The submitted fields are in `$message->variables`, and the recipients in `$message->to`.
-- Set `$event->isSpam = true` or `$event->isValid = false` on `MessageSending` to stop the notification. The visitor sees the same error either way.
+- Set `$event->isValid = false` or `$event->isSpam = true` on `MessageSending` to stop the notification. With `isValid = false`, the visitor gets the generic error message. With `isSpam = true`, the submission is logged instead of sent, and the visitor sees the success message.
 - To change recipients, update `$event->message->to`. The `toEmails` property is gone.
 - Validation rules for submissions can be added from a `ValidationRulesResolving` listener, or with the `allowedMessageFields` setting. See [Validation events](README.md#validation-events).
 
