@@ -10,6 +10,7 @@ use CraftCms\ContactForm\Validation\SubmissionRuleset;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Symfony\Component\Mailer\Exception\TransportException;
@@ -97,7 +98,6 @@ it('returns the failure response when the notification is not handed off', funct
         ->assertRedirect('/contact')
         ->assertSessionHas('error', 'There was a problem with your submission, please check the form and try again!');
 })->with([
-    'marked as spam' => [fn () => Event::listen(fn (MessageSending $event) => $event->isSpam = true)],
     'stopped by a listener' => [fn () => Event::listen(fn (MessageSending $event) => $event->isValid = false)],
     'transport failure' => [function () {
         Mail::extend('failing', fn () => new class extends AbstractTransport
@@ -117,6 +117,28 @@ it('returns the failure response when the notification is not handed off', funct
         Mail::forgetMailers();
     }],
 ]);
+
+it('pretends success but logs and skips sending when a submission is marked as spam', function () {
+    Event::fake([MessageSent::class]);
+    Event::listen(fn (MessageSending $event) => $event->isSpam = true);
+    Log::spy();
+
+    $this->from('/contact')
+        ->post('/actions/contact-form/send', [
+            'fromName' => 'Jane Doe',
+            'fromEmail' => 'jane@example.com',
+            'message' => 'Hello',
+        ])
+        ->assertRedirect('/contact')
+        ->assertSessionHasNoErrors()
+        ->assertSessionHas('success', 'Thanks, we got it!');
+
+    expect(sentEmails())->toBeEmpty();
+    Event::assertNotDispatched(MessageSent::class);
+    Log::shouldHaveReceived('error')
+        ->once()
+        ->with('Contact Form: A submission was marked as spam.', ['from' => 'jane@example.com']);
+});
 
 it('renders submitted fields into the posted redirect URL', function () {
     $this->post('/actions/contact-form/send', [
